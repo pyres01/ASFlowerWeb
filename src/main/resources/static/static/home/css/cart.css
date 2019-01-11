@@ -1,0 +1,274 @@
+
+html,body{
+	width:100%;
+	height:100%;
+}
+body{
+
+	min-width: 320px;
+	max-width: 640px;
+    margin: 0 auto;
+    position: relative;
+}
+header{
+	width: 100%;
+	height: 70px;
+	
+	padding: 0px 20px;
+	box-sizing: border-box;
+	position: relative;
+	border-bottom: 1px solid #F2F2F2;
+    box-shadow: 0px 5px 5px #F7F7F7;
+    padding: 10px 0;
+    margin-bottom: 10px;
+}
+header span{
+	display: block;
+	position: absolute;
+	width: 40px;
+	height: 70px;
+	top: 50%;
+	margin-top: -35px;
+	line-height:70px;
+}
+header .left{
+	left: 20px;
+	cursor: pointer;
+}
+header .right{
+	width:60px;
+	height:70px;
+	right: 20px;
+	cursor: pointer;
+	
+}
+header img{
+	width: 20px;
+	height: 20px;
+}
+header p{
+	width: 100px;
+	height: 70px;
+	margin-right: auto;
+	margin-left: auto;
+	cursor: pointer;
+	text-align: center;
+	 line-height: 70px;
+	 margin-top:-10px;
+}
+
+/*商品信息*/
+main{
+width:95%;
+margin-left:10px;
+
+
+}
+.imfor{
+	overflow: hidden;
+	border-bottom:1px solid #ccc;
+	padding-top:10px;
+	padding-bottom:20px;
+}
+.imfor>div{
+	float: left;
+}
+.imfor .choice{
+	margin-top:10%;
+	margin-right:10px;
+	position: relative;
+}
+.imfor .bg,.choice .bg{
+	width:20px;
+	height:20px;
+	background:#fe5478 url('../images/right.png') center no-repeat;
+	position:absolute;
+	top:0px;
+	left:0px;
+	border-radius:5px;
+    display:none;
+
+}
+.imfor .choice input{
+	 width:20px;
+	height:20px;
+	z-index: 10;
+	color:red;
+	
+}
+
+.pic{
+	width:30%;
+}
+.pic img{
+	width:100%;
+}
+
+.news{
+	width:40%;
+	font-size:14px;
+	margin-top:10px;
+	margin-left:10px;
+	
+}
+
+.news .con{
+	color: #999;
+	
+}
+.news .price{
+	color:#fe5478;
+	margin-top:10px;
+}
+
+/*数量*/
+.num{
+	width:20%;
+	margin-top:10%;
+}
+ .num>div{
+    width:100%;
+    border:1px solid #000;
+	box-sizing:border-box;
+	border-radius:5px;
+    overflow:hidden;
+}
+ .num>div>div{
+	height:33px;
+	float: left;
+	text-align:center;
+	line-height:33px;
+	
+}
+.num .left{
+	width:20%;
+	cursor:pointer;
+	
+}
+.num .right{
+	width:20%;
+	cursor:pointer;
+}
+.num .center{
+	width:60%;
+}
+.num input{
+	height:33px;
+	width:100%;
+	text-align:center;
+	
+}
+
+
+/*结算部分*/
+.count{
+
+	min-width: 320px;
+	max-width: 640px;
+   
+
+	width:95%;
+	overflow:hidden;
+	margin-left:10px;
+	background:#fff;
+	
+	position: fixed;
+
+	bottom:46px;
+	height:45px;
+	border-top:1px solid #ccc;
+	border-bottom:1px solid #ccc;
+
+}
+.count .choice{
+	width:20;
+	float:left;
+	line-height:45px;
+}
+
+.count input{
+	width:20px;
+	height:20px;
+}
+.count .total{
+	width:70%;
+	float:right;
+
+}
+.count .choice .bg{
+	width:20px;
+	height:20px;
+	background:#fe5478 url('../images/right.png') center no-repeat;
+	position:absolute;
+	top:9px;
+	left:0px;
+	border-radius:5px;
+    display:none;
+
+}
+.count .total>div{
+	float:right;
+}
+
+input{
+	outline: none;
+}
+.total .sure{
+	width:40%;
+	height:45px;
+	background:#fe5478;
+	color:#fff;
+	text-align:center;
+	line-height:45px;
+}
+
+.total .sure a{
+	display:block;
+	text-decoration:none;
+	color:#fff;
+}
+.total .price{
+	height:45%;
+	line-height:45px;
+	margin-right:10px;
+}
+.total .price span{
+	color:#fe5478
+}
+
+footer{
+	min-width: 320px;
+	max-width: 640px;
+    
+	width:100%;
+	height:45px;
+	position:fixed;
+	 bottom:0px;
+	
+	background:#fff;
+    font-size:12px;
+    margin: 0 auto;
+
+}
+
+footer ul{
+	display: flex;
+}
+
+footer ul li{
+	flex:1;
+	text-align: center;
+	padding-top:5px;
+}
+footer img{
+	width:20px;
+	height:20px;
+	visibility: center;
+}
+footer a{
+	text-decoration: none;
+	color:#000;
+}
+footer .current a{
+	color: rgb(254, 84, 120);
+}

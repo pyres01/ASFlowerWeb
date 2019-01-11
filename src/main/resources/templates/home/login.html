@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+         <meta name="viewport" content="width=device-width, initial-scale=1">
+         <title>用户登录</title>
+         <link rel="stylesheet" href="/static/home/css/cssreset.css">
+         <link rel="stylesheet" href="/static/home/css/login.css">
+    </head>
+    <body>
+       <header>
+         <a href="../index.html">
+  	       	<h2><img src="/static/home/images/logo_new.png" alt=""></h2>
+  	       	<p>让喜欢成为习惯  爱尚®订阅鲜花</p>
+          </a>
+       </header>
+       <form action="userinfo.html" id='myform' name="form1">
+	       	<div class="tel">
+	       	 	<div class="icon_tel"><img src="/static/home/images/icon_tel.png" alt=""></div>
+	       	 	<div class="text_tel">
+	       	 		<input type="text" placeholder="手机号" id="username">
+	       	 	</div>
+	       	</div>
+	       	<div class="pwd">
+	       	 	<div class="icon_pwd"><img src="/static/home/images/icon_psw.png" alt=""></div>
+	       	 	<div class="text_pwd">
+	       	 		<input type="text" placeholder="账号密码" id="pwd">
+	       	 	</div>
+	       	</div>
+	       	<!-- 递交按钮 -->
+	       	<div class="push">
+	       		<div><button>登录</button></div>
+	       		<div><a href="/home/register">注册</a></div>
+	       	</div>
+         <div class="other">
+            <div class="left"><a href="#">短信快捷登录</a></div>
+         	<div class="right"><a href="#">重置密码</a></div>
+         </div>
+       </form>
+
+       <!-- 表单验证弹出框 -->
+       <div class="bg"></div>
+
+       <div class="modal">
+       	  <h3>提示</h3>
+       	  <div class="imfor">
+       	  	 <span id="tip">手机号码不能为空！</span>
+       	  </div>
+          <div class="sure"> 确定</div>
+          <div class="close"><img src="/static/home/images/cha_red.png" alt=""></div>
+       </div>
+
+  <script src='/static/home/js/jquery.min.js'></script>
+  <script src='/static/home/js/login.js'></script>
+    </body>
+</html>

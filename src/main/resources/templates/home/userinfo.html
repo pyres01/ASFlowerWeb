@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>个人中心</title>
+	<link rel="stylesheet" href="/static/home/css/cssreset.css">
+	<link rel="stylesheet" href="/static/home/css/userinfo.css">
+</head>
+<body>
+	<header>
+		<div class="mylogo">
+			<img src="/static/home/images/logo_new.png" alt="">
+		</div>
+		<div class="mynews">
+			<h3>小猪包</h3>
+			<a href="repassword.html"><p>修改密码</p></a>
+		</div>
+		<div class="more">
+			<img src="/static/home/images/back.png" alt="">
+		</div>
+	</header>
+	
+	<!-- 订单 -->
+	
+	<div class="bg1"></div>
+	<div class="order">
+		<div class="myorder">
+			<img src="/static/home/images/allOrder.png" alt="">
+			<h2>我的订单</h2>
+		</div>
+
+		<div>
+			<ul>
+				<li>
+					<a href="/home/order">
+						<img src="/static/home/images/waitForPay.png" alt="">
+						<p>待付款<span>(2)</span></p>
+					</a>
+				</li>
+				<li>
+					<a href="#">
+						<img src="/static/home/images/remove.png" alt="">
+						<p>已取消<span>(3)</span></p>
+					</a>
+				</li>
+				<li>
+					<a href="#">
+						<img src="/static/home/images/inService.png" alt="">
+						<p>服务中<span>(9)</span></p>
+					</a>
+				</li>
+			</ul>
+		</div>
+	</div>
+	<div class="bg1"></div>
+	<div  class="usernews">
+		<ul>
+			<li>
+				<a href="/home/useraccount">
+					<div>
+						<img src="/static/home/images/person.png" alt="">
+						<h2>个人资料</h2>
+						<div class="more">
+							 <img src="/static/home/images/back.png" alt="">
+						</div>
+					</div>
+				</a>
+			</li>
+			<li>
+				<a href="/home/order">
+						<div>
+							<img src="/static/home/images/payRecord.png" alt="">
+							<h2>消费记录</h2>
+							<div class="more">
+								 <img src="/static/home/images/back.png" alt="">
+							</div>
+						</div>
+					</a>
+			</li>
+			<li>
+				<a href="/home/userAddress">
+					<div>
+						<img src="/static/home/images/address.png" alt="">
+						<h2>收货地址</h2>
+						<div class="more">
+							 <img src="/static/home/images/back.png" alt="">
+						</div>
+					</div>
+				</a>
+			</li>
+			<li>
+
+				<div id='logout'>
+					<img src="/static/home/images/logout.png" alt="">
+					<h2>退出系统</h2>
+				</div>
+			</li>
+		</ul>
+	</div>
+	<footer>
+		<ul>
+			<li >
+				<a href="/home/index">
+					<img src="/static/home/images/home.png" alt="">
+					<p>首页</p>
+				</a>
+			</li>
+			<li>
+				<a href="#">
+					<img src="/static/home/images/service.png" alt="">
+					<p>客服</p>
+				</a>
+			</li>
+			<li>
+				<a href="/home/shoppingCart">
+					<img src="/static/home/images/cart.png" alt="">
+					<p>购物车</p>
+				</a>
+			</li>
+			<li class="current">
+				<a href="/home/userinfo">
+					<img src="/static/home/images/user_select.png" alt="">
+					<p>我的</p>
+				</a>
+			</li>
+
+		</ul>
+	</footer>
+
+	 <!-- 表单验证弹出框 -->
+       <div class="bg"></div>
+
+       <div class="modal">
+       	  <h3>提示</h3>
+       	  <div class="imfor">
+       	  	 <span id="tip">确定退出吗？</span>
+       	  </div>
+       	  <div class="choice">
+       	  	 <div class="sure"> 确定</div>
+             <div class="nosure">取消</div>
+       	  </div>
+         
+       </div>
+
+<script src='/static/home/js/jquery.min.js'></script>
+<script src='/static/home/js/userinfo.js'></script>
+	
+</body>
+</html>

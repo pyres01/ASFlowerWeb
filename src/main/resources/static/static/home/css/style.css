@@ -1,0 +1,289 @@
+/*
+* @Author: admin
+* @Date:   2018-09-14 14:55:27
+* @Last Modified by:   admin
+* @Last Modified time: 2018-11-07 18:28:46
+*/
+body{
+
+	min-width: 320px;
+	max-width: 640px;
+    margin: 0 auto;
+   
+}
+header{
+	width: 100%;
+	position: relative;
+    border-bottom: 1px solid rgb(221, 221, 221);
+ 
+}
+header h1{
+	width: 100%;
+	height: 40px;
+	background: #ffffff;
+    text-align: center;
+    opacity: 0.85;
+    line-height: 40px;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    z-index: 1;
+}
+header h1>img{
+	width: 100px;
+	vertical-align: middle; 
+}
+header .rotate {
+	width: 100%;
+	overflow: hidden; 
+	position: relative;
+}
+header ul{
+	width: 200%;
+	height: 100%;
+	left: 0%;
+	position: relative;
+	overflow: hidden;
+
+}
+
+header .rotate ul li{
+	
+	width: 50%;
+	float: left;
+}
+
+header ol{
+	
+	position: absolute;
+	left: 50%;
+	bottom: 10px;
+}
+header ol li{
+	
+	width: 10px;
+	height: 10px;
+	
+	background: #ccc;
+	margin-right: 10px;
+	float: left;
+	border-radius: 50%;
+	
+}
+header ol>.current{
+	background: #fff;
+}
+
+/* 导航部分 */
+nav{
+	width: 100%;
+	margin-bottom: 30px;
+	border-bottom: 1px solid #ccc;
+}
+nav ul{
+	overflow: hidden;
+}
+nav li{
+    width: 20%;
+    margin-right: 5%;
+	float: left;
+	margin-bottom: 20px;
+}
+nav img{
+	width: 100%;
+}
+nav a{
+	text-decoration: none;
+	color: #666;
+    font-size: 14px;
+    text-align: center;
+}
+/*主要内容部分 */
+
+/* 限时抢购 */
+main{
+	width: 100%;
+}
+.rush{
+	width: 100%;
+
+	
+}  
+.title{
+	width: 100%;
+	overflow: hidden;
+    height: 50px;
+    margin-top:30px;
+	line-height: 50px;
+	border-top: 1px solid #ccc;
+	border-bottom: 1px solid #ccc;
+}
+.title h4{
+	float: left;
+	margin: 0px 20px;
+}
+.title a{
+	margin-right: 20px;
+	display: block;
+	float:right;
+    transform:rotate(180deg);
+}
+.title  img{
+	vertical-align: middle;
+}
+
+.imfor{
+	width:100%;
+	
+	font-size: 14px;
+	margin-top: 10px;
+
+}
+.imfor ul{
+	overflow:hidden;
+	padding-bottom:5px;
+
+}
+.imfor li{
+	width: 22%;
+	
+	margin-left: 2%;
+	float: left;
+	border-radius: 5px;
+	border: 1px solid #ccc;
+
+}
+
+.imfor li:hover{
+	box-shadow: 2px 2px 1px #ccc;
+}
+.imfor img{
+	width: 100%;
+}
+
+.imfor div{
+	width: 100%;
+	height:60px;
+	color: #fff;
+	opacity: 0.3;
+    background: #000;
+    margin-top:-4px;
+}
+.imfor p{
+	margin-left:10px;
+}
+
+
+/*订阅惊喜*/
+.tsurprise li{
+	width:100%;
+	margin-top:10px;
+	border:1px solid #ccc;
+	border-radius:10px;
+	position: relative;
+	box-sizing: border-box;
+
+
+}
+.tsurprise li img{
+	width:100%;
+	
+
+}
+
+.tnews{
+	width:100%;
+	height:70px;
+	position: absolute;
+	left:0px;
+	bottom:0px;
+
+	background:rgba(0,0,0,0.5);
+	color:#fff;
+}
+
+.tnews p{
+	padding-left: 20px;
+	line-height:32px;
+}
+
+/* 单束花礼*/
+.single ul{
+	overflow:hidden;
+}
+.single li{
+	margin:20px 3%;
+	float: left;
+	width:44%;
+	margin-right:10px;
+	border:1px solid #ccc;
+	border-radius:10px;
+}
+.single li:nth-of-type(2n){
+	margin-right:0px;
+}
+.single li img{
+	width:100%;
+	
+}
+
+.single p{
+	padding-left:10px;
+	line-height:32px;
+}
+
+.mynews{
+	width:100%;
+	height:200px;
+	background: #fafafa;
+	display:flex;
+	text-align:center;
+	color: rgb(153, 153, 153);
+
+	border-top:1px solid #ccc;
+
+}
+
+.mynews>div{
+	flex:1;
+	padding-top:40px;
+}
+
+footer{
+
+	min-width: 320px;
+	max-width: 640px;
+    margin: 0 auto;
+    
+	width:100%;
+	height:45px;
+	position:fixed;
+	bottom:0px;
+	
+	background:#fff;
+	
+    font-size:12px;
+
+}
+
+footer ul{
+	display: flex;
+}
+
+footer ul li{
+	flex:1;
+	text-align: center;
+	padding-top:5px;
+}
+footer img{
+	width:20px;
+	height:20px;
+	visibility: center;
+}
+footer a{
+	text-decoration: none;
+	color:#000;
+}
+footer .current a{
+	color: rgb(254, 84, 120);
+}

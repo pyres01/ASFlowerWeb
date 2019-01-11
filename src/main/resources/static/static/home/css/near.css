@@ -1,0 +1,57 @@
+/*
+* @Author: admin
+* @Date:   2018-10-12 14:10:19
+* @Last Modified by:   admin
+* @Last Modified time: 2018-11-07 18:15:51
+*/
+body{
+
+	min-width: 320px;
+	max-width: 640px;
+    margin: 0 auto;
+   
+}
+header img{
+	width: 100%;
+}
+
+/*订阅惊喜*/
+.near li{
+	width:100%;
+	margin-top:10px;
+	border:1px solid #ccc;
+	border-radius:10px;
+	position: relative;
+	box-sizing: border-box;
+
+
+}
+.near li img{
+	width:100%;
+	
+
+}
+
+.tnews{
+	width:100%;
+	height:70px;
+	position: absolute;
+	left:0px;
+	bottom:0px;
+
+	background:rgba(0,0,0,0.5);
+	color:#fff;
+}
+
+.tnews p{
+	padding-left: 20px;
+	line-height:32px;
+}
+
+footer{
+	width: 100%;
+	height: 60px;
+	text-align: center;
+	line-height: 60px;
+
+}

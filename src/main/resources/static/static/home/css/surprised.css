@@ -1,0 +1,19 @@
+/*
+* @Author: admin
+* @Date:   2018-10-12 13:38:23
+* @Last Modified by:   admin
+* @Last Modified time: 2018-11-07 18:16:16
+*/
+body{
+
+	min-width: 320px;
+	max-width: 640px;
+    margin: 0 auto;
+   
+}
+header img{
+	width: 100%;
+}
+main img{
+	width: 100%;
+}

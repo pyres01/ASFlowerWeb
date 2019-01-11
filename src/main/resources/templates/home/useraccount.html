@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="/static/home/css/cssreset.css">
+        <link rel="stylesheet" href="/static/home/css/useraccount.css">
+        <title>个人账户</title>
+    </head>
+    <body>
+	    <header>
+			<div class="back">
+				<a href="/home/index">
+					<img src="/static/home/images/back.png" alt="">返回
+				</a>
+			</div>
+			<div class="myorder">
+				<p>我的账户</p>
+			</div>
+		</header>
+
+		<div  class="usernews">
+			<div class="title">
+				<img src="/static/home/images/person.png" alt="">
+				<h2>个人资料</h2>
+				<div class="edit">编辑</div>
+				<div class="save">保存</div>
+			</div>
+			<div class="info">
+			<!-- 性别 -->
+				<div class="sex">
+					<div class="icon_sex"><label for="sex">性别：</label></div>
+					<div class="text_sex">
+					    <input type="radio" name="sex" value='male'  readonly /><label>男</label>
+			            <input name="sex" checked type="radio" value="female" readonly /><label>女</label>
+					</div>
+				</div>
+				<!-- 生日 -->
+				<div>
+					<div>生日：</div>
+					<div><input type="text" value="1995-6-6" readonly></div>
+				</div>
+				<!-- 生日 -->
+				<div>
+					<div>绑定的手机号：</div>
+					<div><div><input type="text" value="1234567898" readonly></div></div>
+				</div>
+			</div>
+		
+			
+	    </div>
+
+	    <!-- 地址 -->
+	    <div class="bg"></div>
+	    <div class="address">
+	         <div class="title">
+				<img src="/static/home/images/address.png" alt="">
+				<h2>礼物收货地址</h2>
+				<a href="address.html">编辑</a>
+			</div>
+			<div class="info">
+				<div>
+					 <div>收件人：</div>
+				     <div>小猪包</div>
+				</div>
+				<div>
+					 <div>手机号：</div>
+				     <div>1234567890</div>
+				</div>
+				<div>
+					 <div>详细地址：</div>
+				     <div>广西贺州市八步区贺州学院西校区南苑</div>
+				</div>
+			 
+				
+			</div>
+	    	
+	    </div>
+
+	    <script src='/static/home/js/jquery.min.js'></script>
+	    <script src='/static/home/js/useraccount.js'></script>
+    </body>
+</html>
