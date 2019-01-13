@@ -172,17 +172,22 @@
 
         //监听提交
         form.on('submit(add)', function(data){
-          console.log(data.field);
+          //console.log(data.field);
           //校验数据
           //发异步，把数据提交给后台
-          
-          layer.alert("增加成功", {icon: 6},function () {
-              // 获得frame索引
-              var index = parent.layer.getFrameIndex(window.name);
-              //关闭当前frame
-              parent.layer.close(index);
-          });
-          return false;
+          var id = 0;
+          if($('#initOp').text().length){
+        	  switch ($('#initOp').text()){
+        	  	case '0':
+        	  		addManager(data);
+        	  		break;
+        	  	case '1':
+        	  		updateManager(data,$('#updateId').text());
+        	  		break;
+        	  	default:
+        	  		break;
+        	  }
+          }
         });
         
         
@@ -216,7 +221,7 @@
     					  });
     					  $('input[name=username]').val(updateManager.name);
     					  $('input[name=email]').val(updateManager.email);
-    					  $('input[name=birthday]').val(updateManager.birthday.substr(0,10));
+    					  $('input[name=birthday]').val(updateManager.birthday!=null?updateManager.birthday.substr(0,10):'');
     					  $('input[name=address]').val(updateManager.address);
     					  $('input[name=phone]').val(updateManager.phone);
     					  $('input[name=qq]').val(updateManager.qq);
@@ -230,6 +235,64 @@
     	  }else{
     		  //id有误
     	  }
+      }
+      function addManager(formData){
+      	//校验数据
+    	  //发送ajax请求
+    	  formData.field.op = 2;
+    	  $.ajax({
+    	  	url:'',
+    	  	type:"POST",
+    	  	dataType:'json',
+    	  	data:formData.field,
+    	  	success:function(data){
+    	  		if(data.code == 200){
+			  			layer.alert("添加成功", {icon: 6},function () {
+			          // 获得frame索引
+			          var index = parent.layer.getFrameIndex(window.name);
+			          //关闭当前frame
+			          parent.layer.close(index);
+		          });
+    	  		}else{
+    	  			//更新失败
+    	  			layer.alert("添加失败", {icon: 5},function () {
+			          // 获得frame索引
+			          var index = parent.layer.getFrameIndex(window.name);
+			          //关闭当前frame
+			          parent.layer.close(index);
+		          });
+    	  		}
+    	  })
+      }
+      function updateManager(formData,updateManagerId){
+    	  //校验数据
+    	  //发送ajax请求
+    	  formData.field.op = 3;
+    	  console.log(formData.field);
+    	  $.ajax({
+    	  	url:'',
+    	  	type:"POST",
+    	  	dataType:'json',
+    	  	data:formData.field,
+    	  	success:function(data){
+    	  		if(data.code == 200){
+			  			layer.alert("修改成功", {icon: 6},function () {
+			          // 获得frame索引
+			          var index = parent.layer.getFrameIndex(window.name);
+			          //关闭当前frame
+			          parent.layer.close(index);
+		          });
+    	  		}else{
+    	  			//更新失败
+    	  			layer.alert("修改失败", {icon: 5},function () {
+			          // 获得frame索引
+			          var index = parent.layer.getFrameIndex(window.name);
+			          //关闭当前frame
+			          parent.layer.close(index);
+		          });
+    	  		}
+    	  	}
+    	  });
       }
   </script>
   </body>
