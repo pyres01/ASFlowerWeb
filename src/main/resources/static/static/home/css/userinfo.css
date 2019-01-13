@@ -7,7 +7,7 @@ body{
 }
 
 body{
-	font-size:2rem;
+    font-weight: normal;
 }
 header{
 	width: 100%;
@@ -43,24 +43,25 @@ header .mynews{
 
 header .mynews h3{
 	margin-top:10px;
+	font-size:20px;
 
 
 
 }
 header .mynews p{
 	
-	font-size:1.5rem;
+	font-size:16px;
 	color: #666;
 }
  header .more{
-	width: 60px;
+	height: 60px;
 	float: right;
 	text-align: center;
 	margin-right: 20px;
 	line-height: 140px;
 }
 header  .more img{
-	width: 22px;
+	height: 22px;
 	transform: rotate(180deg);
 }
 a{
@@ -71,7 +72,7 @@ a{
 	height: 10px;
 	background-color: #f1f2f3;
 }
-/*订单*/
+/*璁㈠崟*/
 
 .order{
 	width: 100%;
@@ -80,28 +81,32 @@ a{
 .order>div{
 	width: 100%;
 }
+.order img{
+	width:30px;
+	
+}
 .myorder{
 	width: 100%;
-	height: 80px;
+	height: 60px;
 	border-bottom: 1px solid #ccc;
 }
 .myorder img{
-	height: 60px;
+	height: 30px;
 	float: left;
 	margin: 10px 20px;
 }
 .myorder h2{
-	height: 100px;
-	line-height:100px;
+	height: 60px;
+	line-height:60px;
 	
 	color: #999;
 }
 .order ul{
-	height: 100px;
+	height: 60px;
 	display: flex;
 	text-align: center;
-	margin-top: 40px;
-	margin-bottom:40px;
+	margin-top: 20px;
+	
 }
 
 .order li{
@@ -114,26 +119,26 @@ a{
 	text-decoration: none;
 }
 
-/*个人资料*/
+/*涓汉璧勬枡*/
 .usernews{
 	width: 100%;
 	margin-bottom:120px;
 	
 }
 .usernews img{
-	height: 60px;
+	height: 20px;
 	float: left;
-	margin: 10px 20px;
+	margin: 15px 20px;
 }
 .usernews h2{
-	height: 100px;
-	line-height: 100px;
+	height: 60px;
+	line-height: 60px;
 	
 	color: #999;
 	float: left;
 }
 .usernews li{
-	height: 100px;
+	height: 60px;
 	border-bottom: 1px solid #ccc;
 	box-sizing: border-box;
 }
@@ -146,7 +151,7 @@ a{
 	line-height: 140px;
 }
 .usernews  .more img{
-	width: 22px;
+	height:22px;
 	transform: rotate(180deg);
 }
 
@@ -162,6 +167,7 @@ footer{
 
 	border-top: 1px solid #ccc;
 	background:#fff;
+	padding:5px 0;
 	
 	
   
@@ -180,8 +186,11 @@ footer ul li{
 	padding-top:5px;
 }
 footer img{
+	height:20px;
 	
-	
+}
+footer p{
+	font-size:14px;
 }
 footer a{
 	text-decoration: none;
@@ -193,34 +202,40 @@ footer .current a{
 
 
 
-/*表单验证弹出框*/
+
 .bg{
-	width:100%;
-	height:100%;
-	position: fixed;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0,0,0,0.7);
-    display: none;
-    z-index: 10;
-}
-.modal{
-	min-width: 320px;
+	
+    min-width: 320px;
 	max-width: 640px;
     margin: 0 auto;
-	width:50rem;
-	z-index:12;
-	background:#fff;
+	
 	position: fixed;
-  
+    top: 0;
+    width: 100%;
+   height:100%;
+    background: rgba(0,0,0,0.7);
+    z-index: 10;
+    display:none;
+      
+}
+.modal{
+	 min-width: 320px;
+	max-width: 640px;
+	z-index:12;
+	
+	position: fixed;
     top: 30%;
-    display: none;
-  
+    width:100%;
     border-radius: 5px;
     text-align:center;
+   display:none;
   
+}
+.modal>div{
+	width:300px;
+	background:#fff;
+	margin:0px auto;
+	
 }
 
 .modal h3{
@@ -228,13 +243,14 @@ footer .current a{
 	line-height:60px;
 }
 .modal .imfor{
-	height:100px;
-	line-height:100px;
+	height:30px;
+	
 }
 .choice{
-	width: 100%;
-	height: 100px;
+	width: 200px;
+	height: 60px;
 	margin-bottom: 30px;
+	margin:0 auto;
 
 }
 .choice>div{
@@ -243,16 +259,16 @@ footer .current a{
 	border-radius: 5px;
 }
 .sure{
-	width:40%;
-	height:60px;
+	width:60px;
+	height:30px;
 	background:#fe5478;
 	color:#fff;
-	line-height: 60px;
+	line-height: 30px;
 }
 .nosure{
-	width:40%;
-	height:60px;
+	width:60px;
+	height:30px;
 	background:#fe5478;
 	color:#fff;
-	line-height: 60px;
+	line-height: 30px;
 }
