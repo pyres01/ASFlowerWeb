@@ -241,7 +241,7 @@
     	  //发送ajax请求
     	  formData.field.op = 2;
     	  $.ajax({
-    	  	url:'',
+    	  	url:'/admin/editManager',
     	  	type:"POST",
     	  	dataType:'json',
     	  	data:formData.field,
@@ -270,7 +270,7 @@
     	  formData.field.op = 3;
     	  console.log(formData.field);
     	  $.ajax({
-    	  	url:'',
+    	  	url:'/admin/editManager',
     	  	type:"POST",
     	  	dataType:'json',
     	  	data:formData.field,
