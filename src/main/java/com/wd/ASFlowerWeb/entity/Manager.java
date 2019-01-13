@@ -21,12 +21,10 @@ import lombok.extern.slf4j.Slf4j;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Slf4j
 public class Manager {
 	
 	private Integer id;
 	private String name;
-	private String relname;
 	private String password;
 	private Boolean sex = false;
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
@@ -34,14 +32,12 @@ public class Manager {
 	private Timestamp birthday;
 	private String address;
 	private String phone;
-	private String avatar;
 	private String email;
-	private String signature;
 	private String qq;
 	private String wechat;
-	private Boolean status = true;
 	private Boolean isDelete = false;
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
 	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	private Timestamp deleteTime;
+	private Integer rank = 1;
 }

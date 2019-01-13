@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!DOCTYPE html >
 <html>
   
   <head>
@@ -23,16 +23,16 @@
   <body>
     <div class="x-body">
         <form class="layui-form">
-          <div class="layui-form-item">
-              <label for="L_email" class="layui-form-label">
-                  <span class="x-red">*</span>邮箱
+        <div class="layui-form-item">
+              <label for="L_rank" class="layui-form-label">
+                  <span class="x-red">*</span>等级
               </label>
               <div class="layui-input-inline">
-                  <input type="text" id="L_email" name="email" required="" lay-verify="email"
-                  autocomplete="off" class="layui-input">
-              </div>
-              <div class="layui-form-mid layui-word-aux">
-                  <span class="x-red">*</span>将会成为您唯一的登入名
+                  <select name="rank" lay-verify="" id="rankSelecter">
+					  <option value="0" disabled>顶级管理员</option>
+					  <option value="1" >超级管理员</option>
+					  <option value="2" selected>普通管理员</option>
+					</select>
               </div>
           </div>
           <div class="layui-form-item">
@@ -42,6 +42,9 @@
               <div class="layui-input-inline">
                   <input type="text" id="L_username" name="username" required="" lay-verify="nikename"
                   autocomplete="off" class="layui-input">
+              </div>
+              <div class="layui-form-mid layui-word-aux">
+                  <span class="x-red">*</span>将会成为您唯一的登入名
               </div>
           </div>
           <div class="layui-form-item">
@@ -66,20 +69,92 @@
               </div>
           </div>
           <div class="layui-form-item">
-              <label for="L_repass" class="layui-form-label">
+              <label for="L_email" class="layui-form-label">
+                  <span class="x-red">*</span>邮箱
               </label>
-              <button  class="layui-btn" lay-filter="add" lay-submit="">
-                  增加
-              </button>
+              <div class="layui-input-inline">
+                  <input type="text" id="L_email" name="email" required="" lay-verify="email"
+                  autocomplete="off" class="layui-input">
+              </div>
+          </div>
+          <div class="layui-form-item">
+              <label for="L_sex" class="layui-form-label">
+                  <span class="x-red">*</span>性别
+              </label>
+              <div class="layui-input-inline">
+                <input type="radio" name="sex" value="1" title="男">
+				<input type="radio" name="sex" value="0" title="女" checked>
+              </div>
+          </div>
+          <div class="layui-form-item">
+              <label for="L_birthday" class="layui-form-label">
+                  <span class="x-red">*</span>生日
+              </label>
+              <div class="layui-input-inline">
+                  <input type="text" id="L_birthday" name="birthday" required="" lay-verify="birthday"
+                  autocomplete="off" class="layui-input">
+              </div>
+          </div>
+          <div class="layui-form-item">
+              <label for="L_address" class="layui-form-label">
+                  <span class="x-red">*</span>住址
+              </label>
+              <div class="layui-input-inline">
+                  <input type="text" id="L_address" name="address" required="" lay-verify="address"
+                  autocomplete="off" class="layui-input">
+              </div>
+          </div>
+          <div class="layui-form-item">
+              <label for="L_phone" class="layui-form-label">
+                  <span class="x-red">*</span>手机号码
+              </label>
+              <div class="layui-input-inline">
+                  <input type="text" id="L_phone" name="phone" required="" lay-verify="phone"
+                  autocomplete="off" class="layui-input">
+              </div>
+          </div>
+          <div class="layui-form-item">
+              <label for="L_qq" class="layui-form-label">
+                  <span class="x-red">*</span>QQ
+              </label>
+              <div class="layui-input-inline">
+                  <input type="text" id="L_qq" name="qq" required="" lay-verify="qq"
+                  autocomplete="off" class="layui-input">
+              </div>
+          </div>
+          <div class="layui-form-item">
+              <label for="L_wechat" class="layui-form-label">
+                  <span class="x-red">*</span>微信
+              </label>
+              <div class="layui-input-inline">
+                  <input type="text" id="L_wechat" name="wechat" required="" lay-verify="wechat"
+                  autocomplete="off" class="layui-input">
+              </div>
+          </div>
+          <div class="layui-form-item">
+              <label for="L_saveBtn" class="layui-form-label">
+              </label>
+              <button id="L_saveBtn"  class="layui-btn" lay-filter="add" lay-submit="">保存 </button>
           </div>
       </form>
+      <span hidden th:text="${op}" id="initOp"></span>
+      <span hidden th:if="${op == 1}"><span id="updateId" th:text="${id}"></span></span>
     </div>
     <script>
-      layui.use(['form','layer'], function(){
-          $ = layui.jquery;
-        var form = layui.form
-        ,layer = layui.layer;
+      var op = $('#initOp').text();
+      if(op==1){loadUpdateManager($('#updateId').text());}
       
+      var form = layer = laydate = null;
+      layui.use(['form','layer','laydate'], function(){
+          $ = layui.jquery;
+        form = layui.form
+        ,layer = layui.layer
+        ,laydate = layui.laydate;
+      	
+        
+        laydate.render({
+        	elem:'#L_birthday'
+        });
         //自定义验证规则
         form.verify({
           nikename: function(value){
@@ -97,8 +172,10 @@
 
         //监听提交
         form.on('submit(add)', function(data){
-          console.log(data);
-          //发异步，把数据提交给php
+          console.log(data.field);
+          //校验数据
+          //发异步，把数据提交给后台
+          
           layer.alert("增加成功", {icon: 6},function () {
               // 获得frame索引
               var index = parent.layer.getFrameIndex(window.name);
@@ -110,6 +187,50 @@
         
         
       });
+      
+      function loadUpdateManager(id){
+    	  if(id>0){
+    		  $.ajax({
+    			  url:"/admin/loadManager",
+    			  type:"POST",
+    			  dataType:"json",
+    			  data:{
+    				  id : id
+    			  },
+    			  success:function(data){
+    				  if(data.code ==200){//渲染数据
+    					  
+    					  var updateManager = data.updateManager;
+						  //重置等级option禁用状态
+    					  $('#rankSelecter option').each(function(){
+    						  if($(this).val()<updateManager.rank){
+    							  //$("#select_id").find("option:[value=$(this).val()]").removeAttr("disabled");
+    							  $(this).attr("disabled","disabled")//设为禁用
+    						  }else{
+    							  //$("#select_id").find("option:[value=$(this).val()]").removeAttr("disabled");
+    							  $(this).removeAttr("disabled") //设为可用  
+    						  }
+    						  
+    						  //选中对应等级option
+        					  $("#rankSelecter ").val(updateManager.rank);   // 设置Select的Value值为*的项选中
+    					  });
+    					  $('input[name=username]').val(updateManager.name);
+    					  $('input[name=email]').val(updateManager.email);
+    					  $('input[name=birthday]').val(updateManager.birthday.substr(0,10));
+    					  $('input[name=address]').val(updateManager.address);
+    					  $('input[name=phone]').val(updateManager.phone);
+    					  $('input[name=qq]').val(updateManager.qq);
+    					  $('input[name=wechat]').val(updateManager.wechat);
+    				  }else{
+    					  //获取失败
+    				  }
+    			  }
+    			 
+    		  });
+    	  }else{
+    		  //id有误
+    	  }
+      }
   </script>
   </body>
 

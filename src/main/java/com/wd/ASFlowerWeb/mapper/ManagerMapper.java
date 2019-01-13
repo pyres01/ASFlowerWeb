@@ -19,7 +19,7 @@ import com.wd.ASFlowerWeb.entity.Manager;
 public interface ManagerMapper {
 
 	//添加管理员
-	@Insert("INSERT INTO MANAGER(name,relname,password,sex,birthday,address,phone,avatar,email,signature,qq,wechat,status,isDelete,deleteTime) VALUES(#{name},#{relname},#{password},#{sex},#{birthday},#{address},#{phone},#{avatar},#{email},#{signature},#{qq},#{wechat},#{status},#{isDelete},#{deleteTime})")
+	@Insert("INSERT INTO MANAGER(name,password,sex,birthday,address,phone,email,qq,wechat,isDelete,deleteTime,rank) VALUES(#{name},#{password},#{sex},#{birthday},#{address},#{phone},#{email},#{qq},#{wechat},#{isDelete},#{deleteTime},#{rank})")
 	Integer insert(Manager manager);
 	
 	//查询未软删除的管理员个数
@@ -53,12 +53,17 @@ public interface ManagerMapper {
 	Integer updateManagerPwd(@Param("password") String password,@Param("id") Integer id);
 	
 	//根据id更新管理员信息
-	@Update("UPDATE MANAGER SET name = #{name},relname = #{relname},password = #{password},sex = #{sex},birthday = #{birthday},address = #{address},phone = #{phone},avatar = #{avatar},email = #{email},signature = #{signature},qq = #{qq},wechat = #{wechat},status = #{status},isDelete = #{isDelete},deleteTime = #{deleteTime} WHERE id = #{id}")
+	@Update("UPDATE MANAGER SET name = #{name},password = #{password},sex = #{sex},birthday = #{birthday},address = #{address},phone = #{phone},email = #{email},qq = #{qq},wechat = #{wechat},isDelete = #{isDelete},deleteTime = #{deleteTime},rank=#{rank} WHERE id = #{id}")
 	Integer updateManagerById(Manager manager);
 	
 	//根据管理员id删除管理员
 	@Delete("DELETE FROM MANAGER WHERE id = ${id}")
-	Integer deleteManager(@Param("id") Integer id);
+	Integer relDeleteManager(@Param("id") Integer id);
 	
+	//更新管理员软删除状态
+	@Update("UPDATE MANAGER SET isDelete = ${isDelete} WHERE id = ${id}")
+	Integer DeleteManager(@Param("id") Integer id,@Param("isDelete") Integer isDelete);
 	
+	@Select("SELECT * FROM MANAGER WHERE id = ${id}")
+	Manager getManagerById(@Param("id") Integer id);
 }

@@ -1,5 +1,8 @@
 package com.wd.ASFlowerWeb.controller;
 
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,8 +42,20 @@ public class Test {
 	@ResponseBody
 	public Integer test3(){
 		Manager manager = new Manager();
-		manager.setName("test");
+		manager.setName("test1");
 		manager.setPassword("123456");
+		manager.setBirthday(new Timestamp(System.currentTimeMillis()));
 		return managerMapper.insert(manager);
+	}
+	
+	@GetMapping("/admin/test4")
+	@ResponseBody
+	public Timestamp test4(){
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
+		String date = df.format(new Date());// new Date()为获取当前系统时间，也可使用当前时间戳
+
+
+		Timestamp time= new Timestamp(System.currentTimeMillis());//获取系统当前时间 
+		return  time;
 	}
 }
