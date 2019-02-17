@@ -31,4 +31,9 @@ public class ShoppingController {
 	public String skShoppingEditIndex(){
 		return "/admin/sk-shopping-edit";
 	}
+	
+	@GetMapping("/home/shoppingDetail")
+	public String shoppingDetail(){
+		return "/home/detail";
+	}
 }
