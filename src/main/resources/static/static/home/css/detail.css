@@ -144,11 +144,11 @@ main{
 
 .style .title,.time .title,.number .title{
 	height: 33px;
-	width: 11%;
+	width: 15%;
 	line-height: 33px;
 }
 .style .content,.time .content,.number .num{
-	width: 88%;
+	width: 80%;
 }
 .style .content>div,.time .content>div{
 	width: 40%;
@@ -193,6 +193,12 @@ main{
 	width:100%;
 	text-align:center;
 	
+}
+.textcolor{
+	color:#f60;
+}
+.mprice{
+	color:#999;
 }
 main .content .current{
      border: 1px solid #fe5478;
