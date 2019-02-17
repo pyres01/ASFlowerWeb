@@ -1,6 +1,7 @@
 package com.wd.ASFlowerWeb.entity;
 
 import java.sql.Timestamp;
+import java.util.Date;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -9,8 +10,6 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
-import lombok.extern.slf4j.Slf4j;
 
 /**
  * @author 风微轻
@@ -27,9 +26,7 @@ public class Manager {
 	private String name;
 	private String password;
 	private Boolean sex = false;
-	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
-	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-	private Timestamp birthday;
+	private Date birthday;
 	private String address;
 	private String phone;
 	private String email;

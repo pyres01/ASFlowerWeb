@@ -1,6 +1,5 @@
 <!DOCTYPE html >
 <html>
-  
   <head>
     <meta charset="UTF-8">
     <title>欢迎页面-X-admin2.0</title>
@@ -91,7 +90,7 @@
                   <span class="x-red">*</span>生日
               </label>
               <div class="layui-input-inline">
-                  <input type="text" id="L_birthday" name="birthday" required="" lay-verify="birthday"
+                  <input type="text" id="L_birthday" name="birthday" lay-verify="birthday"
                   autocomplete="off" class="layui-input">
               </div>
           </div>
@@ -100,7 +99,7 @@
                   <span class="x-red">*</span>住址
               </label>
               <div class="layui-input-inline">
-                  <input type="text" id="L_address" name="address" required="" lay-verify="address"
+                  <input type="text" id="L_address" name="address"  lay-verify="address"
                   autocomplete="off" class="layui-input">
               </div>
           </div>
@@ -118,7 +117,7 @@
                   <span class="x-red">*</span>QQ
               </label>
               <div class="layui-input-inline">
-                  <input type="text" id="L_qq" name="qq" required="" lay-verify="qq"
+                  <input type="text" id="L_qq" name="qq"  lay-verify="qq"
                   autocomplete="off" class="layui-input">
               </div>
           </div>
@@ -127,7 +126,7 @@
                   <span class="x-red">*</span>微信
               </label>
               <div class="layui-input-inline">
-                  <input type="text" id="L_wechat" name="wechat" required="" lay-verify="wechat"
+                  <input type="text" id="L_wechat" name="wechat"  lay-verify="wechat"
                   autocomplete="off" class="layui-input">
               </div>
           </div>
@@ -221,6 +220,10 @@
     					  });
     					  $('input[name=username]').val(updateManager.name);
     					  $('input[name=email]').val(updateManager.email);
+    					  if(updateManager.sex){
+    						  $('input[name=sex][value=1]').prop('checked', true);
+    					  }
+    					  
     					  $('input[name=birthday]').val(updateManager.birthday!=null?updateManager.birthday.substr(0,10):'');
     					  $('input[name=address]').val(updateManager.address);
     					  $('input[name=phone]').val(updateManager.phone);
@@ -269,6 +272,7 @@
     	  //校验数据
     	  //发送ajax请求
     	  formData.field.op = 3;
+    	  formData.field.id = updateManagerId;
     	  console.log(formData.field);
     	  $.ajax({
     	  	url:'/admin/editManager',

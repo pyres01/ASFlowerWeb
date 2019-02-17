@@ -20,7 +20,7 @@
     <![endif]-->
   </head>
   
-  <body class="layui-anim layui-anim-up">
+  <body>
     <div class="x-nav">
       <span class="layui-breadcrumb">
         <a href="">首页</a>
@@ -32,32 +32,26 @@
         <i class="layui-icon" style="line-height:30px">ဂ</i></a>
     </div>
     <div class="x-body">
-      <div class="layui-row">
-        <form class="layui-form layui-col-md12 x-so">
-          <input class="layui-input" placeholder="开始日" name="start" id="start">
-          <input class="layui-input" placeholder="截止日" name="end" id="end">
-          <input type="text" name="username"  placeholder="请输入用户名" autocomplete="off" class="layui-input">
-          <button class="layui-btn"  lay-submit="" lay-filter="sreach"><i class="layui-icon">&#xe615;</i></button>
-        </form>
-      </div>
-      <xblock>
-        <button class="layui-btn" onclick="x_admin_show('添加用户','./member-add.html',600,400)"><i class="layui-icon"></i>添加</button>
-        <span class="x-right" style="line-height:40px">共有数据：88 条</span>
+      <xblock style="height:40px;">
+        <span class="x-right" style="line-height:40px">共有数据：<span id="countManager">0</span> 条</span>
       </xblock>
-      <table class="layui-table">
+      <table class="layui-table" id="contentTable">
         <thead>
           <tr>
             <th>ID</th>
             <th>用户名</th>
             <th>性别</th>
+            <th>生日</th>
+            <th>住址</th>
             <th>手机</th>
             <th>邮箱</th>
-            <th>地址</th>
+            <th>QQ</th>
+            <th>微信</th>
             <th>删除时间</th>
             <th>操作</th></tr>
         </thead>
         <tbody>
-          <tr>
+          <!-- <tr>
             <td>1</td>
             <td>小明</td>
             <td>男</td>
@@ -67,69 +61,99 @@
             <td>2017-01-01 11:11:42</td>
             <td class="td-manage">
               <a title="恢复"  onclick="x_admin_show('恢复管理员','member-edit.html',600,400)" href="javascript:;">
-                <i class="iconfont">&#xe6b7;</i>
+                <i class="iconfont">&#xe6aa;</i>
               </a>
-              <a title="删除" onclick="member_del(this,'要删除的id')" href="javascript:;">
+              <a title="彻底删除" onclick="member_del(this,'要删除的id')" href="javascript:;">
                 <i class="iconfont">&#xe69d;</i>
               </a>
             </td>
-          </tr>
-          <tr>
-            <td>1</td>
-            <td>小明</td>
-            <td>男</td>
-            <td>13000000000</td>
-            <td>admin@mail.com</td>
-            <td>北京市 海淀区</td>
-            <td>2017-01-01 11:11:42</td>
-            <td class="td-manage">
-              <a title="恢复"  onclick="x_admin_show('恢复管理员','member-edit.html',600,400)" href="javascript:;">
-                <i class="iconfont">&#xe6b7;</i>
-              </a>
-              <a title="删除" onclick="member_del(this,'要删除的id')" href="javascript:;">
-                <i class="iconfont">&#xe69d;</i>
-              </a>
-            </td>
-          </tr>
+          </tr> -->
         </tbody>
       </table>
-      <div class="page">
-        <div>
-          <a class="prev" href="">&lt;&lt;</a>
-          <a class="num" href="">1</a>
-          <span class="current">2</span>
-          <a class="num" href="">3</a>
-          <a class="num" href="">489</a>
-          <a class="next" href="">&gt;&gt;</a>
-        </div>
-      </div>
-
     </div>
     <script>
-      layui.use('laydate', function(){
-        var laydate = layui.laydate;
-        
-        //执行一个laydate实例
-        laydate.render({
-          elem: '#start' //指定元素
-        });
-
-        //执行一个laydate实例
-        laydate.render({
-          elem: '#end' //指定元素
-        });
-      });
-
-
-      /*用户-删除*/
-      function member_del(obj,id){
-          layer.confirm('确认要删除吗？',function(index){
-              //发异步删除数据
-              $(obj).parents("tr").remove();
-              layer.msg('已删除!',{icon:1,time:1000});
-          });
+      init();
+      function init(){
+    	  hideTable();
+    	  loadDelList();
+      }
+      
+      function hideTable(){
+    	  $('#contentTable').hide();
+      }
+      function showTable(){
+    	  $('#contentTable').show();
       }
 
+      /*用户-删除*/
+      function del(obj,id){
+          layer.confirm('确认要彻底删除吗？',function(index){
+              $.ajax({
+            	  url:'/admin/relDelManager',
+      			type:"POST",
+      			dataType:'json',
+      			data:{id:id},
+      			success:function(data){
+      				if(data.code == 200){
+      					$(obj).parents("tr").remove();
+      	              	layer.msg('已删除!',{icon:1,time:1000});
+      	                var count = $('#countManager').text();
+	 		    		 $('#countManager').text(count-1);
+	 		    		 if(count-1==0){
+	 		    			 hideTable();
+	 		    		 }
+      				}else{
+      					layer.msg('删除失败!',{icon:2,time:1000});
+      				}
+      			}
+              });
+              
+          });
+      }
+      
+      function recover(obj,id){
+    	  layer.confirm('确认要恢复吗？',function(index){
+    		  $.ajax({
+    			url:'/admin/recoverDelManager',
+    			type:"POST",
+    			dataType:'json',
+    			data:{id:id},
+    			success:function(data){
+    				if(data.code == 200){
+    					 $(obj).parents("tr").remove();
+    		    		 layer.msg('已恢复！',{icon:6,time:1000});
+    		    		 var count = $('#countManager').text();
+    		    		 $('#countManager').text(count-1);
+    		    		 if(count-1==0){
+    		    			 hideTable();
+    		    		 }
+    				}else{
+    					layer.msg('恢复失败！',{icon:5,time:1000});
+    				}
+    			}
+    		  });
+    		 
+    	  })
+      }
+	  function loadDelList(){
+		  $.ajax({
+			  url:"/admin/loadDelManagerList",
+			  type:"POST",
+			  dataType:"json",
+			  data:{},
+			  success:function(data){
+				  if(data.code == 200){
+					  $('#countManager').text(data.managerCount);
+					  $.each(data.managerList,function(index,item){
+						$('#contentTable').append('<tr><td>'+(item.id)+'</td><td>'+(item.name)+'</td><td>'+(item.sex == 0?"女":"男")+'</td><td>'+(item.birthday!=null?item.birthday.substr(0,10):"无")+'</td><td>'+(item.address!=null?item.address:"无")+'</td><td>'+(item.phone!=null?item.phone:"无")+'</td><td>'+(item.email!=null?item.email:"无")+'</td><td>'+(item.qq!=null?item.qq:"无")+'</td><td>'+(item.wechat!=null?item.wechat:"无")+'</td><td>'+(item.deleteTime)+'</td><td class="td-manage"><a title="恢复"  onclick="recover(this,'+(item.id)+')" href="javascript:;"><i class="iconfont">&#xe6aa;</i></a> <a title="彻底删除" onclick="del(this,'+(item.id)+')" href="javascript:;"><i class="iconfont">&#xe69d;</i></a></td></tr>');
+					  });
+					  showTable();
+				  }else{
+					  $('#countManager').text(0);
+				  }
+			  }
+		  });
+	  }
     </script>
   </body>
 

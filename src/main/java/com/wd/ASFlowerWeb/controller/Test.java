@@ -1,5 +1,7 @@
 package com.wd.ASFlowerWeb.controller;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -7,6 +9,8 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.ClassUtils;
+import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -25,9 +29,11 @@ public class Test {
 	private ManagerMapper managerMapper;
 	@GetMapping("/admin/test")
 	@ResponseBody
-	public String test(){
-		List<Manager> managerList = managerMapper.findNormalAll(0,1);
-		return managerList.toString();
+	public void test() throws FileNotFoundException{
+		
+		String path = ClassUtils.getDefaultClassLoader().getResource("").getPath()+"static/";
+
+		System.out.println(path);
 	}
 	
 	@GetMapping("/admin/test2")

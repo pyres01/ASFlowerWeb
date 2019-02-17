@@ -20,7 +20,7 @@
     <![endif]-->
   </head>
   
-  <body class="layui-anim layui-anim-up">
+  <body>
     <div class="x-nav">
       <span class="layui-breadcrumb">
         <a href="">首页</a>
@@ -32,14 +32,14 @@
         <i class="layui-icon" style="line-height:30px">ဂ</i></a>
     </div>
     <div class="x-body">
-      <div class="layui-row">
+      <!-- <div class="layui-row">
         <form class="layui-form layui-col-md12 x-so">
           <input class="layui-input" placeholder="开始日" name="start" id="start">
           <input class="layui-input" placeholder="截止日" name="end" id="end">
           <input type="text" name="username"  placeholder="请输入用户名" autocomplete="off" class="layui-input">
           <button class="layui-btn"  lay-submit="" lay-filter="sreach"><i class="layui-icon">&#xe615;</i></button>
         </form>
-      </div>
+      </div> -->
       <xblock>
         <button class="layui-btn" onclick="x_admin_show('添加管理员','/admin/editManager',600,400)"><i class="layui-icon"></i>添加</button>
         <span class="x-right" style="line-height:40px">共有数据：<span id="countManager">0</span> 条</span>
@@ -61,7 +61,7 @@
         <tbody>
         </tbody>
       </table>
-      <div class="page">
+      <!-- <div class="page">
         <div>
           <a class="prev" href="">&lt;&lt;</a>
           <a class="num" href="">1</a>
@@ -70,7 +70,7 @@
           <a class="num" href="">489</a>
           <a class="next" href="">&gt;&gt;</a>
         </div>
-      </div>
+      </div> -->
     </div>
     <script>
       layui.use('laydate', function(){
@@ -101,32 +101,25 @@
      				 id:id
      			 },
      			 success:function(data){
-     				 console.log(data);
+     				 if(data.code == 200){
+     					$(obj).parents("tr").remove();
+     		              layer.msg('已删除!',{icon:1,time:1000});
+     				 }else{
+     					layer.msg('删除失败!',{icon:2,time:1000});
+     				 }
+     				 var count = $('#countManager').text();
+     				 $('#countManager').text(count-1);
+     				 if(count -1 ==0){
+     					 hideTable();
+     				 }
      			 }
               });
-              $(obj).parents("tr").remove();
-              layer.msg('已删除!',{icon:1,time:1000});
+              
           });
       }
 	  function init(){
-		  var page = 1;
-		  $.ajax({
-			 url:"/admin/loadManagerList",
-			 type:"POST",
-			 dateType:"json",
-			 data:{
-				 page:page
-			 },
-			 success:function(data){
-				 //console.log(data);
-				 if(data.code == 200){
-					 $('#countManager').text(data.managerCount);
-					 $.each(data.managerList,function(index,item){
-						 $('#managerListTable').append('<tr><td>'+(item.id)+'</td><td>'+(item.name)+'</td><td>'+(item.sex == 0?"女":"男")+'</td><td>'+(item.birthday!=null?item.birthday.substr(0,10):"无")+'</td><td>'+(item.address!=null?item.address:"无")+'</td><td>'+(item.phone!=null?item.phone:"无")+'</td><td>'+(item.email!=null?item.email:"无")+'</td><td>'+(item.qq!=null?item.qq:"无")+'</td><td>'+(item.wechat!=null?item.wechat:"无")+'</td><td class="td-manage"><a title="编辑"  onclick="x_admin_show(\'编辑\',\'/admin/editManager?op=1&id='+(item.id)+'\',600,400)" href="javascript:;"><i class="layui-icon">&#xe642;</i></a><a onclick="x_admin_show(\'修改密码\',\'member-password.html\',600,400)" title="修改密码" href="javascript:;"><i class="layui-icon">&#xe631;</i></a><a title="删除" onclick="managerDel(this,'+(item.id)+')" href="javascript:;"><i class="layui-icon">&#xe640;</i></a></td></tr>');
-					 }); 
-				 }
-			 }
-		  });
+		  hideTable();
+		  loadList();
 	  }
 	  /* function formatTimeStamp(timeStamp){
 		  var date = new Date(timeStamp);
@@ -138,6 +131,30 @@
 		  s = date.getSeconds();
 		  return Y+M+D+h+m+s;
 	  } */
+	  
+	  function hideTable(){
+		  $('#managerListTable').hide();
+	  }
+	  function showTable(){
+		  $('#managerListTable').show();
+	  }
+	  function loadList(){
+		  $.ajax({
+				 url:"/admin/loadManagerList",
+				 type:"POST",
+				 dateType:"json",
+				 success:function(data){
+					 //console.log(data);
+					 if(data.code == 200){
+						 $('#countManager').text(data.managerCount);
+						 $.each(data.managerList,function(index,item){
+							 $('#managerListTable').append('<tr><td>'+(item.id)+'</td><td>'+(item.name)+'</td><td>'+(item.sex == 0?"女":"男")+'</td><td>'+(item.birthday!=null?item.birthday.substr(0,10):"无")+'</td><td>'+(item.address!=null?item.address:"无")+'</td><td>'+(item.phone!=null?item.phone:"无")+'</td><td>'+(item.email!=null?item.email:"无")+'</td><td>'+(item.qq!=null?item.qq:"无")+'</td><td>'+(item.wechat!=null?item.wechat:"无")+'</td><td class="td-manage"><a title="编辑"  onclick="x_admin_show(\'编辑\',\'/admin/editManager?op=1&id='+(item.id)+'\',600,400)" href="javascript:;"><i class="layui-icon">&#xe642;</i></a><a onclick="x_admin_show(\'修改密码\',\'member-password.html\',600,400)" title="修改密码" href="javascript:;"><i class="layui-icon">&#xe631;</i></a><a title="删除" onclick="managerDel(this,'+(item.id)+')" href="javascript:;"><i class="layui-icon">&#xe640;</i></a></td></tr>');
+						 }); 
+						 showTable();
+					 }
+				 }
+			  });
+	  }
     </script>
   </body>
 

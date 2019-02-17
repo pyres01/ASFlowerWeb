@@ -1,5 +1,6 @@
 package com.wd.ASFlowerWeb.mapper;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Delete;
@@ -27,16 +28,20 @@ public interface ManagerMapper {
 	Integer countNormalAll();
 	//查询所有未软删除的管理员并分页
 	@Select("SELECT * FROM MANAGER WHERE iSDelete = 0 LIMIT ${limitStart},${limitSize}")
-	List<Manager> findNormalAll(@Param("limitStart") Integer limitStart,@Param("limitSize") Integer limitSize);
-	
+	List<Manager> findNormalAllPaged(@Param("limitStart") Integer limitStart,@Param("limitSize") Integer limitSize);
+	//查询所有未软删除的管理员不分页
+	@Select("SELECT * FROM MANAGER WHERE iSDelete = 0")
+	List<Manager> findNormalAll();
 	
 	//查询已软删除的管理员个数
-	@Select("SELECT * FROM MANAGER WHERE iSDelete = 1 LIMIT ${limitStart},${limitSize}")
-	List<Manager> countDellAll(@Param("limitStart") Integer limitStart,@Param("limitSize") Integer limitSize);
+	@Select("SELECT COUNT(*) FROM MANAGER WHERE iSDelete = 1")
+	Integer countDelAll();
 	//查询所有已软删除的管理员并分页
 	@Select("SELECT * FROM MANAGER WHERE iSDelete = 1 LIMIT ${limitStart},${limitSize}")
-	List<Manager> findDellAll(@Param("limitStart") Integer limitStart,@Param("limitSize") Integer limitSize);
-	
+	List<Manager> findDelAllPaged(@Param("limitStart") Integer limitStart,@Param("limitSize") Integer limitSize);
+	//查询所有已软删除的管理员不分页
+	@Select("SELECT * FROM MANAGER WHERE iSDelete = 1")
+	List<Manager> findDelAll();
 	
 	//根据用户名查询单个用户，用于登陆查询
 	@Select("SELECT * FROM MANAGER WHERE NAME = #{name} AND iSDelete = 0 LIMIT 1")
@@ -61,8 +66,10 @@ public interface ManagerMapper {
 	Integer relDeleteManager(@Param("id") Integer id);
 	
 	//更新管理员软删除状态
-	@Update("UPDATE MANAGER SET isDelete = ${isDelete} WHERE id = ${id}")
-	Integer DeleteManager(@Param("id") Integer id,@Param("isDelete") Integer isDelete);
+	@Update("UPDATE MANAGER SET isDelete = 1,deleteTime = #{deleteTime} WHERE id = ${id}")
+	Integer DeleteManager(@Param("id") Integer id,@Param("deleteTime") Timestamp deleteTime);
+	@Update("UPDATE MANAGER SET isDelete = 0 WHERE id = ${id}")
+	Integer RecoverManager(@Param("id") Integer id);
 	
 	@Select("SELECT * FROM MANAGER WHERE id = ${id}")
 	Manager getManagerById(@Param("id") Integer id);

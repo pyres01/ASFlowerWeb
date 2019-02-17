@@ -1,5 +1,6 @@
 package com.wd.ASFlowerWeb.service;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,19 +42,30 @@ public class ManagerService {
 	public Integer countNormalAll(){
 		return managerMapper.countNormalAll();
 	}
-	public List<Manager> findNormalManagerAll(Integer limitStart, Integer limitSize){
-		return managerMapper.findNormalAll(limitStart, limitSize);
+	public Integer countDelAll(){
+		return managerMapper.countDelAll();
+	}
+	public List<Manager> findNormalManagerAll(){
+		return managerMapper.findNormalAll();
+	}
+	
+	public List<Manager> findDelManagerAll(){
+		return managerMapper.findDelAll();
 	}
 	
 	public Boolean delManager(Integer managerId){
-		return managerMapper.DeleteManager(managerId,1) == 1?true:false;
+		return managerMapper.DeleteManager(managerId,new Timestamp(System.currentTimeMillis())) == 1?true:false;
 	}
 	
 	public Boolean recoverDelManager(Integer managerId){
-		return managerMapper.DeleteManager(managerId,0) == 1?true:false;
+		return managerMapper.RecoverManager(managerId) == 1?true:false;
 	}
 	
 	public Boolean relDelManager(Integer managerId){
 		return managerMapper.relDeleteManager(managerId) == 1?true:false;
+	}
+	
+	public Boolean updateManagerById(Manager manager){
+		return managerMapper.updateManagerById(manager) == 1?true:false;
 	}
 }

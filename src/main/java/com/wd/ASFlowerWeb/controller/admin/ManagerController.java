@@ -1,13 +1,20 @@
 package com.wd.ASFlowerWeb.controller.admin;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TimeZone;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.DigestUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -74,17 +81,209 @@ public class ManagerController {
 			}else if(op==2){
 				//实现新增
 				modelAndView = new ModelAndView(new MappingJackson2JsonView());
-				Map<String,Object> map = new HashMap<>();
-				map.put("code", 200);
-				map.put("msg", "add success");
-				modelAndView.addObject(map);
+				modelAndView.addObject("code", 200);
+				modelAndView.addObject("msg", "add success");
+				
+				//获取数据
+				String name = request.getParameter("username");
+				String pass = request.getParameter("pass");
+				String repass = request.getParameter("repass");
+				Boolean sex = request.getParameter("sex")!=null?Boolean.valueOf(request.getParameter("sex")):false;
+				String email = request.getParameter("email");
+				String birthday_str = request.getParameter("birthday");
+				String address = request.getParameter("address");
+				String phone = request.getParameter("phone");
+				String qq = request.getParameter("qq");
+				String wechat = request.getParameter("wechat");
+				Integer rank  = request.getParameter("rank")!=null?Integer.valueOf(request.getParameter("rank")):2;
+				
+				Boolean validateStatus = true;
+				Manager manager = new Manager();
+				//简单处理数据，完善项目可添加xss过滤以及白名单过滤和去空格
+				
+				//名称
+				if(name!=null && name.trim().length()>5){
+					manager.setName(name);
+				}else{
+		        	validateStatus = false;
+					log.info("validate name fail");
+		        }
+				//密码和确认密码
+				if(pass!=null && repass!=null && pass.trim().length()>=6 && pass.trim().length()<=12 && pass.equals(repass)){
+					manager.setPassword(DigestUtils.md5DigestAsHex(repass.getBytes()));
+				}else{
+		        	validateStatus = false;
+					log.info("validate pass fail");
+		        }
+				//生日
+				if(birthday_str!=null && birthday_str.trim().length()==10){
+					SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+					sdf.setTimeZone(TimeZone.getTimeZone("Asia/Shanghai"));
+					try {
+						manager.setBirthday(sdf.parse(birthday_str));
+					} catch (ParseException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}else{
+		        	validateStatus = false;
+					log.info("validate birthday_str fail");
+		        }
+				//验证邮箱
+				String regEmail = "^([a-z0-9A-Z]+[-|\\.]?)+[a-z0-9A-Z]@([a-z0-9A-Z]+(-[a-z0-9A-Z]+)?\\.)+[a-zA-Z]{2,}$";
+				Pattern p;
+		        Matcher m;
+		        p = Pattern.compile(regEmail);
+		        m = p.matcher(email);
+		        if (m.matches()){
+					manager.setEmail(email);
+				}else{
+		        	validateStatus = false;
+					log.info("validate email fail");
+		        }
+				//地址
+		        if(address!=null && address.trim().length()>=4){
+		        	manager.setAddress(address);
+		        }else{
+		        	validateStatus = false;
+					log.info("validate address fail");
+		        }
+		        
+		        //phone
+		        if(phone != null && phone.trim().length()==11){
+		        	manager.setPhone(phone);
+		        }else{
+		        	validateStatus = false;
+					log.info("validate phone fail");
+		        }
+		        
+		        //qq
+		        if(qq!= null && qq.trim().length()>=5&&qq.trim().length()<=11){
+		        	manager.setQq(qq);
+		        }else{
+		        	validateStatus = false;
+					log.info("validate qq fail");
+		        }
+		        //微信
+		        if(wechat!= null && wechat.trim().length()>=6 && wechat.trim().length()<=20){
+		        	manager.setWechat(wechat);
+		        }else{
+		        	validateStatus = false;
+					log.info("validate wechat fail");
+		        }
+		        
+		        //sex
+		        manager.setSex(sex);	
+		        
+		        HttpSession sessoin=request.getSession();
+		        Manager loginer = (Manager) sessoin.getAttribute("manager");
+		        if(loginer !=null && loginer.getRank() > rank){
+		        	manager.setRank(rank);
+		        }else{
+		        	validateStatus = false;
+					log.info("validate rank fail");
+		        }
+		        Boolean addStatus = false;
+		        if(validateStatus){
+		        	addStatus = managerService.addManager(manager);
+		        }
+		        if(!addStatus){
+		        	modelAndView.addObject("code",0);
+					modelAndView.addObject("msg", "add  failed");
+		        }
+		        return modelAndView;
+				
 			}else if(op==3){
 				//实现修改
 				modelAndView = new ModelAndView(new MappingJackson2JsonView());
-				Map<String,Object> map = new HashMap<>();
-				map.put("code", 200);
-				map.put("msg", "update success");
-				modelAndView.addObject(map);
+				modelAndView.addObject("code",200);
+				modelAndView.addObject("msg", "update success");
+				
+				//获取数据
+				
+				Integer id = request.getParameter("id")!=null ? Integer.valueOf(request.getParameter("id")) : null;
+				String name = request.getParameter("username");
+				String pass = request.getParameter("pass");
+				String repass = request.getParameter("repass");
+				Boolean sex = request.getParameter("sex")!=null?Boolean.valueOf(request.getParameter("sex")):false;
+				String email = request.getParameter("email");
+				String birthday_str = request.getParameter("birthday");
+				String address = request.getParameter("address");
+				String phone = request.getParameter("phone");
+				String qq = request.getParameter("qq");
+				String wechat = request.getParameter("wechat");
+				Integer rank  = request.getParameter("rank")!=null?Integer.valueOf(request.getParameter("rank")):2;
+				
+				
+				Manager manager = managerService.getManagerById(id);
+				//简单处理数据，完善项目可添加xss过滤以及白名单过滤和去空格
+				
+				//名称
+				if(name!=null && name.trim().length()>5){
+					manager.setName(name);
+				}
+				//密码和确认密码
+				if(pass!=null && repass!=null && pass.trim().length()>=6 && pass.trim().length()<=12 && pass.equals(repass)){
+					manager.setPassword(DigestUtils.md5DigestAsHex(repass.getBytes()));
+				}
+				//生日
+				if(birthday_str!=null && birthday_str.trim().length()==10){
+					SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+					sdf.setTimeZone(TimeZone.getTimeZone("Asia/Shanghai"));
+					try {
+						manager.setBirthday(sdf.parse(birthday_str));
+					} catch (ParseException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+				//验证邮箱
+				String regEmail = "^([a-z0-9A-Z]+[-|\\.]?)+[a-z0-9A-Z]@([a-z0-9A-Z]+(-[a-z0-9A-Z]+)?\\.)+[a-zA-Z]{2,}$";
+				Pattern p;
+		        Matcher m;
+		        p = Pattern.compile(regEmail);
+		        m = p.matcher(email);
+		        if (m.matches()){
+					manager.setEmail(email);
+				}
+				//地址
+		        if(address!=null && address.trim().length()>=4){
+		        	manager.setAddress(address);
+		        }
+		        
+		        //phone
+		        if(phone != null && phone.trim().length()==11){
+		        	manager.setPhone(phone);
+		        }
+		        
+		        //qq
+		        if(qq!= null && qq.trim().length()>=5&&qq.trim().length()<=11){
+		        	manager.setQq(qq);
+		        }
+		        //微信
+		        if(wechat!= null && wechat.trim().length()>=6 && wechat.trim().length()<=20){
+		        	manager.setWechat(wechat);
+		        }
+		        
+		        //sex
+		        manager.setSex(sex);	
+		        
+		        HttpSession sessoin=request.getSession();
+		        Manager loginer = (Manager) sessoin.getAttribute("manager");
+		        if(loginer !=null && loginer.getRank() > rank){
+		        	manager.setRank(rank);
+		        }
+		        		        
+		        
+				Boolean addStatus =  managerService.updateManagerById(manager);
+				
+				if(!addStatus){
+					modelAndView.addObject("code",0);
+					modelAndView.addObject("msg", "update failed");
+				}
+				//返回结果
+				return modelAndView;
+				
 			}else{
 				modelAndView = new ModelAndView("/admin/manager-normal-edit");
 				modelAndView.addObject("op",0);
@@ -104,9 +303,28 @@ public class ManagerController {
 			
 		}else{
 			Integer managerCount = managerService.countNormalAll();
-			List<Manager> managerList = managerService.findNormalManagerAll(0, 10);
+			List<Manager> managerList = managerService.findNormalManagerAll();
 			map.put("managerCount", managerCount);
 			map.put("managerList", managerList);
+		}
+		return map;
+	}
+	
+	@RequestMapping("/admin/loadDelManagerList")
+	@ResponseBody
+	public Map<String,Object> loadDelManagerList(HttpServletRequest request){
+		Map<String,Object> map = new HashMap<>();
+		map.put("code", 200);
+		map.put("msg", "success");
+		Integer managerCount = managerService.countDelAll();
+		
+		if(managerCount!=0){
+			List<Manager> managerList = managerService.findDelManagerAll();
+			map.put("managerCount", managerCount);
+			map.put("managerList", managerList);
+		}else{
+			map.put("code", 0);
+			map.put("msg", "fail");
 		}
 		return map;
 	}
@@ -197,8 +415,6 @@ public class ManagerController {
 		}else if(op.equals("u")){
 			
 		}
-		
-		
 		
 		return modelAndView;
 	}
