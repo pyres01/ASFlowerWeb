@@ -88,7 +88,9 @@
   </head>
 <body>
 	<div id="body-left">
-		<div id="editNShoppingBox" class="layui-form">
+		<form id="editNShoppingBox" class="layui-form">
+			<input type="hidden" name="op" value="add"/>
+			<input type="hidden" name="sid" value=0 />
 			<div class="layui-form-item">
 			  <label class="layui-form-label">商品栏目：</label>
 			  <div class="layui-input-block">
@@ -169,13 +171,13 @@
 			<div class="layui-form-item">
 				<label class="layui-form-label"></label>
 				<div class="layui-input-block" id="reviewAndSaveBox">
-					<button class="layui-btn" id="saveShoppingBtn">保存商品</button>
-					<button class="layui-btn" id="reviewShoppingContentBtn">
+					<button type="button" class="layui-btn" id="saveShoppingBtn">保存商品</button>
+					<button type="button" class="layui-btn" id="reviewShoppingContentBtn">
 					  <i class="layui-icon">&#xe609;</i>内容预览
 					</button>
 				</div>
 			</div>
-		</div>
+		</form>
 	</div>
 	<div id="body-right">
 		<div id="preview">
@@ -364,9 +366,8 @@ layui.use(['upload','layedit','laydate'], function(){
   
   
   laydate.render({
-	  elem:'#skTime',
+	  elem:'#saleTime',
 	  type:'datetime',
-	  range:true
   });
   layedit.set({
 	  uploadImage: {
@@ -453,7 +454,60 @@ layui.use(['upload','layedit','laydate'], function(){
   });
   
   $('#saveShoppingBtn').on('click',function(){
+	  var op = $('input[name=op]').val();
+	  var sid = $('input[name=sid]').val();
+	  var type = $('input[name=type]').val();
+	  var title = $('input[name=title]').val();
+	  var instruction = $('input[name=instruction]').val();
+	  var asPrice = $('input[name=asPrice]').val();
+	  var nmPrice = $('input[name=nmPrice]').val();
+	  var store = $('input[name=store]').val();
+	  var saleTime = $('input[name=saleTime]').val();
+	  var content = layedit.getContent(layeditIndex).replace(new RegExp(".gif","gm"),'.gif" class="emojiImg');
+	  var imgs = '';
+	  $.each($('.upImgReviweItem'),function(index,item){
+		  imgs += $(item).find('img')[0].src+'|';
+	  });
+	  /* console.log("op:"+op);
+	  console.log("sid:"+sid);
+	  console.log("type:"+type);
+	  console.log("title:"+title);
+	  console.log("instruction:"+instruction);
+	  console.log("asPrice:"+asPrice);
+	  console.log("nmPrice:"+nmPrice);
+	  console.log("store:"+store);
+	  console.log("saleTime:"+saleTime);
+	  console.log("content:"+content);
+	  console.log("imgs:"+imgs); */
 	  
+	  //TODO check data
+	  
+	  $.ajax({
+		 url:'/admin/normalShoppingEdit',
+		 type:'POST',
+		 datType:'json',
+		 data:$.param({
+			op:op,
+			sid:sid,
+			type:type,
+			title:title,
+			instruction:instruction,
+			asPrice:asPrice,
+			nmPrice:nmPrice,
+			store:store,
+			saleTime:saleTime,
+			content:content,
+			imgs:imgs
+		 }),
+		 success:function(res){
+			 if(res.code == 200){
+				 layer.msg('保存成功',{icon:6});
+			 }
+		 }
+	  	
+	  });
+	  
+	 
   });
   $('#reviewShoppingContentBtn').on('click',function(){
 	  var shoppingContent = layedit.getContent(layeditIndex).replace(new RegExp(".gif","gm"),'.gif" class="emojiImg');

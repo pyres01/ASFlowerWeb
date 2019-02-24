@@ -14,6 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.wd.ASFlowerWeb.entity.User;
 import com.wd.ASFlowerWeb.service.UserService;
@@ -34,9 +35,10 @@ public class HomeUserInfoController {
 	private UserService userService;
 	
 	@GetMapping("/home/user/userinfo")
-	public String userinfo(){
-		
-		return "/home/userinfo";
+	public ModelAndView userinfo(){
+		ModelAndView mav = new ModelAndView();
+		mav.setViewName("/home/userinfo");
+		return mav;
 	}
 	
 	@GetMapping("/home/user/useraccount")
@@ -54,12 +56,20 @@ public class HomeUserInfoController {
 		return "/home/login";
 	}
 	
+	@GetMapping("/home/user/logout")
+	public void logout(HttpServletRequest request){
+		HttpSession session = request.getSession();
+		if(session.getAttribute("member")!=null){
+			session.removeAttribute("member");
+		}
+	}
+	
 	@GetMapping("/home/register")
 	public String register(){
 		return "/home/register";
 	}
 	
-	@GetMapping("/home/repassword")
+	@GetMapping("/home/user/repassword")
 	public String rePassWord(){
 		return "/home/repassword";
 	}

@@ -3,9 +3,10 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	 <meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>个人中心</title>
 	<link rel="stylesheet" href="/static/home/css/cssreset.css">
+	<link rel="stylesheet" href="/static/home/js/layui/css/layui.css">
 	<link rel="stylesheet" href="/static/home/css/userinfo.css">
 </head>
 <body>
@@ -14,8 +15,8 @@
 			<img src="/static/home/images/logo_new.png" alt="">
 		</div>
 		<div class="mynews">
-			<h3>小猪包</h3>
-			<a href="repassword.html"><p>修改密码</p></a>
+			<h3 th:text="${session.member.memberName}"></h3>
+			<a href="/home/user/repassword"><p>修改密码</p></a>
 		</div>
 		<div class="more">
 			<img src="/static/home/images/back.png" alt="">
@@ -58,7 +59,7 @@
 	<div  class="usernews">
 		<ul>
 			<li>
-				<a href="/home/useraccount">
+				<a href="/home/user/useraccount">
 					<div>
 						<img src="/static/home/images/person.png" alt="">
 						<h2>个人资料</h2>
@@ -80,7 +81,7 @@
 					</a>
 			</li>
 			<li>
-				<a href="/home/userAddress">
+				<a href="/home/user/userAddress">
 					<div>
 						<img src="/static/home/images/address.png" alt="">
 						<h2>收货地址</h2>
@@ -120,7 +121,7 @@
 				</a>
 			</li>
 			<li class="current">
-				<a href="/home/userinfo">
+				<a href="/home/user/userinfo">
 					<img src="/static/home/images/user_select.png" alt="">
 					<p>我的</p>
 				</a>
@@ -128,8 +129,8 @@
 
 		</ul>
 	</footer>
-
-	 <!-- 表单验证弹出框 -->
+<!-- 
+	 表单验证弹出框
        <div class="bg"></div>
 
        <div class="modal">
@@ -144,10 +145,10 @@
 	       	  </div>
        	 </div>
          
-       </div>
+       </div> -->
 
 <script src='/static/home/js/jquery.min.js'></script>
+<script type="text/javascript" src="/static/home/js/layui/layui.js" charset="utf-8"></script>
 <script src='/static/home/js/userinfo.js'></script>
-	
 </body>
 </html>
