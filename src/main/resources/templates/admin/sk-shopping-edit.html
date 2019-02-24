@@ -29,18 +29,60 @@
     	} 
     	#body-left{
     		width:60%;
-    		border-right:2px solid #ccc;
     		float:left;
+    		font-size:14px;
     	}
     	#body-right{
     		width:38%;
     		float:right;
+    		border-left:2px solid #ccc;
     	}
     	#preview{
-    		width:300px;
+    		width:340px;
     		min-height:500px;
     		border:1px solid #eee;
-    		margin:30px auto;
+    		margin:20px auto;
+    	}
+    	#upImgLimit{
+    		margin-left:8px;
+    		color:#ccc;
+    	}
+    	#upImgReviweBox{
+    		margin-top:15px;
+    		border: 1px dotted #ccc;
+    		width:496px;
+    		height:140px;
+    		padding:5px 2px;
+    	}
+    	#upImgReviweBox .upImgReviewItemBox{
+    		width:100px;
+    		height:128px;
+    		float:left;
+    		margin-left:17px;
+    		margin-top:5px;
+    		border:1px solid #ccc;
+    		position:relative;
+    	}
+    	#upImgReviweBox .upImgReviweItem{
+    		width:100%;
+    		height:100%;;
+    		overflow:hidden;
+    		
+    	}
+    	#upImgReviweBox .upImgReviweItem img{
+    		width:100%;
+    		height:100%;
+    	}
+    	.removeUpImgBtn{
+    		position:absolute;
+    		right:-8px;
+    		top:-6px;
+    		font-size:25px;
+    		cursor:pointer;
+    	}
+    	#reviewAndSaveBox button{
+    		float:right;
+    		margin:30px;
     	}
     </style>
   </head>
@@ -48,21 +90,26 @@
 	<div id="body-left">
 		<div id="editNShoppingBox" class="layui-form">
 			<div class="layui-form-item">
-			  <label class="layui-form-label">商品栏目：</label>
-			  <div class="layui-input-block">
-			    	<input type="radio" name="type" value="1" title="订阅惊喜" checked>
-					<input type="radio" name="type" value="2" title="单束花礼">
-					<input type="radio" name="type" value="3" title="永生花礼">
-					<input type="radio" name="type" value="4" title="花边小物">
-			  </div>
-			</div>
-			<div class="layui-form-item">
 			  <label class="layui-form-label">商品图片：</label>
-			  <div class="layui-input-block">
-			  	
+			  <div class="layui-input-block" id="upImgBox">
 			  	<button type="button" class="layui-btn" id="upShopImg">
 				  <i class="layui-icon">&#xe67c;</i>上传图片
 				</button>
+				<span id="upImgLimit">（最多可上传4张）</span>
+			  </div>
+			  <div class="layui-input-block" id="upImgReviweBox">
+			  	<div class="upImgReviewItemBox">
+			  		<i class="layui-icon layui-icon-close-fill removeUpImgBtn"></i>
+			  		<div class="upImgReviweItem"><img src="/static/home/images/dban1.jpg"/></div>
+			  	</div>
+			  	<div class="upImgReviewItemBox">
+			  		<i class="layui-icon layui-icon-close-fill removeUpImgBtn"></i>
+			  		<div class="upImgReviweItem"><img src="/static/home/images/dban2.jpg"/></div>
+			  	</div>
+			  	<div class="upImgReviewItemBox">
+			  		<i class="layui-icon layui-icon-close-fill removeUpImgBtn"></i>
+			  		<div class="upImgReviweItem"><img src="/static/home/images/dban3.jpg"/></div>
+			  	</div>
 			  </div>
 			</div>
 			<div class="layui-form-item">
@@ -113,10 +160,20 @@
 					<input type="radio" name="isSale" value="0" title="否">
 			  </div>
 			</div>
-			<div class="layui-form-item">
+			<div class="layui-form-item" id="shoppingContentBox">
 				<label class="layui-form-label">商品内容：</label>
 				<div class="layui-input-block">
 					<textarea id="shoppingContent" style="display: none;"></textarea>
+				</div>
+				
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label"></label>
+				<div class="layui-input-block" id="reviewAndSaveBox">
+					<button class="layui-btn" id="saveShoppingBtn">保存商品</button>
+					<button class="layui-btn" id="reviewShoppingContentBtn">
+					  <i class="layui-icon">&#xe609;</i>内容预览
+					</button>
 				</div>
 			</div>
 		</div>
@@ -124,17 +181,17 @@
 	<div id="body-right">
 		<div id="preview">
 			<header>
-				<span class="left"> <img src="/static/admin//images/back.png" alt=""></span>
-				<span class="center">商品详情</span>
-				<span class="right"><img src="/static/admin//images/user.png" alt=""></span>
+				<span class="left"> <img src="/static/home/images/back.png" alt=""></span>
+				<p class="center">商品详情</p>
+				<span class="right"><img src="/static/home/images/user.png" alt=""></span>
 			</header>
 			<!-- 轮播图 -->
 			<div class="rotate">
 				<ul>
-					<li ><a href="#"><img src="/static/admin/images/dban1.jpg" alt="" ></a></li>
-					<li><a href="#"><img src="/static/admin/images/dban2.jpg" alt="" ></a></li>
-					<li ><a href="#"><img src="/static/admin/images/dban3.jpg" alt="" ></a></li>
-					<li><a href="#"><img src="/static/admin/images/dban4.jpg" alt="" ></a></li>
+					<li ><a href="#"><img src="/static/home/images/dban1.jpg" alt="" ></a></li>
+					<li><a href="#"><img src="/static/home/images/dban2.jpg" alt="" ></a></li>
+					<li ><a href="#"><img src="/static/home/images/dban3.jpg" alt="" ></a></li>
+					<li><a href="#"><img src="/static/home/images/dban4.jpg" alt="" ></a></li>
 		
 				</ul>
 				<ol>
@@ -148,49 +205,49 @@
 				<!-- 标题 -->
 				<div class="title">
 					<h2>缤纷设计鲜花系列</h2>
-					<p>一周一花, 似锦繁花, 五种不同花材, 缤纷多样</p>
-		
-					<h2>¥ 59.90 ~ 2352.00</h2>
+					<p>一周一花, 似锦繁花, 五种不同花材, 缤纷多样<br>该商品为订阅包月鲜花，每1周配送一次</p>
 					<p>运费：免运费</p>
 				</div>
 		        <!-- 周期购 -->
+		        <!-- 
 				<div class="pack">
 					<div class="backtime">周期购</div>
 					<div class="desc">该商品为订阅包月鲜花，每1周配送一次</div>
 				</div>
+				 -->
 		       <!-- 主要信息 -->
 		       <main>
-		        	<!-- 款式 -->
-			       	<div class="style ">
-			       		<div class="title">款式</div>
-			       		<div class="content ">
-			       			<div class="current"> 缤纷设计</div>
-			       			
+		        	
+			       	
+			       	 	<!-- 价格 -->
+			       	<div class="number">
+			       		<div class="title">爱尚价格</div>
+			       		<div class="num">
+				       		<span class='textcolor'>￥288.6</span>
 			       		</div>
-			         	
+			       	
 			       	</div>
-			       	<!-- 时长-->
-			       	<div class="time ">
-			       		<div class="title">时长</div>
-			       		<div class="content">
-			       			<div > 单次体验（1束）</div>
-			       			<div > 1个月（4束）</div>
-			       			<div > 3个月（12束）</div>
-			       			<div > 6个月（24束）</div>
-			       			<div > 1年赠一个月（52束）</div>
+			       		<div class="number mprice">
+			       		<div class="title">市场价格</div>
+			       		<div class="num">
+				       		<del>￥888.6</del>
 			       		</div>
+			       	
 			       	</div>
+			       
 			       	<!-- 数量 -->
 			       	<div class="number">
-			       		<div class="title">数量</div>
+			       		<div class="title countTitle">数量</div>
 			       		<div class="num">
 				       		<div>
-				       			<div class="left"><img src="/static/admin/images/reduce.png" alt=""></div>
+				       			<div class="left"><img src="/static/home/images/reduce.png" alt=""></div>
 				       			<div class="center"><input type="text" value="1"></div>
-				       			<div class="right"><img src="/static/admin/images/plus.png" alt=""></div>
+				       			<div class="right"><img src="/static/home/images/plus.png" alt=""></div>
 				       		</div>
 			       		</div>
 			       	</div>
+			       	
+			       	
 		       </main>
 		       <div class="pd"></div>
 		       <!-- 商品展示 -->
@@ -205,55 +262,55 @@
 		       </div>
 		       <div class="goods">
 			       	<div class="imfor current">
-			       	   <div>
+			       	   <div id="m_shoppingContent">
 			       	   	<ul>
 			       	   		<li>
-			       	   			<a href="#"><img src="/static/admin/images/dpic1.jpg" alt=""></a>
+			       	   			<a href="#"><img src="/static/home/images/dpic1.jpg" alt=""></a>
 			       	   		</li>
 			       	   		<li>
-			       	   			<a href="#"><img src="/static/admin/images/dpic2.jpg" alt=""></a>
+			       	   			<a href="#"><img src="/static/home/images/dpic2.jpg" alt=""></a>
 			       	   		</li>
 			       	   		<li>
-			       	   			<a href="#"><img src="/static/admin/images/dpic3.jpg" alt=""></a>
+			       	   			<a href="#"><img src="/static/home/images/dpic3.jpg" alt=""></a>
 			       	   		</li>
 			       	   		<li>
-			       	   			<a href="#"><img src="/static/admin/images/dpic4.jpg" alt=""></a>
+			       	   			<a href="#"><img src="/static/home/images/dpic4.jpg" alt=""></a>
 			       	   		</li>
 			       	   		<li>
-			       	   			<a href="#"><img src="/static/admin/images/dpic5.jpg" alt=""></a>
+			       	   			<a href="#"><img src="/static/home/images/dpic5.jpg" alt=""></a>
 			       	   		</li>
 			       	   		<li>
-			       	   			<a href="#"><img src="/static/admin/images/dpic6.jpg" alt=""></a>
+			       	   			<a href="#"><img src="/static/home/images/dpic6.jpg" alt=""></a>
 			       	   		</li>
 			       	   		<li>
-			       	   			<a href="#"><img src="/static/admin/images/dpic7.jpg" alt=""></a>
+			       	   			<a href="#"><img src="/static/home/images/dpic7.jpg" alt=""></a>
 			       	   		</li>
 			       	   		<li>
-			       	   			<a href="#"><img src="/static/admin/images/dpic8.jpg" alt=""></a>
+			       	   			<a href="#"><img src="/static/home/images/dpic8.jpg" alt=""></a>
 			       	   		</li>
 			       	   		<li>
-			       	   			<a href="#"><img src="/static/admin/images/dpic9.jpg" alt=""></a>
+			       	   			<a href="#"><img src="/static/home/images/dpic9.jpg" alt=""></a>
 			       	   		</li>
 			       	   		<li>
-			       	   			<a href="#"><img src="/static/admin/images/dpic10.jpg" alt=""></a>
+			       	   			<a href="#"><img src="/static/home/images/dpic10.jpg" alt=""></a>
 			       	   		</li>
 			       	   		<li>
-			       	   			<a href="#"><img src="/static/admin/images/dpic11.jpg" alt=""></a>
+			       	   			<a href="#"><img src="/static/home/images/dpic11.jpg" alt=""></a>
 			       	   		</li>
 			       	   		<li>
-			       	   			<a href="#"><img src="/static/admin/images/dpic12.gif" alt=""></a>
+			       	   			<a href="#"><img src="/static/home/images/dpic12.gif" alt=""></a>
 			       	   		</li>
 			       	   		<li>
-			       	   			<a href="#"><img src="/static/admin/images/dpic13.jpg" alt=""></a>
+			       	   			<a href="#"><img src="/static/home/images/dpic13.jpg" alt=""></a>
 			       	   		</li>
 			       	   		<li>
-			       	   			<a href="#"><img src="/static/admin/images/dpic14.jpg" alt=""></a>
+			       	   			<a href="#"><img src="/static/home/images/dpic14.jpg" alt=""></a>
 			       	   		</li>
 			       	   		<li>
-			       	   			<a href="#"><img src="/static/admin/images/dpic15.jpg" alt=""></a>
+			       	   			<a href="#"><img src="/static/home/images/dpic15.jpg" alt=""></a>
 			       	   		</li>
 			       	   		<li>
-			       	   			<a href="#"><img src="/static/admin/images/dpic16.jpg" alt=""></a>
+			       	   			<a href="#"><img src="/static/home/images/dpic16.jpg" alt=""></a>
 			       	   		</li>
 			       	   	</ul>
 			       	   </div>
@@ -266,20 +323,20 @@
 			<footer>
 				  	<ul>
 				  		<li class="current">
-				  		    <a href="../index.html">
-					  			<img src="/static/admin/images/home.png" alt="">
+				  		    <a href="/home/index">
+					  			<img src="/static/home/images/home.png" alt="">
 					  			<p>首页</p>
 				  			</a>
 				  		</li>
 				  		<li>
 				  		    <a href="#">
-					  			<img src="/static/admin/images/service.png" alt="">
+					  			<img src="/static/home/images/service.png" alt="">
 					  			<p>客服</p>
 				  			</a>
 				  		</li>
 				  		<li>
-				  		    <a href="#">
-					  			<img src="/static/admin/images/cart.png" alt="">
+				  		    <a href="/home/shoppingCart">
+					  			<img src="/static/home/images/cart.png" alt="">
 					  			<p>购物车</p>
 				  			</a>
 				  		</li>
@@ -297,6 +354,10 @@
 	
 </body>
 <script>
+if(checkUpImgLimit()){
+	$('#upImgBox').hide();
+}
+checkIsEmptyUpImgBox();
 layui.use(['upload','layedit','laydate'], function(){
   var upload = layui.upload;
   var layedit = layui.layedit;
@@ -314,19 +375,108 @@ layui.use(['upload','layedit','laydate'], function(){
 	    ,type: 'post' //默认post
 	  }
 	});
-  layedit.build("shoppingContent");
+  var layeditIndex = layedit.build("shoppingContent");
+  
   
   //执行实例
   var uploadInst = upload.render({
-    elem: '#upShopImg' //绑定元素
-    ,url: '' //上传接口
-    ,done: function(res){
-      //上传完毕回调
-    }
-    ,error: function(){
-      //请求异常回调
-    }
+	    elem: '#upShopImg' //绑定元素
+	  	,url: '/admin/imgUpLoad'
+	  	,acceptMime: 'image/jpg, image/png'
+	  	,before: function(obj){ //obj参数包含的信息
+	    	layer.load(); //上传loading
+  	  }
+	  ,done: function(res, index, upload){
+	    layer.closeAll('loading'); //关闭loading
+	    if(res.code == 0){
+	    	$('#upImgReviweBox').append('<div class="upImgReviewItemBox"><i class="layui-icon layui-icon-close-fill removeUpImgBtn"></i><div class="upImgReviweItem"><img src="'+res.data.src+'"/></div></div>');
+	    }else{
+	    	//上传失败
+	    	layer.msg('上传失败了-_-!!!');
+	    }
+	  }
+	  ,error: function(index, upload){
+	    layer.closeAll('loading'); //关闭loading
+	  }
   });
+  //监听upImgReviweBox DOM插入
+  /* $('#upImgReviweBox').bind('DOMNodeInserted',function(){
+	  if(!checkUpImgLimit()){
+		 $('#upImgBox').hide();
+	  }
+  }); */
+//监听upImgReviweBox DOM移除
+  /* $('#upImgReviweBox').bind('DOMNodeRemoved',function(){
+	  if(checkUpImgLimit()){
+		 $('#upImgBox').show();
+	  }
+  }); */
+//监听upImgReviweBox DOM修改
+  $('#upImgReviweBox').bind('DOMSubtreeModified',function(){
+	  if(!checkUpImgLimit()){
+		 $('#upImgBox').show();
+	  }else{
+		  $('#upImgBox').hide(); 
+	  }
+	  
+	  checkIsEmptyUpImgBox();
+  });
+  
+  $('#upImgReviweBox').on('click','.removeUpImgBtn',function(index,item){
+	  $(this).parent().remove();
+  });
+  
+  $('input[name=title]').on('input propertychange',function(){
+	  $('#preview section > div.title h2').text($(this).val());
+  });
+  $('input[name=instruction]').on('input propertychange',function(){
+	  $('#preview section>div.title p:first').html($(this).val());
+  });
+  $('input[name=asPrice]').on('input propertychange',function(){
+	  $('#preview .textcolor').text('￥'+$(this).val());
+  });
+  $('input[name=nmPrice]').on('input propertychange',function(){
+	  $('#preview .mprice del').text('￥'+$(this).val());
+  });
+  $('input[name=skPrice]').on('input propertychange',function(){
+	  if($(this).val().length){
+		  if($('#preview #skPrice').length){
+			  $('#preview #skPrice').text('￥'+$(this).val());
+		  }else{
+			  $('#preview .textcolor').before('<span id="skPrice">￥'+$(this).val()+'</span>');
+		  }
+		  $('#preview .textcolor').replaceWith('<del class="textcolor">'+$('#preview .textcolor').html()+'</del>');
+	  }else{
+		  $('#preview #skPrice').remove();
+		  $('#preview .textcolor').replaceWith('<span class="textcolor">'+$('#preview .textcolor').html()+'</span>');
+	  }  
+	  
+  });
+  
+  $('#saveShoppingBtn').on('click',function(){
+	  
+  });
+  $('#reviewShoppingContentBtn').on('click',function(){
+	  var shoppingContent = layedit.getContent(layeditIndex).replace(new RegExp(".gif","gm"),'.gif" class="emojiImg');
+	  console.log(shoppingContent);
+	  $('#m_shoppingContent').html(shoppingContent);
+  });
+  
 });
+
+function checkUpImgLimit(){
+	return $('.upImgReviweItem').length==4?true:false;
+}
+
+function checkIsEmptyUpImgBox(){
+	var s = $('.upImgReviweItem').length==0?true:false;
+	if(s){
+		$('#upImgReviweBox').hide();
+	}else{
+		$('#upImgReviweBox').show();
+	}
+}
+
+
 </script>
 </html>

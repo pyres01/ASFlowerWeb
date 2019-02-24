@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>找回密码</title>
+
+<link rel="stylesheet" href="/static/home/css/cssreset.css">
+<link rel="stylesheet" href="/static/admin/css/font.css">
+<link rel="stylesheet" href="/static/home/js/layui/css/layui.css">
+<style>
+	
+	.layui-timeline-axis{
+		color:#ccc;
+	}
+	.layui-timeline-axis:hover{
+		color:#ccc;
+	}
+	.axis-active{
+		color:#5FB878 !important;
+	}
+	
+	body{
+		min-width: 320px;
+		max-width: 640px;
+	    margin: 0 auto;
+    }
+	header{
+		width:100%;
+		height:50px;
+		line-height:50px;
+		padding-left:15px;
+		border-bottom: 1px solid #F2F2F2;
+	    box-shadow: 0px 5px 5px #F7F7F7;
+	    color: #999;
+	    margin-bottom: 10px;
+	}
+		header .layui-icon{
+			font-size:22px;
+		}
+		header span{
+			display:inline-block;
+			width:100px;
+			font-size:18px;
+			position:relative;
+			top:-1px;
+			left:50%;
+			margin-left:-66px;
+		}
+	section{
+		padding:10px;
+	}
+		section .formItem{
+			width:90%;
+			margin:10px;
+			border-bottom: 1px solid #ccc;
+			overflow: hidden;
+		}
+		section .formItem>div{
+			float: left;
+		}
+		section .formItem .itemIcon{
+			width:20%;
+		}
+		section .formItem .itemIcon .layui-icon{
+			font-size:22px;
+		}
+		section .formItem .itemIcon .iconfont{
+			font-size:18px;
+			position:relative;
+			left:2px;
+		}
+		section .formItem .itemText{
+			width:80%;
+			
+		}
+		section .formItem .itemText input{
+			width:100%;
+			height:30px;
+			border:none;
+			outline: none;
+		}
+		#emailInput{
+			width:65%;
+		}
+		#getCaptchaBtn{
+			margin-bottom:3px;
+		}
+		section #validateBtn{
+			margin-left:10px;
+		}
+		section .resultTip span{
+			position:relative;
+			top:-3px;
+		}
+</style>
+</head>
+<body>
+	<header>
+		<div class="back">
+			<a href="/home/index">
+				<i class="layui-icon layui-icon-left"></i><span>找回密码</span>
+			</a>
+		</div>
+	</header>
+	<section>
+		<div class="layui-timeline">
+		  <div class="layui-timeline-item" id="validateStatus">
+		    <i class="layui-icon layui-timeline-axis axis-active">&#xe63f;</i>
+		    <div class="layui-timeline-content layui-text">
+		      <span>验证邮箱</span>
+		      <br><br><br>
+		      <div id='validateform'>
+					<div class="formItem">
+						<div class="itemIcon">
+							<i class="iconfont">&#xe69f;</i>
+						</div>
+						<div class="itemText">
+							<input type="text" placeholder="请输入绑定邮箱" autocomplete="off" id="email">
+						</div>
+					</div>
+					<div class="formItem">
+						<div class="itemIcon">
+							<i class="layui-icon layui-icon-vercode"></i>
+						</div>
+						<div class="itemText">
+							<input type="text" placeholder="邮箱验证码" autocomplete="off" id="emailInput">
+							<button class="layui-btn layui-btn-sm" id="getCaptchaBtn">点击获取</button>
+						</div>
+					</div>
+					<div>
+						<button class="layui-btn" id="validateBtn">验证</button>
+					</div>
+			  </div>
+			  <br><br>
+		    </div>
+		  </div>
+		  <div class="layui-timeline-item" id="updateStatus">
+		    <i class="layui-icon layui-timeline-axis">&#xe63f;</i>
+		    <div class="layui-timeline-content layui-text">
+		      <span>更新密码</span>
+		      <div id="brBox" style="height:180px;">
+		      </div>
+		      
+		      <div id="updateContent" hidden>
+		      	<div id='updateform'>
+					<div class="formItem">
+						<div class="itemIcon">
+							<i class="layui-icon layui-icon-password"></i>
+						</div>
+						<div class="itemText">
+							<input type="password" placeholder="请输入新密码" id="password">
+						</div>
+					</div>
+					<div class="formItem">
+						<div class="itemIcon">
+							<i class="layui-icon layui-icon-password"></i>
+						</div>
+						<div class="itemText">
+							<input type="password" placeholder="确认密码" id="repassword">
+						</div>
+					</div>
+					<div>
+						<button class="layui-btn" id="validateBtn">更新</button>
+					</div>
+				</div>
+		      </div>
+		      
+		    </div>
+		    <br><br>
+		  </div>
+		  <div class="layui-timeline-item" id="resultStatus">
+		    <i class="layui-icon layui-timeline-axis">&#xe63f;</i>
+		    <div class="layui-timeline-content layui-text">
+		      <span>处理结果</span>
+		      <br><br>
+		      <div id="resultContent" hidden>
+		      	<div class="itemIcon resultTip" id="successTip">
+					<i class="layui-icon" style="font-size:22px;color:#FF5722;">&#xe6af;</i>
+					<span>恭喜您！密码找回成功！</span>
+				</div>
+				<div class="itemIcon resultTip" id="failTip">
+					<i class="layui-icon" style="font-size:22px;color:#FFB800;">&#xe69c;</i>
+					<span>很抱歉！找回失败了！</span>
+				</div>
+		      </div>
+					
+		    </div>
+		</div>
+	 </div>
+	</section>
+</body>
+<script type="text/javascript" src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+<script src="/static/admin/lib/layui/layui.js" charset="utf-8"></script>
+<script>
+init();
+function init(){
+	//hidden属性 ie不支持，演示时如用到ie则js调用隐藏
+	//$('#updateContent').hide();
+	$('#resultContent').hide();
+}
+</script>
+</html>

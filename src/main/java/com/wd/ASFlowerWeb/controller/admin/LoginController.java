@@ -62,9 +62,10 @@ public class LoginController {
 		String username = request.getParameter("username");
 		String password = request.getParameter("password");
 		
-		log.info("username:"+username+"password:"+password);
+//		log.info("username:"+username+"password:"+password);
 		
 		Manager manager = managerService.getManagerByName(username);
+		
 		if(manager!=null && manager.getPassword().equals(DigestUtils.md5DigestAsHex(password.getBytes()))){
 			HttpSession sessoin=request.getSession();
 			sessoin.setAttribute("manager",manager);

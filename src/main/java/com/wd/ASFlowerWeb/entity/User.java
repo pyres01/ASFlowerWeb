@@ -21,7 +21,6 @@ import lombok.extern.slf4j.Slf4j;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Slf4j
 public class User {
 	
 	private Integer id;
@@ -31,7 +30,7 @@ public class User {
 	@JsonFormat(pattern = "yyyy-MM-dd",timezone="GMT+8")
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date birthday;
-	private Boolean sex;
+	private Boolean sex = false;
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
 	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	private Timestamp joinTime;
@@ -40,7 +39,7 @@ public class User {
 	private String qq;
 	private String wechat;
 	private String avatar;
-	private Integer rankId;
+	private Integer rankId = 0;
 	private Integer status=1;
 	private Boolean isDelete=false;
 }

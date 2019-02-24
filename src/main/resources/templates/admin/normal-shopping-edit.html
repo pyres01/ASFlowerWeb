@@ -9,6 +9,7 @@
     <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
     <link rel="stylesheet" href="/static/admin/css/font.css">
     <link rel="stylesheet" href="/static/admin/css/xadmin.css">
+    <link rel="stylesheet" href="/static/admin/css/shoppingPreview.css">
     <script type="text/javascript" src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
     <script type="text/javascript" src="/static/admin/lib/layui/layui.js" charset="utf-8"></script>
     <script type="text/javascript" src="/static/admin/js/xadmin.js"></script>
@@ -17,103 +18,464 @@
       <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
       <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
+    <script type="text/javascript" src="/static/admin/js/shoppingPreview.js"></script>
     <style>
+    	body{
+    		padding-top:20px;
+    		padding-bottom:20px;
+    	}
     	#editNShoppingBox{
     		padding:20px 30px 20px 20px;
+    	} 
+    	#body-left{
+    		width:60%;
+    		float:left;
+    		font-size:14px;
+    	}
+    	#body-right{
+    		width:38%;
+    		float:right;
+    		border-left:2px solid #ccc;
+    	}
+    	#preview{
+    		width:340px;
+    		min-height:500px;
+    		border:1px solid #eee;
+    		margin:20px auto;
+    	}
+    	#upImgLimit{
+    		margin-left:8px;
+    		color:#ccc;
+    	}
+    	#upImgReviweBox{
+    		margin-top:15px;
+    		border: 1px dotted #ccc;
+    		width:496px;
+    		height:140px;
+    		padding:5px 2px;
+    	}
+    	#upImgReviweBox .upImgReviewItemBox{
+    		width:100px;
+    		height:128px;
+    		float:left;
+    		margin-left:17px;
+    		margin-top:5px;
+    		border:1px solid #ccc;
+    		position:relative;
+    	}
+    	#upImgReviweBox .upImgReviweItem{
+    		width:100%;
+    		height:100%;;
+    		overflow:hidden;
+    		
+    	}
+    	#upImgReviweBox .upImgReviweItem img{
+    		width:100%;
+    		height:100%;
+    	}
+    	.removeUpImgBtn{
+    		position:absolute;
+    		right:-8px;
+    		top:-6px;
+    		font-size:25px;
+    		cursor:pointer;
+    	}
+    	#reviewAndSaveBox button{
+    		float:right;
+    		margin:30px;
     	}
     </style>
   </head>
 <body>
-	<div id="editNShoppingBox" class="layui-form">
-		<div class="layui-form-item">
-		  <label class="layui-form-label">商品栏目：</label>
-		  <div class="layui-input-block">
-		    	<input type="radio" name="type" value="1" title="订阅惊喜" checked>
-				<input type="radio" name="type" value="2" title="单束花礼">
-				<input type="radio" name="type" value="3" title="永生花礼">
-				<input type="radio" name="type" value="4" title="花边小物">
-		  </div>
-		</div>
-		<div class="layui-form-item">
-		  <label class="layui-form-label">商品图片：</label>
-		  <div class="layui-input-block">
-		  	
-		  	<button type="button" class="layui-btn" id="upShopImg">
-			  <i class="layui-icon">&#xe67c;</i>上传图片
-			</button>
-		  </div>
-		</div>
-		<div class="layui-form-item">
-		  <label class="layui-form-label">商品名称：</label>
-		  <div class="layui-input-inline">
-		  	<input type="text" name="title" required lay-verify="required" placeholder="请输入商品名称" autocomplete="off" class="layui-input layui-input-inline">
-		  </div>
-		  <label class="layui-form-label">商品介绍：</label>
-		  <div class="layui-input-inline">
-		  	<input type="text" name="instruction" required lay-verify="required" placeholder="请输入商品介绍" autocomplete="off" class="layui-input layui-input-inline">
-		  </div>
-		</div>
-		
-		<div class="layui-form-item">
-			<label class="layui-form-label">库存：</label>
-		  <div class="layui-input-inline">
-		  	<input type="text" name="store" required lay-verify="required"  autocomplete="off" class="layui-input layui-input-inline">
-		  </div>
-		  <label class="layui-form-label">上架时间：</label>
-		  <div class="layui-input-inline">
-		  	<input type="text" name="saleTime" required lay-verify="required"  autocomplete="off" class="layui-input layui-input-inline" id="saleTime">
-		  </div>
-		</div>
-		<div class="layui-form-item">
-		  <label class="layui-form-label">爱尚价格：</label>
-		  <div class="layui-input-inline">
-		  	<input type="text" name="asPrice" required lay-verify="required" autocomplete="off" class="layui-input layui-input-inline">
-		  </div>
-		  <label class="layui-form-label">市场价格：</label>
-		  <div class="layui-input-inline">
-		  	<input type="text" name="nmPrice" required lay-verify="required"  autocomplete="off" class="layui-input layui-input-inline">
-		  </div>
-		</div>
-		<div class="layui-form-item">
-			<label class="layui-form-label">是否销售：</label>
-		  <div class="layui-input-block">
-			  <input type="radio" name="isSale" value="1" title="是" checked>
-				<input type="radio" name="isSale" value="0" title="否">
-		  </div>
-		</div>
-		<div class="layui-form-item">
-			<label class="layui-form-label">商品内容：</label>
-			<div class="layui-input-block">
-				<textarea id="shoppingContent" style="display: none;"></textarea>
+	<div id="body-left">
+		<div id="editNShoppingBox" class="layui-form">
+			<div class="layui-form-item">
+			  <label class="layui-form-label">商品栏目：</label>
+			  <div class="layui-input-block">
+			    	<input type="radio" name="type" value="1" title="订阅惊喜" checked>
+					<input type="radio" name="type" value="2" title="单束花礼">
+					<input type="radio" name="type" value="3" title="永生花礼">
+					<input type="radio" name="type" value="4" title="花边小物">
+			  </div>
+			</div>
+			<div class="layui-form-item">
+			  <label class="layui-form-label">商品图片：</label>
+			  <div class="layui-input-block" id="upImgBox">
+			  	<button type="button" class="layui-btn" id="upShopImg">
+				  <i class="layui-icon">&#xe67c;</i>上传图片
+				</button>
+				<span id="upImgLimit">（最多可上传4张）</span>
+			  </div>
+			  <div class="layui-input-block" id="upImgReviweBox">
+			  	<div class="upImgReviewItemBox">
+			  		<i class="layui-icon layui-icon-close-fill removeUpImgBtn"></i>
+			  		<div class="upImgReviweItem"><img src="/static/home/images/dban1.jpg"/></div>
+			  	</div>
+			  	<div class="upImgReviewItemBox">
+			  		<i class="layui-icon layui-icon-close-fill removeUpImgBtn"></i>
+			  		<div class="upImgReviweItem"><img src="/static/home/images/dban2.jpg"/></div>
+			  	</div>
+			  	<div class="upImgReviewItemBox">
+			  		<i class="layui-icon layui-icon-close-fill removeUpImgBtn"></i>
+			  		<div class="upImgReviweItem"><img src="/static/home/images/dban3.jpg"/></div>
+			  	</div>
+			  </div>
+			</div>
+			<div class="layui-form-item">
+			  <label class="layui-form-label">商品名称：</label>
+			  <div class="layui-input-inline">
+			  	<input type="text" name="title" required lay-verify="required" placeholder="请输入商品名称" autocomplete="off" class="layui-input layui-input-inline">
+			  </div>
+			  <label class="layui-form-label">商品介绍：</label>
+			  <div class="layui-input-inline">
+			  	<input type="text" name="instruction" required lay-verify="required" placeholder="请输入商品介绍" autocomplete="off" class="layui-input layui-input-inline">
+			  </div>
+			</div>
+			
+			<div class="layui-form-item">
+			  <label class="layui-form-label">爱尚价格：</label>
+			  <div class="layui-input-inline">
+			  	<input type="text" name="asPrice" required lay-verify="required" autocomplete="off" class="layui-input layui-input-inline">
+			  </div>
+			  <label class="layui-form-label">市场价格：</label>
+			  <div class="layui-input-inline">
+			  	<input type="text" name="nmPrice" required lay-verify="required"  autocomplete="off" class="layui-input layui-input-inline">
+			  </div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">库存：</label>
+			  <div class="layui-input-inline">
+			  	<input type="text" name="store" required lay-verify="required"  autocomplete="off" class="layui-input layui-input-inline">
+			  </div>
+			  <label class="layui-form-label">上架时间：</label>
+			  <div class="layui-input-inline">
+			  	<input type="text" name="saleTime" required lay-verify="required"  autocomplete="off" class="layui-input layui-input-inline" id="saleTime">
+			  </div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">是否销售：</label>
+			  <div class="layui-input-block">
+				  <input type="radio" name="isSale" value="1" title="是" checked>
+					<input type="radio" name="isSale" value="0" title="否">
+			  </div>
+			</div>
+			<div class="layui-form-item" id="shoppingContentBox">
+				<label class="layui-form-label">商品内容：</label>
+				<div class="layui-input-block">
+					<textarea id="shoppingContent" style="display: none;"></textarea>
+				</div>
+				
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label"></label>
+				<div class="layui-input-block" id="reviewAndSaveBox">
+					<button class="layui-btn" id="saveShoppingBtn">保存商品</button>
+					<button class="layui-btn" id="reviewShoppingContentBtn">
+					  <i class="layui-icon">&#xe609;</i>内容预览
+					</button>
+				</div>
 			</div>
 		</div>
 	</div>
+	<div id="body-right">
+		<div id="preview">
+			<header>
+				<span class="left"> <img src="/static/home/images/back.png" alt=""></span>
+				<p class="center">商品详情</p>
+				<span class="right"><img src="/static/home/images/user.png" alt=""></span>
+			</header>
+			<!-- 轮播图 -->
+			<div class="rotate">
+				<ul>
+					<li ><a href="#"><img src="/static/home/images/dban1.jpg" alt="" ></a></li>
+					<li><a href="#"><img src="/static/home/images/dban2.jpg" alt="" ></a></li>
+					<li ><a href="#"><img src="/static/home/images/dban3.jpg" alt="" ></a></li>
+					<li><a href="#"><img src="/static/home/images/dban4.jpg" alt="" ></a></li>
+		
+				</ul>
+				<ol>
+					<li class="current"></li>
+					<li></li>
+					<li></li>
+					<li></li>
+				</ol>
+			</div>
+			<section>
+				<!-- 标题 -->
+				<div class="title">
+					<h2>缤纷设计鲜花系列</h2>
+					<p>一周一花, 似锦繁花, 五种不同花材, 缤纷多样<br>该商品为订阅包月鲜花，每1周配送一次</p>
+					<p>运费：免运费</p>
+				</div>
+		        <!-- 周期购 -->
+		        <!-- 
+				<div class="pack">
+					<div class="backtime">周期购</div>
+					<div class="desc">该商品为订阅包月鲜花，每1周配送一次</div>
+				</div>
+				 -->
+		       <!-- 主要信息 -->
+		       <main>
+		        	
+			       	
+			       	 	<!-- 价格 -->
+			       	<div class="number">
+			       		<div class="title">爱尚价格</div>
+			       		<div class="num">
+				       		<span class='textcolor'>￥288.6</span>
+			       		</div>
+			       	
+			       	</div>
+			       		<div class="number mprice">
+			       		<div class="title">市场价格</div>
+			       		<div class="num">
+				       		<del>￥888.6</del>
+			       		</div>
+			       	
+			       	</div>
+			       
+			       	<!-- 数量 -->
+			       	<div class="number">
+			       		<div class="title countTitle">数量</div>
+			       		<div class="num">
+				       		<div>
+				       			<div class="left"><img src="/static/home/images/reduce.png" alt=""></div>
+				       			<div class="center"><input type="text" value="1"></div>
+				       			<div class="right"><img src="/static/home/images/plus.png" alt=""></div>
+				       		</div>
+			       		</div>
+			       	</div>
+			       	
+			       	
+		       </main>
+		       <div class="pd"></div>
+		       <!-- 商品展示 -->
+		       <div class="showtitle">
+			       	<ul>
+			       		<li class="current">
+			       			商品展示
+			       		</li>
+			       		<li>买家晒单</li>
+			       		
+			       	</ul>
+		       </div>
+		       <div class="goods">
+			       	<div class="imfor current">
+			       	   <div id="m_shoppingContent">
+			       	   	<ul>
+			       	   		<li>
+			       	   			<a href="#"><img src="/static/home/images/dpic1.jpg" alt=""></a>
+			       	   		</li>
+			       	   		<li>
+			       	   			<a href="#"><img src="/static/home/images/dpic2.jpg" alt=""></a>
+			       	   		</li>
+			       	   		<li>
+			       	   			<a href="#"><img src="/static/home/images/dpic3.jpg" alt=""></a>
+			       	   		</li>
+			       	   		<li>
+			       	   			<a href="#"><img src="/static/home/images/dpic4.jpg" alt=""></a>
+			       	   		</li>
+			       	   		<li>
+			       	   			<a href="#"><img src="/static/home/images/dpic5.jpg" alt=""></a>
+			       	   		</li>
+			       	   		<li>
+			       	   			<a href="#"><img src="/static/home/images/dpic6.jpg" alt=""></a>
+			       	   		</li>
+			       	   		<li>
+			       	   			<a href="#"><img src="/static/home/images/dpic7.jpg" alt=""></a>
+			       	   		</li>
+			       	   		<li>
+			       	   			<a href="#"><img src="/static/home/images/dpic8.jpg" alt=""></a>
+			       	   		</li>
+			       	   		<li>
+			       	   			<a href="#"><img src="/static/home/images/dpic9.jpg" alt=""></a>
+			       	   		</li>
+			       	   		<li>
+			       	   			<a href="#"><img src="/static/home/images/dpic10.jpg" alt=""></a>
+			       	   		</li>
+			       	   		<li>
+			       	   			<a href="#"><img src="/static/home/images/dpic11.jpg" alt=""></a>
+			       	   		</li>
+			       	   		<li>
+			       	   			<a href="#"><img src="/static/home/images/dpic12.gif" alt=""></a>
+			       	   		</li>
+			       	   		<li>
+			       	   			<a href="#"><img src="/static/home/images/dpic13.jpg" alt=""></a>
+			       	   		</li>
+			       	   		<li>
+			       	   			<a href="#"><img src="/static/home/images/dpic14.jpg" alt=""></a>
+			       	   		</li>
+			       	   		<li>
+			       	   			<a href="#"><img src="/static/home/images/dpic15.jpg" alt=""></a>
+			       	   		</li>
+			       	   		<li>
+			       	   			<a href="#"><img src="/static/home/images/dpic16.jpg" alt=""></a>
+			       	   		</li>
+			       	   	</ul>
+			       	   </div>
+			       	</div>
+			        <div class="say">
+			        	<div>买家秀</div>
+			        </div>
+		       </div>
+			</section>
+			<footer>
+				  	<ul>
+				  		<li class="current">
+				  		    <a href="/home/index">
+					  			<img src="/static/home/images/home.png" alt="">
+					  			<p>首页</p>
+				  			</a>
+				  		</li>
+				  		<li>
+				  		    <a href="#">
+					  			<img src="/static/home/images/service.png" alt="">
+					  			<p>客服</p>
+				  			</a>
+				  		</li>
+				  		<li>
+				  		    <a href="/home/shoppingCart">
+					  			<img src="/static/home/images/cart.png" alt="">
+					  			<p>购物车</p>
+				  			</a>
+				  		</li>
+				  		<li class="join">
+				  		    <a href="#">加入购物车</a>
+				  		</li>
+				  		<li class="buy">
+				  		    <a href="#">立即购买</a>
+				  		</li>
+				  		
+				  	</ul>
+			</footer>
+		</div>
+	</div>
+	
 </body>
 <script>
-layui.use(['upload','layedit'], function(){
+if(checkUpImgLimit()){
+	$('#upImgBox').hide();
+}
+checkIsEmptyUpImgBox();
+layui.use(['upload','layedit','laydate'], function(){
   var upload = layui.upload;
   var layedit = layui.layedit;
+  var laydate = layui.laydate;
   
   
+  laydate.render({
+	  elem:'#skTime',
+	  type:'datetime',
+	  range:true
+  });
   layedit.set({
 	  uploadImage: {
 	    url: '/admin/imgUpLoad' //接口url
 	    ,type: 'post' //默认post
 	  }
 	});
-  layedit.build("shoppingContent");
+  var layeditIndex = layedit.build("shoppingContent");
+  
   
   //执行实例
   var uploadInst = upload.render({
-    elem: '#upShopImg' //绑定元素
-    ,url: '' //上传接口
-    ,done: function(res){
-      //上传完毕回调
-    }
-    ,error: function(){
-      //请求异常回调
-    }
+	    elem: '#upShopImg' //绑定元素
+	  	,url: '/admin/imgUpLoad'
+	  	,acceptMime: 'image/jpg, image/png'
+	  	,before: function(obj){ //obj参数包含的信息
+	    	layer.load(); //上传loading
+  	  }
+	  ,done: function(res, index, upload){
+	    layer.closeAll('loading'); //关闭loading
+	    if(res.code == 0){
+	    	$('#upImgReviweBox').append('<div class="upImgReviewItemBox"><i class="layui-icon layui-icon-close-fill removeUpImgBtn"></i><div class="upImgReviweItem"><img src="'+res.data.src+'"/></div></div>');
+	    }else{
+	    	//上传失败
+	    	layer.msg('上传失败了-_-!!!');
+	    }
+	  }
+	  ,error: function(index, upload){
+	    layer.closeAll('loading'); //关闭loading
+	  }
   });
+  //监听upImgReviweBox DOM插入
+  /* $('#upImgReviweBox').bind('DOMNodeInserted',function(){
+	  if(!checkUpImgLimit()){
+		 $('#upImgBox').hide();
+	  }
+  }); */
+//监听upImgReviweBox DOM移除
+  /* $('#upImgReviweBox').bind('DOMNodeRemoved',function(){
+	  if(checkUpImgLimit()){
+		 $('#upImgBox').show();
+	  }
+  }); */
+//监听upImgReviweBox DOM修改
+  $('#upImgReviweBox').bind('DOMSubtreeModified',function(){
+	  if(!checkUpImgLimit()){
+		 $('#upImgBox').show();
+	  }else{
+		  $('#upImgBox').hide(); 
+	  }
+	  
+	  checkIsEmptyUpImgBox();
+  });
+  
+  $('#upImgReviweBox').on('click','.removeUpImgBtn',function(index,item){
+	  $(this).parent().remove();
+  });
+  
+  $('input[name=title]').on('input propertychange',function(){
+	  $('#preview section > div.title h2').text($(this).val());
+  });
+  $('input[name=instruction]').on('input propertychange',function(){
+	  $('#preview section>div.title p:first').html($(this).val());
+  });
+  $('input[name=asPrice]').on('input propertychange',function(){
+	  $('#preview .textcolor').text('￥'+$(this).val());
+  });
+  $('input[name=nmPrice]').on('input propertychange',function(){
+	  $('#preview .mprice del').text('￥'+$(this).val());
+  });
+  $('input[name=skPrice]').on('input propertychange',function(){
+	  if($(this).val().length){
+		  if($('#preview #skPrice').length){
+			  $('#preview #skPrice').text('￥'+$(this).val());
+		  }else{
+			  $('#preview .textcolor').before('<span id="skPrice">￥'+$(this).val()+'</span>');
+		  }
+		  $('#preview .textcolor').replaceWith('<del class="textcolor">'+$('#preview .textcolor').html()+'</del>');
+	  }else{
+		  $('#preview #skPrice').remove();
+		  $('#preview .textcolor').replaceWith('<span class="textcolor">'+$('#preview .textcolor').html()+'</span>');
+	  }  
+	  
+  });
+  
+  $('#saveShoppingBtn').on('click',function(){
+	  
+  });
+  $('#reviewShoppingContentBtn').on('click',function(){
+	  var shoppingContent = layedit.getContent(layeditIndex).replace(new RegExp(".gif","gm"),'.gif" class="emojiImg');
+	  //console.log(shoppingContent);
+	  $('#m_shoppingContent').html(shoppingContent);
+  });
+  
 });
+
+function checkUpImgLimit(){
+	return $('.upImgReviweItem').length==4?true:false;
+}
+
+function checkIsEmptyUpImgBox(){
+	var s = $('.upImgReviweItem').length==0?true:false;
+	if(s){
+		$('#upImgReviweBox').hide();
+	}else{
+		$('#upImgReviweBox').show();
+	}
+}
+
+
 </script>
 </html>

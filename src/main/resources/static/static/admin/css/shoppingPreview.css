@@ -1,32 +1,30 @@
-@CHARSET "UTF-8";
 
 #preview header{
 	width: 100%;
-	height: 45px;
+	height: 70px;
 	/* background: skyblue; */
-	padding: 8px 20px;
+	padding: 0px 20px;
 	box-sizing: border-box;
 	position: relative;
 }
 #preview header span{
-	height-line:20px;
+	position: absolute;
+	width: 20px;
 	height: 20px;
-	float:left;
+	top: 50%;
+	margin-top:-10px;
 }
 #preview header .left{
-	width: 20px;
-	margin-left: 10px;
+	left: 20px;
 	cursor: pointer;
-	float:left;
 }
 #preview header .center{
-	position:relative;
-	left:28%;
+	font-size:20px;
+	margin-top: 3px;
+	letter-spacing:3px;
 }
 #preview header .right{
-	width: 20px;
-	float:right;
-	margin-right: 10px;
+	right: 20px;
 	cursor: pointer;
 }
 #preview header img{
@@ -35,16 +33,16 @@
 }
 #preview header p{
 	width: 100px;
-	height: 90px;
+	height: 70px;
 	margin-right: auto;
 	margin-left: auto;
 	cursor: pointer;
 	text-align: center;
-	line-height: 90px;
+	line-height: 70px;
 }
 
 /* 轮播图部分 */
-#preview .rotate {
+#preview  .rotate {
 	width: 100%;
 	overflow: hidden; 
 	position: relative;
@@ -58,25 +56,24 @@
 
 }
 
-#preview .rotate ul li{
+#preview  .rotate ul li{
 	
 	width: 25%;
 	float: left;
 }
 #preview .rotate ul img{
 	width: 100%;
+	height:250px;
 }
 #preview .rotate ol{
-	
 	position: absolute;
-	left: 50%;
-	bottom: 10px;
+	left: 42%;
+	bottom: 15px;
 }
 #preview .rotate ol li{
 	
 	width: 10px;
 	height: 10px;
-	
 	background: #ccc;
 	margin-right: 10px;
 	float: left;
@@ -104,12 +101,16 @@
 	font-size: 14px;
     color: #999;
     margin-bottom: 8px;
+    line-height:23px;
 }
+
+/*
 #preview .pack{
 	padding-left: 20px;
 	margin: 20px auto;
 	overflow:hidden;
 }
+*/
 #preview .backtime{
 	float: left;
     width: auto;
@@ -128,7 +129,7 @@
 /* 主要信息 */
 #preview main{
 	padding-left: 20px;
-	margin-top: 40px;
+	margin-top: 15px;
 	
 }
 #preview .style,.time,.content,.number{
@@ -142,11 +143,12 @@
 
 #preview .style .title,.time .title,.number .title{
 	height: 33px;
-	width: 11%;
+	width: 18%;
 	line-height: 33px;
+	font-size:14px;
 }
 #preview .style .content,.time .content,.number .num{
-	width: 88%;
+	width: 78%;
 }
 #preview .style .content>div,.time .content>div{
 	width: 40%;
@@ -174,6 +176,10 @@
 	line-height:33px;
 	
 }
+#preview .number .num>div>div.left,.number .num>div>div.right{
+	position: relative;
+    top: 3px;
+}
 #preview .number .left{
 	width:20%;
 	cursor:pointer;
@@ -184,13 +190,41 @@
 	cursor:pointer;
 }
 #preview .number .center{
-	width:60%;
+	width:59%;
+	position: relative;
+    top: -1px;
 }
 #preview .number input{
 	height:33px;
 	width:100%;
 	text-align:center;
 	
+}
+#preview .textcolor{
+	color:#f60;
+	position:relative;
+	top:7px;
+	left:8px;
+}
+#preview .mprice{
+	color:#999;
+	
+}
+#preview .mprice del{
+	position:relative;
+	top:7px;
+	left:8px;
+}
+#preview #skPrice{
+	color:#f60;
+	position:relative;
+	top:6px;
+	left:8px;
+	font-size:16px;
+	margin-right:4px;
+}
+#preview .number .countTitle{
+	letter-spacing:1em;
 }
 #preview main .content .current{
      border: 1px solid #fe5478;
@@ -241,13 +275,19 @@
 }
 
 #preview .imfor{
-	margin-top:60px;
+	margin-top:40px;
 	margin-bottom:60px;
+	overflow:hidden;
 }
-#preview .imfor img{
+#m_shoppingContent{
+	margin:0 8px;
+}
+ #preview .imfor img{
 	width:100%;
 }
-
+#preview .emojiImg{
+	width:22px !important;
+}
 /*买家秀*/
 #preview .say>div{
 	height:200px;
@@ -259,7 +299,7 @@
 
     margin: 0 auto;
 
-	width:300px;
+	width:340px;
 	height:45px;
 	position:fixed;
 	bottom:0px;
@@ -271,7 +311,6 @@
 }
 
 #preview footer ul{
-	width:100%;
 	display: flex;
 }
 
@@ -305,5 +344,6 @@
 
 #preview .join a,.buy a{
 	color:#fff;
-	line-height:50px;
+	line-height:40px;
+	
 }

@@ -1,8 +1,4 @@
 
-
-
-
-
 // 轮播图部分
 var timer;
 var num=0;    

@@ -49,4 +49,12 @@ public class UserService {
 	public Boolean updateUser(User user){
 		return userMapper.update(user)==1?true:false;
 	}
+	
+	public User getUserByMName(String memberName){
+		return userMapper.getUserByMName(memberName);
+	}
+	
+	public User getUserByEmail(String email){
+		return userMapper.getUserByEmail(email);
+	}
 }

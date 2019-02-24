@@ -45,10 +45,10 @@ public class Upload {
         }
         // 获取文件名
         String fileName = file.getOriginalFilename();
-        log.info("上传的文件名为：" + fileName);
+//        log.info("上传的文件名为：" + fileName);
         // 获取文件的后缀名
         String suffixName = fileName.substring(fileName.lastIndexOf("."));
-        log.info("上传的后缀名为：" + suffixName);
+//        log.info("上传的后缀名为：" + suffixName);
         if(".jpg".equals(suffixName.trim())||".png".equals(suffixName.trim())){
 
             // 文件上传后的路径

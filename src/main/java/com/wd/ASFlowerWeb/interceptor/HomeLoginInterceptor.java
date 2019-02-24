@@ -27,7 +27,7 @@ public class HomeLoginInterceptor implements HandlerInterceptor{
 		//获取session
         HttpSession session = request.getSession(true);
         //判断用户ID是否存在，不存在就跳转到登录界面
-        if(session.getAttribute("userId") == null){
+        if(session.getAttribute("member") == null){
 			  response.sendRedirect(request.getContextPath()+"/home/login");
 			  return false;
         }else{

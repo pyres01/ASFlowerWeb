@@ -17,6 +17,19 @@
       <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
       <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
+    <style>
+    	#loadMore{
+    		width:100px;
+    		height:30px;
+    		line-height:30px;
+    		margin:10px auto;
+    		border:1px solid #ccc;
+    		border-radius:5px;
+    		text-align:center;
+    		cursor:pointer;
+    		letter-spacing:3px;
+    	}
+    </style>
   </head>
   
   <body>
@@ -33,21 +46,21 @@
     <div class="x-body">
       <div class="layui-row">
         <form class="layui-form layui-col-md12 x-so" id="searchForm">
-          <input type="checkbox" name="" title="全部" checked>
-		  <input type="checkbox" name="" title="订阅惊喜"> 
-		  <input type="checkbox" name="" title="单束花礼">
-		  <input type="checkbox" name="" title="永生花礼"> 
-		  <input type="checkbox" name="" title="花边小物">
+          <input type="checkbox" name="typeId" value=0 title="全部" checked lay-filter="checkType">
+		  <input type="checkbox" name="typeId" value=1 title="订阅惊喜" checked lay-filter="checkType"> 
+		  <input type="checkbox" name="typeId" value=2 title="单束花礼" checked lay-filter="checkType">
+		  <input type="checkbox" name="typeId" value=3 title="永生花礼" checked lay-filter="checkType"> 
+		  <input type="checkbox" name="typeId" value=4 title="花边小物" checked lay-filter="checkType">
           <input type="text" name="shoppingName"  placeholder="商品名称" autocomplete="off" class="layui-input">
-          <button type="button" class="layui-btn" onclick="search();" lay-filter="sreach"><i class="layui-icon">&#xe615;</i></button>
+          <button type="button" class="layui-btn" onclick="search();"><i class="layui-icon">&#xe615;</i></button>
         </form>
       </div>
       <xblock>
-        <button class="layui-btn layui-btn-danger" onclick="delAll()" id="delManyBtn"><i class="layui-icon"></i>批量删除</button>
-        <button class="layui-btn" onclick="x_admin_show('添加商品','/admin/normalShoppingEdit',900,500)"><i class="layui-icon"></i>添加</button>
-        <span class="x-right" style="line-height:40px">共有数据：<span id="userNum">0</span> 条</span>
+        <!-- <button class="layui-btn layui-btn-danger" onclick="delAll()" id="delManyBtn"><i class="layui-icon"></i>批量删除</button> -->
+        <button class="layui-btn" onclick="x_admin_show('添加商品','/admin/normalShoppingEdit')"><i class="layui-icon"></i>添加</button>
+        <span class="x-right" style="line-height:40px">共有数据：<span id="shopNum">0</span> 条</span>
       </xblock>
-      <table class="layui-table" id="usersTable">
+      <table class="layui-table" id="shoppingTable">
         <thead>
           <tr>
             <th>
@@ -57,17 +70,123 @@
             <th>商品栏目</th>
             <th>商品图片</th>
             <th>商品名称</th>
+            <th>商品介绍</th>
             <th>爱尚价格</th>
             <th>市场价</th>
             <th>库存</th>
             <th>上架时间</th>
             <th>是否销售</th>
-            <th>查看详情</th>
             <th>操作</th></tr>
         </thead>
-        <tbody id="usersTbody">
+        <tbody id="shoppingTbody">
         </tbody>
       </table>
+      <div id="loadMore">加载更多</div>
     </div>
   </body>
+  <script>
+  var layer;
+  var form;
+  var page=pageCount=1;
+  var typeName = new Array();
+  typeName[1]='订阅惊喜';
+  typeName[2]='单束花礼';
+  typeName[3]='永生花礼';
+  typeName[4]='花边小物';
+  init();
+  
+  
+  function init(){
+	  layui.use(['layer','form'],function(){
+		  layer = layui.layer;
+		  form = layui.form;
+		  getShoppings();
+		  bindMyEvents();
+	  });
+  }
+  function getShoppings(){
+	  var loadIndex;
+	  $.ajax({
+		  url:'/admin/searchNmShoppings',
+		  type:'GET',
+		  data:getSearchKey(),
+		  dataType:'json',
+		  beforeSend:function(xhr){
+			  loadIndex = layer.load();
+		  },
+		  success:function(res){
+			 if(res.code == 200){
+				 showTable();
+				 $('#shopNum').text(res.shopCount);
+				 pageCount = res.pageCount;
+				 $.each(res.shoppings,function(index,item){
+					 $('#shoppingTbody').append('<tr><td><div class="layui-unselect layui-form-checkbox" lay-skin="primary" data-id="'+(item.id)+'"><i class="layui-icon">&#xe605;</i></div></td><td>'+(item.id)+'</td><td>'+(typeName[item.typeId])+'</td><td></td><td>'+(item.shoppingName)+'</td><td>'+(item.introduction!=null?(item.introduction.length>15?item.introduction.substr(0,15)+'...':item.introduction):"")+'</td><td>'+(item.asPrice)+'</td><td>'+(item.nmPrice)+'</td><td>'+(item.store)+'</td><td>'+(item.onShelveTime)+'</td><td>'+(item.isSale==true?"是":"否")+'</td><td><button class="layui-btn layui-btn-sm">编辑</button> <button class="layui-btn layui-btn-sm layui-btn-danger">删除</button></td>');
+				 });
+				 if(page <= pageCount){
+					 $('#loadMore').hide();
+				 }
+			 }else{
+				 hideTable();
+			 }
+		  },
+		  complete:function(xhr,testStatus){
+			  layer.close(loadIndex);
+		  }
+		  
+	  });
+  }
+  function loadMore(){
+	  page++;
+	  getShoppings();
+  }
+  function search(){
+	  page = 1;
+	  renderTableEmpty();
+	  getShoppings();
+  }
+  function getSearchKey(){
+	  var typeIds = [];
+	  $("input[name=typeId]:checked").each(function(i){
+		  typeIds[i] = $(this).val();
+	  });
+	  if($.inArray('0',typeIds)>=0){
+		  typeIds = [1,2,3,4];
+	  }
+	  var sname = $('input[name=shoppingName]').val();
+	  return {page:page,typeIds:typeIds,sname:sname};
+  }
+  
+  function renderTableEmpty(){
+	  $('#shoppingTbody').empty();
+  }
+  function hideTable(){
+	  $('#shoppingTable').hide();
+	  $('#shopNum').text(0);
+  }
+  function showTable(){
+	  $('#shoppingTable').show();
+  }
+  
+  function bindMyEvents(){
+	  form.on('checkbox(checkType)', function(data){
+		  //console.log(data.elem); //得到checkbox原始DOM对象
+		  //console.log(data.elem.checked); //是否被选中，true或者false
+		  if(data.elem.checked && data.value ==0){
+			  $("input[type='checkbox'][name='typeId']").prop("checked", true);
+		  }else if(!data.elem.checked && data.value ==0){
+			  $("input[type='checkbox'][name='typeId']").prop("checked", false);
+		  }else if(data.elem.checked && !$("input[type='checkbox'][name='typeId'][value=0]").is(':checked') && $("input[type='checkbox'][name='typeId']:checked").length==4){
+			  $("input[type='checkbox'][name='typeId'][value=0]").prop("checked", true);
+		  }else{
+			 if($("input[type='checkbox'][name='typeId'][value=0]").is(':checked')){
+				 $("input[type='checkbox'][name='typeId'][value=0]").prop("checked", false);
+			 }
+		  }
+		  form.render('checkbox');
+		});
+	  $('#loadMore').on('click',function(){
+		  loadMore();
+	  });
+  }
+  </script>
 </html>

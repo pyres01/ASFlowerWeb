@@ -21,6 +21,12 @@ public interface UserMapper {
 	@Select("SELECT * FROM user WHERE id =${id}")
 	User getUserById(@Param("id") Integer id);
 	
+	@Select("SELECT * FROM user WHERE memberName = #{memberName}")
+	User getUserByMName(@Param("memberName")String memberName);
+	
+	@Select("SELECT * FROM user WHERE email = #{email}")
+	User getUserByEmail(@Param("email")String email);
+	
 	@Select("SELECT * FROM user WHERE DATE(joinTime) >= DATE(#{startTime}) AND DATE(joinTime) <= DATE(#{endTime}) order by joinTime desc limit ${start},${num}")
 	List<User> searchUsersByJT(@Param("startTime") String startTime,@Param("endTime") String endTime,@Param("start") int start,@Param("num") int num);
 	

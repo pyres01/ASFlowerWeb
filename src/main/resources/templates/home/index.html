@@ -10,6 +10,11 @@
 
 	<link rel="stylesheet" href="/static/home/css/cssreset.css">
 	<link rel="stylesheet" href="/static/home/css/style.css">
+	<style>
+		.layui-layer-loading .layui-layer-loading1 {
+			margin: 0 auto;
+		}
+	</style>
 </head>
 <body>
     <!-- 头部 -->
@@ -102,15 +107,15 @@
 			</div>
 		</div>
 		 <!-- 订阅惊喜 -->
-	    <div class="take">
+	    <div class="take" id="topic1">
 			<div class="title">
 				<h4> 订阅惊喜</h4>
 			  <a href="#"><img src="/static/home/images/back.png" alt='' height="18px"></a>
 			</div>
 			<div class="tsurprise">
 			   <ul>
-				   	<li>
-				   		<a href="html/detail.html"><img src="/static/home/images/h1.jpg" alt=""></a>
+				   	<!-- <li>
+				   		<a href="/home/shoppingDetail"><img src="/static/home/images/h1.jpg" alt=""></a>
 				   		<div class="tnews">
 				   			<p>缤纷设计鲜花系列</p>
 				   			<p>¥ 59.90  </p>
@@ -143,20 +148,20 @@
 				   			<p>轻奢甄选鲜花系列</p>
 				   			<p>¥ 129.00  </p>
 				   		</div>
-				   	</li>
+				   	</li> -->
 			   </ul>
 			</div>
 		</div>
 
 		<!-- 单束花礼-->
-		<div>
+		<div id="topic2">
 			<div class="title">
 				<h4> 单束花礼</h4>
 			  <a href="#"><img src="/static/home/images/back.png" alt='' height="18px"></a>
 			</div>
 			<div class="single">
 			    <ul>
-			    	<li>
+			    	<!-- <li>
 			    		<a href="#">
 			    			<img src="/static/home/images/h6.jpg" alt="">
 			    		</a>
@@ -209,7 +214,7 @@
 			    			<p>[星座花礼]星座鲜花-射手座</p>
 			    			<p>¥ 269.00  </p>
 			    		</div>
-			    	</li>
+			    	</li> -->
 			    	
 			    </ul>
 				
@@ -217,14 +222,14 @@
 		</div>
 
 		<!-- 永生花礼-->
-		<div>
+		<div id="topic3">
 			<div class="title">
 				<h4>永生花礼</h4>
 			  <a href="#"><img src="/static/home/images/back.png" alt='' height="18px"></a>
 			</div>
 			<div class="single">
 			    <ul>
-			    	
+			    	<!-- 
 			    	<li>
 			    		<a href="#">
 			    			<img src="/static/home/images/h12.jpg" alt="">
@@ -279,21 +284,21 @@
 			    			<p>¥ 279.00  </p>
 			    		</div>
 			    	</li>
-			    	
+			    	 -->
 			    </ul>
 				
 			</div>
 		</div>
 
 		<!-- 花边小物-->
-		<div>
+		<div id="topic4">
 			<div class="title">
 				<h4>花边小物</h4>
 			  <a href="#"><img src="/static/home/images/back.png" alt='' height="18px"></a>
 			</div>
 			<div class="single">
 			    <ul>
-			    	
+			    	<!-- 
 			    	<li>
 			    		<a href="#">
 			    			<img src="/static/home/images/h18.jpg" alt="">
@@ -321,7 +326,7 @@
 			    			<p>¥ 59.00  </p>
 			    		</div>
 			    	</li>
-			    	
+			    	 -->
 			    </ul>
 				
 			</div>
@@ -362,7 +367,7 @@
 		  			</a>
 		  		</li>
 		  		<li>
-		  		    <a href="/home/userinfo">
+		  		    <a href="/home/user/userinfo">
 			  			<img src="/static/home/images/user.png" alt="">
 			  			<p>我的</p>
 		  			</a>
@@ -371,7 +376,108 @@
 		  	</ul>
 	</footer>
 	<script src='/static/home/js/jquery.min.js'></script>
+	<script type="text/javascript" src="/static/home/js/layui/layui.js" charset="utf-8"></script>
 	<script src='/static/home/js/index.js'></script>
 </body>
+<script>
+var reqC = 0;
+var layer;
+var loadI;
+init();
+function init(){
+	layui.use('layer',function(){
+		layer = layui.layer;
+		
+		loadI = layer.load(1,{shade:[0.5, '#393D49']});
+		for(var i=1;i<=4;i++){
+			eval('bindTopic'+i+'()');
+		}
+	});
+	
+}
+function getTopShop(topid){
+	return $.ajax({
+		url:'/home/getShoppings',
+		type:'GET',
+		dataType:'json',
+		data:{tid:topid},
+		beforeSend:function(){
+			reqC++;
+		},
+		success:function(res){
+			console.log(res);
+			return res;
+		},
+		error:function(xhr){
+			return xhr;
+		},
+		complete:function(xhr,ts){
+			if(reqC == 4){
+				layer.close(loadI);
+			}
+		}
+	});
+}
+function bindTopic1(){
+	var topic1List = getTopShop(1);
+	topic1List.then(function(res){
+		if(res!=null && res.code == 200){
+			var topicUl = $('#topic1').find('ul');
+			var img;
+			$.each(res.shoppings,function(index,item){
+				imgsrc = item.shoppingImg.split('|')[0];
+				topicUl.append('<li><a href="/home/shoppingDetail?topic=1&id='+(item.id)+'"><img src="'+(imgsrc)+'" alt=""></a><div class="tnews"><p>'+(item.shoppingName)+'</p><p>¥ '+(item.asPrice)+'  </p></div></li>');
+			});
+		}else{
+			$('#topic1').hide();
+		}
+	});
+}
+function bindTopic2(){
+	var topic2List = getTopShop(2);
+	topic2List.then(function(res){
+		if(res!=null && res.code == 200){
+			var topicUl = $('#topic2').find('ul');
+			var img;
+			$.each(res.shoppings,function(index,item){
+				imgsrc = item.shoppingImg.split('|')[0];
+				topicUl.append('<li><a href="/home/shoppingDetail?topic=2&id='+(item.id)+'"><img src="'+(imgsrc)+'" alt=""></a><div class="snews"><p>'+(item.shoppingName)+'</p><p>¥ '+(item.asPrice)+'  </p></div></li>');
+			});
+		}else{
+			$('#topic2').hide();
+		}
+	});
+}
+function bindTopic3(){
+	var topic3List = getTopShop(3);
+	topic3List.then(function(res){
+		if(res!=null && res.code == 200){
+			var topicUl = $('#topic3').find('ul');
+			var img;
+			$.each(res.shoppings,function(index,item){
+				imgsrc = item.shoppingImg.split('|')[0];
+				topicUl.append('<li><a href="/home/shoppingDetail?topic=3&id='+(item.id)+'"><img src="'+(imgsrc)+'" alt=""></a><div class="snews"><p>'+(item.shoppingName)+'</p><p>¥ '+(item.asPrice)+'  </p></div></li>');
+			});
+		}else{
+			$('#topic3').hide();
+		}
+	});
+}
+function bindTopic4(){
+	var topic4List = getTopShop(4);
+	topic4List.then(function(res){
+		if(res!=null && res.code == 200){
+			var topicUl = $('#topic4').find('ul');
+			var img;
+			$.each(res.shoppings,function(index,item){
+				imgsrc = item.shoppingImg.split('|')[0];
+				topicUl.append('<li><a href="/home/shoppingDetail?topic=4&id='+(item.id)+'"><img src="'+(imgsrc)+'" alt=""></a><div class="snews"><p>'+(item.shoppingName)+'</p><p>¥ '+(item.asPrice)+'  </p></div></li>');
+			});
+		}else{
+			$('#topic4').hide();
+		}
+	});
+}
+</script>
 </html>
  	

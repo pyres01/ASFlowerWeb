@@ -1,21 +1,29 @@
 package com.wd.ASFlowerWeb.controller;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.util.ClassUtils;
-import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.wd.ASFlowerWeb.entity.Manager;
 import com.wd.ASFlowerWeb.mapper.ManagerMapper;
+import com.wd.ASFlowerWeb.service.util.MailService;
+
+import lombok.extern.slf4j.Slf4j;
+
+
 
 /**
  * @author 风微轻
@@ -24,16 +32,24 @@ import com.wd.ASFlowerWeb.mapper.ManagerMapper;
  *
  */
 @Controller
+@Slf4j
 public class Test {
+	
+	@Autowired
+    private MailService mailService;
 	@Autowired
 	private ManagerMapper managerMapper;
-	@GetMapping("/admin/test")
+	@GetMapping("/home/test")
 	@ResponseBody
-	public void test() throws FileNotFoundException{
+	public void test(HttpServletRequest request) throws FileNotFoundException{
 		
-		String path = ClassUtils.getDefaultClassLoader().getResource("").getPath()+"static/";
-
-		System.out.println(path);
+		//String path = ClassUtils.getDefaultClassLoader().getResource("").getPath()+"static/";
+		/*List<Integer> idList =  new ArrayList<Integer>();
+		idList.add(1);
+		idList.add(2);
+		idList.add(3);
+		System.out.println(StringUtils.strip(idList.toString(),"[]"));*/
+		
 	}
 	
 	@GetMapping("/admin/test2")

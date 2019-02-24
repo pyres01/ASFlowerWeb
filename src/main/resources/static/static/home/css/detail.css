@@ -1,6 +1,4 @@
 
-
-
 body{
 
 	min-width: 320px;
@@ -10,7 +8,7 @@ body{
 }
 header{
 	width: 100%;
-	height: 90px;
+	height: 70px;
 	/* background: skyblue; */
 	padding: 0px 20px;
 	box-sizing: border-box;
@@ -21,11 +19,16 @@ header span{
 	width: 20px;
 	height: 20px;
 	top: 50%;
-	margin-top: -10px;
+	margin-top:-10px;
 }
 header .left{
 	left: 20px;
 	cursor: pointer;
+}
+header .center{
+	font-size:20px;
+	margin-top: 3px;
+	letter-spacing:3px;
 }
 header .right{
 	right: 20px;
@@ -37,12 +40,12 @@ header img{
 }
 header p{
 	width: 100px;
-	height: 90px;
+	height: 70px;
 	margin-right: auto;
 	margin-left: auto;
 	cursor: pointer;
 	text-align: center;
-	line-height: 90px;
+	line-height: 70px;
 }
 
 /* 轮播图部分 */
@@ -67,18 +70,17 @@ header p{
 }
 .rotate ul img{
 	width: 100%;
+	height:250px;
 }
 .rotate ol{
-	
 	position: absolute;
-	left: 50%;
-	bottom: 10px;
+	left: 42%;
+	bottom: 15px;
 }
 .rotate ol li{
 	
 	width: 10px;
 	height: 10px;
-	
 	background: #ccc;
 	margin-right: 10px;
 	float: left;
@@ -106,12 +108,16 @@ section>div.title p{
 	font-size: 14px;
     color: #999;
     margin-bottom: 8px;
+    line-height:23px;
 }
+
+/*
 .pack{
 	padding-left: 20px;
 	margin: 20px auto;
 	overflow:hidden;
 }
+*/
 .backtime{
 	float: left;
     width: auto;
@@ -130,7 +136,7 @@ section>div.title p{
 /* 主要信息 */
 main{
 	padding-left: 20px;
-	margin-top: 40px;
+	margin-top: 15px;
 	
 }
 .style,.time,.content,.number{
@@ -144,11 +150,12 @@ main{
 
 .style .title,.time .title,.number .title{
 	height: 33px;
-	width: 15%;
+	width: 18%;
 	line-height: 33px;
+	font-size:14px;
 }
 .style .content,.time .content,.number .num{
-	width: 80%;
+	width: 78%;
 }
 .style .content>div,.time .content>div{
 	width: 40%;
@@ -176,6 +183,10 @@ main{
 	line-height:33px;
 	
 }
+.number .num>div>div.left,.number .num>div>div.right{
+	position: relative;
+    top: 3px;
+}
 .number .left{
 	width:20%;
 	cursor:pointer;
@@ -186,7 +197,9 @@ main{
 	cursor:pointer;
 }
 .number .center{
-	width:60%;
+	width:59%;
+	position: relative;
+    top: -1px;
 }
 .number input{
 	height:33px;
@@ -196,9 +209,29 @@ main{
 }
 .textcolor{
 	color:#f60;
+	position:relative;
+	top:4px;
+	left:8px;
 }
 .mprice{
 	color:#999;
+	
+}
+.mprice del{
+	position:relative;
+	top:7px;
+	left:8px;
+}
+#skPrice{
+	color:#f60;
+	position:relative;
+	top:6px;
+	left:8px;
+	font-size:16px;
+	margin-right:4px;
+}
+.number .countTitle{
+	letter-spacing:1em;
 }
 main .content .current{
      border: 1px solid #fe5478;
@@ -249,8 +282,10 @@ main .content .current{
 }
 
 .imfor{
-	margin-top:60px;
+	margin-top:10px;
 	margin-bottom:60px;
+	padding-left:8px;
+	padding-right:8px;
 }
 .imfor img{
 	width:100%;
@@ -314,5 +349,6 @@ footer a{
 
 .join a,.buy a{
 	color:#fff;
-	line-height:50px;
+	line-height:40px;
+	
 }
