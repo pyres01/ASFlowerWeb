@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
@@ -118,5 +119,69 @@ public class HomeShoppingController {
 		return mav;
 	}
 	
+	@GetMapping("/home/nmtype")
+	@ResponseBody
+	public ModelAndView nmTypeList(int type,Integer page){
+		Map<Integer,String> templateMap = new  HashMap<>();
+		templateMap.put(1,"/home/surprised");
+		templateMap.put(2,"/home/fast");
+		templateMap.put(3,"/home/forever");
+		templateMap.put(4,"/home/near");
+		ModelAndView mav = new ModelAndView();
+		
+		if(page == null){
+			page = 1;
+		}
+		if(type<1 || type>4){
+			type = 1;
+		}
+
+		mav.setViewName(templateMap.get(type));
+		mav.addObject("page", page);
+		return mav;
+	}
+	
+	@PostMapping("/home/getNmBytype")
+	@ResponseBody
+	public Map<String,Object> getNmByType(HttpServletRequest req){
+		Map<String,Object> map = new HashMap<>();
+		Integer type = null;
+		int page = 1;
+		int pageSize = 10;
+		int pageCount = 0;
+		int count = 0;
+		
+		if(req.getParameter("type")!=null && req.getParameter("type").trim().length()==1){
+			try{
+				type = Integer.valueOf(req.getParameter("type").trim());
+			}catch(NumberFormatException e){
+				
+			}
+		}
+		if(req.getParameter("page")!=null && req.getParameter("page").trim().length()>0){
+			try{
+				page = Integer.valueOf(req.getParameter("page").trim());
+			}catch(NumberFormatException e){}
+		}
+		if(type!=null){
+			count = nmShoppingServer.countForSearchByType(type);
+			if(count>0){
+				pageCount = (int) Math.ceil((double)count/pageSize);
+				page = Math.min(Math.max(1, page), pageCount);
+				List<NmShopping> shoppings = nmShoppingServer.searchByType(type, (page-1)*pageSize, pageSize);
+				map.put("code", 200);
+				map.put("msg", "get success");
+				map.put("shoppings", shoppings);
+			}else{
+				map.put("code", 0);
+				map.put("msg", "null");
+			}
+		}else{
+			map.put("code", 0);
+			map.put("msg", "param error");
+		}
+		
+		return map;
+	}
 
 }

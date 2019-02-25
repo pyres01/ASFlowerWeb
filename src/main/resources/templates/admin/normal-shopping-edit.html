@@ -89,15 +89,15 @@
 <body>
 	<div id="body-left">
 		<form id="editNShoppingBox" class="layui-form">
-			<input type="hidden" name="op" value="add"/>
-			<input type="hidden" name="sid" value=0 />
+			<input type="hidden" name="op" value="add" th:attr="value=${op}"/>
+			<input type="hidden" name="sid" value=0  th:attr="value=${sid}" />
 			<div class="layui-form-item">
 			  <label class="layui-form-label">商品栏目：</label>
 			  <div class="layui-input-block">
-			    	<input type="radio" name="type" value="1" title="订阅惊喜" checked>
-					<input type="radio" name="type" value="2" title="单束花礼">
-					<input type="radio" name="type" value="3" title="永生花礼">
-					<input type="radio" name="type" value="4" title="花边小物">
+			    	<input type="radio" name="type" value="1" title="订阅惊喜" checked th:checked="${editNmShopping!=null && editNmShopping.typeId==1 }">
+					<input type="radio" name="type" value="2" title="单束花礼" checked th:checked="${editNmShopping!=null && editNmShopping.typeId==2 }">
+					<input type="radio" name="type" value="3" title="永生花礼" checked th:checked="${editNmShopping!=null && editNmShopping.typeId==3 }">
+					<input type="radio" name="type" value="4" title="花边小物" checked th:checked="${editNmShopping!=null && editNmShopping.typeId==4 }">
 			  </div>
 			</div>
 			<div class="layui-form-item">
@@ -108,8 +108,8 @@
 				</button>
 				<span id="upImgLimit">（最多可上传4张）</span>
 			  </div>
-			  <div class="layui-input-block" id="upImgReviweBox">
-			  	<div class="upImgReviewItemBox">
+			  <div class="layui-input-block" id="upImgReviweBox" th:with="Simgs=${editNmShopping!=null?#strings.arraySplit(editNmShopping.shoppingImg,'|'):null}">
+			  	<!-- <div class="upImgReviewItemBox">
 			  		<i class="layui-icon layui-icon-close-fill removeUpImgBtn"></i>
 			  		<div class="upImgReviweItem"><img src="/static/home/images/dban1.jpg"/></div>
 			  	</div>
@@ -120,51 +120,56 @@
 			  	<div class="upImgReviewItemBox">
 			  		<i class="layui-icon layui-icon-close-fill removeUpImgBtn"></i>
 			  		<div class="upImgReviweItem"><img src="/static/home/images/dban3.jpg"/></div>
+			  	</div> -->
+			  	<div class="upImgReviewItemBox" th:each="simg : ${Simgs}">
+			  		<i class="layui-icon layui-icon-close-fill removeUpImgBtn"></i>
+			  		<div class="upImgReviweItem"><img th:src="${simg}"/></div>
 			  	</div>
+			  	
 			  </div>
 			</div>
 			<div class="layui-form-item">
 			  <label class="layui-form-label">商品名称：</label>
 			  <div class="layui-input-inline">
-			  	<input type="text" name="title" required lay-verify="required" placeholder="请输入商品名称" autocomplete="off" class="layui-input layui-input-inline">
+			  	<input type="text" name="title" required lay-verify="required" placeholder="请输入商品名称" autocomplete="off" class="layui-input layui-input-inline" th:attr="value=${editNmShopping!=null?editNmShopping.shoppingName:''}">
 			  </div>
 			  <label class="layui-form-label">商品介绍：</label>
 			  <div class="layui-input-inline">
-			  	<input type="text" name="instruction" required lay-verify="required" placeholder="请输入商品介绍" autocomplete="off" class="layui-input layui-input-inline">
+			  	<input type="text" name="introduction" required lay-verify="required" placeholder="请输入商品介绍" autocomplete="off" class="layui-input layui-input-inline" th:attr="value=${editNmShopping!=null?editNmShopping.introduction:''}">
 			  </div>
 			</div>
 			
 			<div class="layui-form-item">
 			  <label class="layui-form-label">爱尚价格：</label>
 			  <div class="layui-input-inline">
-			  	<input type="text" name="asPrice" required lay-verify="required" autocomplete="off" class="layui-input layui-input-inline">
+			  	<input type="text" name="asPrice" required lay-verify="required" autocomplete="off" class="layui-input layui-input-inline" th:attr="value=${editNmShopping!=null?editNmShopping.asPrice:''}">
 			  </div>
 			  <label class="layui-form-label">市场价格：</label>
 			  <div class="layui-input-inline">
-			  	<input type="text" name="nmPrice" required lay-verify="required"  autocomplete="off" class="layui-input layui-input-inline">
+			  	<input type="text" name="nmPrice" required lay-verify="required"  autocomplete="off" class="layui-input layui-input-inline" th:attr="value=${editNmShopping!=null?editNmShopping.nmPrice:''}">
 			  </div>
 			</div>
 			<div class="layui-form-item">
 				<label class="layui-form-label">库存：</label>
 			  <div class="layui-input-inline">
-			  	<input type="text" name="store" required lay-verify="required"  autocomplete="off" class="layui-input layui-input-inline">
+			  	<input type="text" name="store" required lay-verify="required"  autocomplete="off" class="layui-input layui-input-inline" th:attr="value=${editNmShopping!=null?editNmShopping.store:''}">
 			  </div>
 			  <label class="layui-form-label">上架时间：</label>
 			  <div class="layui-input-inline">
-			  	<input type="text" name="saleTime" required lay-verify="required"  autocomplete="off" class="layui-input layui-input-inline" id="saleTime">
+			  	<input type="text" name="saleTime" required lay-verify="required"  autocomplete="off" class="layui-input layui-input-inline" id="saleTime" th:attr="value=${editNmShopping!=null?#dates.format(editNmShopping.onShelveTime,'yyyy-MM-dd HH:mm:ss'):''}">
 			  </div>
 			</div>
 			<div class="layui-form-item">
 				<label class="layui-form-label">是否销售：</label>
 			  <div class="layui-input-block">
-				  <input type="radio" name="isSale" value="1" title="是" checked>
-					<input type="radio" name="isSale" value="0" title="否">
+				  <input type="radio" name="isSale" value="1" title="是" checked th:checked="${editNmShopping!=null && editNmShopping.isSale==true}">
+					<input type="radio" name="isSale" value="0" title="否" th:checked="${editNmShopping!=null && editNmShopping.isSale==false}">
 			  </div>
 			</div>
 			<div class="layui-form-item" id="shoppingContentBox">
 				<label class="layui-form-label">商品内容：</label>
 				<div class="layui-input-block">
-					<textarea id="shoppingContent" style="display: none;"></textarea>
+					<textarea id="shoppingContent" th:inline="text">[[${editNmShopping!=null?editNmShopping.shoppingDetail:''}]]</textarea>
 				</div>
 				
 			</div>
@@ -458,11 +463,12 @@ layui.use(['upload','layedit','laydate'], function(){
 	  var sid = $('input[name=sid]').val();
 	  var type = $('input[name=type]').val();
 	  var title = $('input[name=title]').val();
-	  var instruction = $('input[name=instruction]').val();
+	  var introduction = $('input[name=introduction]').val();
 	  var asPrice = $('input[name=asPrice]').val();
 	  var nmPrice = $('input[name=nmPrice]').val();
 	  var store = $('input[name=store]').val();
 	  var saleTime = $('input[name=saleTime]').val();
+	  var isSale = $('input[name=isSale]').val();
 	  var content = layedit.getContent(layeditIndex).replace(new RegExp(".gif","gm"),'.gif" class="emojiImg');
 	  var imgs = '';
 	  $.each($('.upImgReviweItem'),function(index,item){
@@ -491,11 +497,12 @@ layui.use(['upload','layedit','laydate'], function(){
 			sid:sid,
 			type:type,
 			title:title,
-			instruction:instruction,
+			introduction:introduction,
 			asPrice:asPrice,
 			nmPrice:nmPrice,
 			store:store,
 			saleTime:saleTime,
+			isSale:isSale,
 			content:content,
 			imgs:imgs
 		 }),

@@ -11,7 +11,8 @@
 </head>
 <body>
 	<header>
-		<a href='../index.html'>
+		<input type="hidden" th:value=${page!=null?page:''}>
+		<a href='/home/index'>
 			<img src="/static/home/images/flogo.jpg" alt="">
 		</a>
 	</header>

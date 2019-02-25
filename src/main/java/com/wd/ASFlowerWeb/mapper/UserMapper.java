@@ -18,6 +18,7 @@ import com.wd.ASFlowerWeb.entity.User;
  *
  */
 public interface UserMapper {
+	
 	@Select("SELECT * FROM user WHERE id =${id}")
 	User getUserById(@Param("id") Integer id);
 	

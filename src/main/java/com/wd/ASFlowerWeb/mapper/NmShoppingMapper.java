@@ -18,8 +18,11 @@ import com.wd.ASFlowerWeb.entity.NmShopping;
  */
 public interface NmShoppingMapper {
 	
+	@Select("SELECT * FROM nmshopping WHERE id =${id}")
+	NmShopping getById(@Param("id") Integer id);
+	
 	@Select("SELECT * FROM nmshopping WHERE typeId=${typeId} AND id =${id}")
-	NmShopping getByTypeANdId(@Param("typeId") Integer typeId,@Param("id") Integer id);
+	NmShopping getByTypeAndId(@Param("typeId") Integer typeId,@Param("id") Integer id);
 	
 	@Insert("INSERT INTO nmshopping(typeId,shoppingName,introduction,shoppingImg,asPrice,nmPrice,store,onShelveTime,isSale,shoppingDetail) VALUES(#{typeId},#{shoppingName},#{introduction},#{shoppingImg},#{asPrice},#{nmPrice},#{store},#{onShelveTime},#{isSale},#{shoppingDetail})")
 	Integer insert(NmShopping shopping);
@@ -27,8 +30,8 @@ public interface NmShoppingMapper {
 	@Update("UPDATE nmshopping SET typeId=#{typeId}, shoppingName = #{shoppingName},introduction=#{introduction},shoppingImg=#{shoppingImg},asPrice=#{asPrice},nmPrice=#{nmPrice},store=#{store},onShelveTime=#{onShelveTime},isSale=#{isSale},shoppingDetail=#{shoppingDetail} WHERE id = #{id}")
 	Integer update(NmShopping shopping);
 	
-	@Delete("DELETE FROM nmshopping where id = ${id}")
-	Integer delete();
+	@Delete("DELETE FROM nmshopping WHERE id = ${id}")
+	Integer delete(@Param("id")int id);
 	
 	@Select("SELECT COUNT(*) FROM nmshopping")
 	Integer count();

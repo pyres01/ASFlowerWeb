@@ -13,10 +13,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 
+import com.wd.ASFlowerWeb.entity.ReceAddress;
 import com.wd.ASFlowerWeb.entity.User;
+import com.wd.ASFlowerWeb.service.ReceAddressService;
 import com.wd.ASFlowerWeb.service.UserService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -33,6 +37,8 @@ public class HomeUserInfoController {
 	
 	@Autowired
 	private UserService userService;
+	@Autowired
+	private ReceAddressService receAddressService;
 	
 	@GetMapping("/home/user/userinfo")
 	public ModelAndView userinfo(){
@@ -46,9 +52,75 @@ public class HomeUserInfoController {
 		return "/home/useraccount";
 	}
 	
-	@GetMapping("/home/user/userAddress")
-	public String address(){
-		return "/home/address";
+	@RequestMapping("/home/user/userAddress")
+	public ModelAndView address(HttpServletRequest req){
+		ModelAndView mav = null;
+		if(req.getMethod().equals("POST")){
+			mav = new ModelAndView(new MappingJackson2JsonView());
+			String receiver = "";
+			String phone = "";
+			String address="";
+			boolean validate = true;
+			if(req.getParameter("receiver")!=null && req.getParameter("receiver").trim().length()>=2){
+				receiver = req.getParameter("receiver").trim();
+			}else{
+				validate = false;
+			}
+			if(req.getParameter("phone")!=null && req.getParameter("phone").trim().length()==11){
+				phone = req.getParameter("phone").trim();
+			}else{
+				validate = false;
+			}
+			if(req.getParameter("address")!=null && req.getParameter("address").trim().length()>=10){
+				address = req.getParameter("address").trim();
+			}else{
+				validate = false;
+			}
+			if(validate){
+				boolean saveStatus = true;
+				ReceAddress addr = null;
+				HttpSession session = req.getSession();
+				if(session.getAttribute("defReceAddress") != null){
+					addr = (ReceAddress) session.getAttribute("defReceAddress");
+					addr.setAddress(address);
+					addr.setPhone(phone);
+					addr.setReceiver(receiver);
+					if(receAddressService.updateById(addr)){
+						session.setAttribute("defReceAddress",addr);
+					}else{
+						saveStatus = false;
+					}
+				}else{
+					addr = new ReceAddress();
+					Integer uid = Integer.valueOf(((User)session.getAttribute("member")).getId());
+					addr.setUid(uid);
+					addr.setReceiver(receiver);
+					addr.setPhone(phone);
+					addr.setAddress(address);
+					addr.setDef(true);
+					if(receAddressService.insert(addr)){
+						ReceAddress dfAddr = receAddressService.getDefReceAddress(uid);
+						session.setAttribute("defReceAddress",dfAddr);
+					}else{
+						saveStatus = false;
+					}
+				}
+				if(saveStatus){
+					mav.addObject("code", 200);
+					mav.addObject("msg", "save success");
+				}else{
+					mav.addObject("code", 0);
+					mav.addObject("msg", "save fail");
+				}
+			}else{
+				mav.addObject("code", 0);
+				mav.addObject("msg", "validate fail");
+			}
+			
+		}else{
+			mav = new ModelAndView("/home/address");
+		}
+		return mav;
 	}
 	
 	@GetMapping("/home/login")
@@ -57,6 +129,7 @@ public class HomeUserInfoController {
 	}
 	
 	@GetMapping("/home/user/logout")
+	@ResponseBody
 	public void logout(HttpServletRequest request){
 		HttpSession session = request.getSession();
 		if(session.getAttribute("member")!=null){
@@ -69,9 +142,39 @@ public class HomeUserInfoController {
 		return "/home/register";
 	}
 	
-	@GetMapping("/home/user/repassword")
-	public String rePassWord(){
-		return "/home/repassword";
+	@RequestMapping("/home/user/repassword")
+	public ModelAndView rePassWord(HttpServletRequest request){
+		ModelAndView mav = null;
+		if(request.getMethod().equals("POST")){
+			mav = new ModelAndView(new MappingJackson2JsonView());
+			String oldpass = request.getParameter("password");
+			String newpass = request.getParameter("newPassword");
+			String repass = request.getParameter("repassword");
+			if(this.validatePassword(oldpass) && this.validatePassword(newpass) && this.validateRePassword(newpass, repass)){
+				User u = (User) request.getSession().getAttribute("member");
+				if(u.getPassword().equals(oldpass)){
+					u.setPassword(newpass);
+					if(userService.updateUser(u)){
+						request.getSession().setAttribute("member",u);
+						mav.addObject("code", 200);
+						mav.addObject("msg", "change success");
+					}else{
+						mav.addObject("code", 0);
+						mav.addObject("msg", "change fail");
+					}
+				}else{
+					mav.addObject("code", 0);
+					mav.addObject("msg", "password error");
+				}
+			}else{
+				mav.addObject("code", 0);
+				mav.addObject("msg", "param error");
+			}
+			
+		}else{
+			mav = new ModelAndView("/home/repassword");
+		}
+		return mav;
 	}
 	
 	@GetMapping("/home/findPass")
@@ -108,8 +211,10 @@ public class HomeUserInfoController {
 			map.put("code", 0);
 			map.put("msg", "validate fail");
 		}else{
+			ReceAddress DefReceAddress = receAddressService.getDefReceAddress(1);
 			HttpSession sessoin=req.getSession();
 			sessoin.setAttribute("member",member);
+			sessoin.setAttribute("defReceAddress",DefReceAddress);
 			map.put("code", 200);
 		}
 		return map;

@@ -1,7 +1,9 @@
 package com.wd.ASFlowerWeb.controller.admin;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.sql.Array;
+import java.sql.Timestamp;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -22,6 +24,7 @@ import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 import com.wd.ASFlowerWeb.entity.NmShopping;
 import com.wd.ASFlowerWeb.mapper.NmShoppingMapper;
 import com.wd.ASFlowerWeb.service.NmShoppingServer;
+import com.wd.ASFlowerWeb.service.UserService;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -48,14 +51,14 @@ public class ShoppingController {
 		
 		ModelAndView mav = null;
 		
-		DecimalFormat df = new DecimalFormat("0.00");
 		Integer type = null;
 		String title = "";
-		String instruction = "";
+		String introduction = "";
 		BigDecimal asPrice = null;
 		BigDecimal nmPrice = null;
 		Integer store = 0;
-		String saleTime = "";
+		Timestamp saleTime = null;
+		Boolean isSale = true;
 		String content = "";
 		String imgs = "";
 		
@@ -69,23 +72,23 @@ public class ShoppingController {
 		if(request.getParameter("title")!=null && request.getParameter("title").trim().length()>0){
 			title = request.getParameter("title").trim();
 		}
-		if(request.getParameter("instruction")!=null && request.getParameter("instruction").trim().length()>0){
-			instruction = request.getParameter("instruction").trim();
+		if(request.getParameter("introduction")!=null && request.getParameter("introduction").trim().length()>0){
+			introduction = request.getParameter("introduction").trim();
 		}
 		if(request.getParameter("asPrice")!=null && request.getParameter("asPrice").trim().length()>0){
 			String m_asPrice = request.getParameter("asPrice").trim();
-			m_asPrice = df.format(m_asPrice);
 			try{
 				asPrice = new BigDecimal(m_asPrice);
+				asPrice = asPrice.setScale(2, RoundingMode.DOWN);
 			}catch(Exception e){
 				
 			}
 		}
 		if(request.getParameter("nmPrice")!=null && request.getParameter("nmPrice").trim().length()>0){
-			String m_nmPrice = request.getParameter("nmPrice").trim();
-			m_nmPrice = df.format(m_nmPrice);
+			String m_nmPrice = request.getParameter("nmPrice").trim().toString();
 			try{
 				nmPrice = new BigDecimal(m_nmPrice);
+				nmPrice = nmPrice.setScale(2, RoundingMode.DOWN);
 			}catch(Exception e){
 				
 			}
@@ -100,25 +103,138 @@ public class ShoppingController {
 				store = null;
 			}
 		}
+		if(request.getParameter("saleTime")!=null && request.getParameter("saleTime").trim().length()>0){
+			try{
+				saleTime = Timestamp.valueOf(request.getParameter("saleTime").trim());
+			}catch(Exception e){
+			}
+		}
+		if(request.getParameter("isSale")!=null && request.getParameter("isSale").trim().length()>0){
+			String m_isSale = request.getParameter("isSale").trim();
+			try{
+				isSale = m_isSale.equals("1")?true:false;
+			}catch(Exception e){
+			}finally{
+				log.info(isSale.toString());
+			}
+		}
+		if(request.getParameter("content")!=null && request.getParameter("content").trim().length()>0){
+			content = request.getParameter("content").trim();
+		}
+		if(request.getParameter("imgs")!=null && request.getParameter("imgs").trim().length()>0){
+			imgs = request.getParameter("imgs").trim();
+		}
 		
 		if(op!=null&&op.trim().length()>0){
+			mav = new ModelAndView(new MappingJackson2JsonView());
 			if(op.equals("add")){
-				
+				if(type == null || title.equals("") || asPrice == null || nmPrice==null || store==null || saleTime==null || imgs.equals("")){
+					mav.addObject("code",0);
+					mav.addObject("msg","param error");
+				}else{
+					NmShopping S = new NmShopping();
+					if(!introduction.equals("")){
+						S.setIntroduction(introduction);
+					}
+					if(content.equals("")){
+						content = "暂无内容";
+					}
+					
+					S.setTypeId(type);
+					S.setShoppingName(title);
+					S.setAsPrice(asPrice);
+					S.setNmPrice(nmPrice);
+					S.setStore(store);
+					S.setOnShelveTime(saleTime);
+					S.setIsSale(isSale);
+					S.setShoppingDetail(content);
+					S.setShoppingImg(imgs);
+					if(nmShoppingServer.insert(S)){
+						mav.addObject("code",200);
+						mav.addObject("msg","add success");
+					}else{
+						mav.addObject("code",0);
+						mav.addObject("msg","add fail");
+					}
+				}
 			}else if(op.equals("update")){
-				mav = new ModelAndView(new MappingJackson2JsonView());
 				if(sid==null || sid<=0){
 					mav.addObject("code",0);
 					mav.addObject("msg","param error");
 				}else{
-					
+					NmShopping editS = nmShoppingServer.getById(sid);
+					if(type != null){
+						editS.setTypeId(type);
+					}
+					if(!title.equals("")){
+						editS.setShoppingName(title);
+					}
+					editS.setIntroduction(introduction);
+					if(asPrice != null){
+						editS.setAsPrice(asPrice);					
+					}
+					if(nmPrice!=null){
+						editS.setNmPrice(nmPrice);
+					}
+					if(store!=null){
+						editS.setStore(store);
+					}
+					if(saleTime!=null){
+						editS.setOnShelveTime(saleTime);
+					}
+					if(!imgs.equals("")){
+						editS.setShoppingImg(imgs);
+					}
+					editS.setIsSale(isSale);
+					if(content.equals("")){
+						content = "暂无内容";
+					}
+					editS.setShoppingDetail(content);
+					if(nmShoppingServer.update(editS)){
+						mav.addObject("code", 200);
+						mav.addObject("msg", "update success");
+					}else{
+						mav.addObject("code", 0);
+						mav.addObject("msg", "update fail");
+					}
 				}
+			}else{
+				mav = new ModelAndView();
+				mav.setViewName("/admin/normal-shopping-edit");
+				mav.addObject("op", "add");
+				mav.addObject("sid", 0);
 			}
 		}else{
 			mav = new ModelAndView();
 			mav.setViewName("/admin/normal-shopping-edit");
+			if(sid != null){
+				mav.addObject("editNmShopping", nmShoppingServer.getById(sid));
+				mav.addObject("op", "update");
+				mav.addObject("sid", sid);
+				log.info(nmShoppingServer.getById(sid).getOnShelveTime().toString());
+			}else{
+				mav.addObject("op", "add");
+				mav.addObject("sid", 0);
+			}
 		}
 		return mav;
 	}
+	
+	
+	@GetMapping("/admin/nmShoppingDel")
+	@ResponseBody
+	public Map<String,Object> nmShoppingDel(int sid){
+		Map<String,Object> map = new HashMap<>();
+		map.put("code", 0);
+		map.put("msg","delete fail");
+		if(sid>0 && nmShoppingServer.delete(sid)){
+			map.put("code", 200);
+			map.put("msg","delete success");
+		}
+		return map;
+		
+	}
+	
 	
 	@GetMapping("/admin/skShopping")
 	public String skShopping(){

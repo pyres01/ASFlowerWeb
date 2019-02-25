@@ -120,7 +120,7 @@
 				 $('#shopNum').text(res.shopCount);
 				 pageCount = res.pageCount;
 				 $.each(res.shoppings,function(index,item){
-					 $('#shoppingTbody').append('<tr><td><div class="layui-unselect layui-form-checkbox" lay-skin="primary" data-id="'+(item.id)+'"><i class="layui-icon">&#xe605;</i></div></td><td>'+(item.id)+'</td><td>'+(typeName[item.typeId])+'</td><td></td><td>'+(item.shoppingName)+'</td><td>'+(item.introduction!=null?(item.introduction.length>15?item.introduction.substr(0,15)+'...':item.introduction):"")+'</td><td>'+(item.asPrice)+'</td><td>'+(item.nmPrice)+'</td><td>'+(item.store)+'</td><td>'+(item.onShelveTime)+'</td><td>'+(item.isSale==true?"是":"否")+'</td><td><button class="layui-btn layui-btn-sm">编辑</button> <button class="layui-btn layui-btn-sm layui-btn-danger">删除</button></td>');
+					 $('#shoppingTbody').append('<tr><td><div class="layui-unselect layui-form-checkbox" lay-skin="primary" data-id="'+(item.id)+'"><i class="layui-icon">&#xe605;</i></div></td><td>'+(item.id)+'</td><td>'+(typeName[item.typeId])+'</td><td></td><td>'+(item.shoppingName)+'</td><td>'+(item.introduction!=null?(item.introduction.length>15?item.introduction.substr(0,15)+'...':item.introduction):"")+'</td><td>'+(item.asPrice)+'</td><td>'+(item.nmPrice)+'</td><td>'+(item.store)+'</td><td>'+(item.onShelveTime)+'</td><td>'+(item.isSale==true?"是":"否")+'</td><td><button class="layui-btn layui-btn-sm" onclick="x_admin_show(\'编辑商品信息\',\'/admin/normalShoppingEdit?sid='+(item.id)+'\')">查看 || 编辑</button> <button type="button" class="layui-btn layui-btn-sm layui-btn-danger" onclick="del(this,'+(item.id)+')">删除</button></td>');
 				 });
 				 if(page <= pageCount){
 					 $('#loadMore').hide();
@@ -143,6 +143,36 @@
 	  page = 1;
 	  renderTableEmpty();
 	  getShoppings();
+  }
+  function del(ele,sid){
+	  layer.confirm('确认要删除吗？', {
+		  btn: ['是','否'] //按钮
+		}, function(){
+			if(sid>0){
+			  $.ajax({
+				 url:'/admin/nmShoppingDel',
+				 type:'GET',
+				 dataType:'json',
+				 data:{sid:sid},
+				 success:function(res){
+					 if(res.code == 200){
+						 layer.msg('删除成功！',{icon:6,time:2000});
+						 $(ele).parent().parent().remove();
+						 var sn = $('#shopNum').text();
+						 sn--;
+						 $('#shopNum').text(sn);
+						 if(!sn){
+							 hideTable();
+						 }
+					 }else{
+						 layer.msg('删除失败了=_=!',{icon:5});
+					 }
+				 }
+			  });
+			}else{
+				layer.msg('删除失败了=_=!',{icon:5});
+			}
+		}, function(){});
   }
   function getSearchKey(){
 	  var typeIds = [];

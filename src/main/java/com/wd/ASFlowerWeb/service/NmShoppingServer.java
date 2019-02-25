@@ -3,6 +3,7 @@ package com.wd.ASFlowerWeb.service;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -48,7 +49,27 @@ public class NmShoppingServer {
 	}
 	
 	public NmShopping getByTypeAndId(int typeId,int id){
-		return nmShoppingMapper.getByTypeANdId(typeId,id);
+		return nmShoppingMapper.getByTypeAndId(typeId,id);
+	}
+	
+	public List<NmShopping> getByType(int typeId,int start,int num){
+		return nmShoppingMapper.searchByType(typeId, start, num);
+	}
+	
+	public NmShopping getById(Integer id){
+		return nmShoppingMapper.getById(id);
+	}
+	
+	public boolean insert(NmShopping shopping){
+		return nmShoppingMapper.insert(shopping)==1?true:false;
+	}
+	
+	public boolean update(NmShopping shopping){
+		return nmShoppingMapper.update(shopping) == 1 ?true:false;
+	}
+	
+	public boolean delete(int sid){
+		return nmShoppingMapper.delete(sid) == 1?true:false;
 	}
 	
 }

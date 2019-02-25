@@ -10,7 +10,7 @@
     <body>
 	    <header>
 			<div class="back">
-				<a href="/home/index">
+				<a href="#" onclick="history.back(-1);return false;">
 					<img src="/static/home/images/back.png" alt="">返回
 				</a>
 			</div>
@@ -31,19 +31,19 @@
 				<div class="sex">
 					<div class="icon_sex"><label for="sex">性别：</label></div>
 					<div class="text_sex">
-					    <input type="radio" name="sex" value='male'  readonly /><label>男</label>
-			            <input name="sex" checked type="radio" value="female" readonly /><label>女</label>
+					    <input type="radio" name="sex" value='male'  readonly th:checked="${session.member.sex==true}"/><label>男</label>
+			            <input name="sex" checked type="radio" value="female" readonly th:checked="${session.member.sex==false}"/><label>女</label>
 					</div>
 				</div>
 				<!-- 生日 -->
 				<div>
 					<div>生日：</div>
-					<div><input type="text" value="1995-6-6" readonly></div>
+					<div><input type="text" value="" readonly th:value="${session.member.birthday!=null?#dates.format(session.member.birthday,'yyyy-MM-dd'):'暂未设置'}"></div>
 				</div>
 				<!-- 生日 -->
 				<div>
-					<div>绑定的手机号：</div>
-					<div><div><input type="text" value="1234567898" readonly></div></div>
+					<div>绑定邮箱：</div>
+					<div><div><input type="text" value="" readonly th:value="${session.member.email}"></div></div>
 				</div>
 			</div>
 		
@@ -61,15 +61,15 @@
 			<div class="info">
 				<div>
 					 <div>收件人：</div>
-				     <div>小猪包</div>
+				     <div th:text="${session.defReceAddress!=null?session.defReceAddress.receiver:'暂未设置'}"></div>
 				</div>
 				<div>
 					 <div>手机号：</div>
-				     <div>1234567890</div>
+				     <div th:text="${session.defReceAddress!=null?session.defReceAddress.phone:'暂未设置'}"></div>
 				</div>
 				<div>
 					 <div>详细地址：</div>
-				     <div>广西贺州市八步区贺州学院西校区南苑</div>
+				     <div th:text="${session.defReceAddress!=null?session.defReceAddress.address:'暂未设置'}"></div>
 				</div>
 			 
 				
