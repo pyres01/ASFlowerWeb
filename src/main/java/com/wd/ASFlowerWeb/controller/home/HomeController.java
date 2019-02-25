@@ -12,6 +12,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class HomeController {
 
+	@GetMapping("/")
+	public String webRoot(){
+		return "/home/index";
+	}
+	
 	@GetMapping("/home/index")
 	public String index(){
 		return "/home/index";
