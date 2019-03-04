@@ -30,4 +30,5 @@ public class NmOrder {
 	private Timestamp createTime;
 	private String seriaNo;
 	private BigDecimal total;
+	private Integer receAddress_id;
 }
