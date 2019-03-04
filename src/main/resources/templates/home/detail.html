@@ -93,7 +93,7 @@
 	       		<div class="num">
 		       		<div>
 		       			<div class="left"><img src="/static/home/images/reduce.png" alt=""></div>
-		       			<div class="center"><input type="text" value="1"></div>
+		       			<div class="center"><input type="text" value="1" id="_count"></div>
 		       			<div class="right"><img src="/static/home/images/plus.png" alt=""></div>
 		       		</div>
 	       		</div>
@@ -215,15 +215,19 @@
 			    //,anim: 'fade' //切换动画方式
 		};
 	var ins;
+	var layer;
 	init();
 	function init(){
 		$('body').hide();
-		layui.use('carousel', function(){
+		layui.use(['layer','carousel'], function(){
 		  var carousel = layui.carousel;
+		  var layer = layui.layer;
 		  //建造实例
 		  ins = carousel.render(ins_option);
 		  
 		  getContent();
+		  $('#MenuJoinBtn').click(addCart);
+		  
 		});
 		
 	}
@@ -249,7 +253,7 @@
 					$('#asPrice').text(S.asPrice);
 					$('#nmPrice').text(S.nmPrice);
 					$('#shoppingContent').html(S.shoppingDetail==null?"暂无内容":S.shoppingDetail.replace(new RegExp(".gif","gm"),'.gif" class="emojiImg'));
-					var store =0;
+					var store =S.store;
 					if(store<=0){
 						$('#MenuJoinBtn').remove();
 						$('#MenuBuyBtn').remove();
@@ -264,7 +268,19 @@
 			}
 		});
 	}
-		
+	function addCart(){
+		var sid = $('#sid').text() || 0;
+		var count = $('#_count').val() || 1;
+		$.ajax({
+			url:'/home/addCart',
+			type:'POST',
+			dataType:'json',
+			data:{sid:sid,count:count},
+			success:function(res){
+				layer.msg(res.msg);
+			}
+		});
+	}	
 	</script>
 </body>
 </html>

@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 
-import com.wd.ASFlowerWeb.service.NmShoppingServer;
+import com.wd.ASFlowerWeb.service.NmShoppingService;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -34,7 +34,7 @@ import com.wd.ASFlowerWeb.entity.NmShopping;;
 public class HomeShoppingController {
 	
 	@Autowired
-	private NmShoppingServer nmShoppingServer;
+	private NmShoppingService nmShoppingServer;
 	
 	@GetMapping("/home/getShoppings")
 	@ResponseBody

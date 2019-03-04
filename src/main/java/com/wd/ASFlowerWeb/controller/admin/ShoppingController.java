@@ -23,7 +23,7 @@ import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 
 import com.wd.ASFlowerWeb.entity.NmShopping;
 import com.wd.ASFlowerWeb.mapper.NmShoppingMapper;
-import com.wd.ASFlowerWeb.service.NmShoppingServer;
+import com.wd.ASFlowerWeb.service.NmShoppingService;
 import com.wd.ASFlowerWeb.service.UserService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -39,7 +39,7 @@ import lombok.extern.slf4j.Slf4j;
 public class ShoppingController {
 
 	@Autowired
-	private NmShoppingServer nmShoppingServer;
+	private NmShoppingService nmShoppingServer;
 	
 	@GetMapping("/admin/normalShopping")
 	public String normalShoppingIndex(){

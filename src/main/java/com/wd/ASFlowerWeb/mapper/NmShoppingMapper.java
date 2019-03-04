@@ -18,7 +18,7 @@ import com.wd.ASFlowerWeb.entity.NmShopping;
  */
 public interface NmShoppingMapper {
 	
-	@Select("SELECT * FROM nmshopping WHERE id =${id}")
+	@Select("SELECT * FROM nmshopping WHERE id =${id} FOR UPDATE")
 	NmShopping getById(@Param("id") Integer id);
 	
 	@Select("SELECT * FROM nmshopping WHERE typeId=${typeId} AND id =${id}")

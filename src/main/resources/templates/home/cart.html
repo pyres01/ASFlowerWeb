@@ -9,60 +9,38 @@
     </head>
     <body>
     <header>
-		<span class="left"><a href="../index.html"> <img src="/static/home/images/back.png" alt=""></a></span>
+		<span class="left"><a href="javascript:;" id="backHome"> <img src="/static/home/images/back.png" alt=""></a></span>
 		<p>购物车</p>
-		<span class="right">编辑</span>
+		<span class="right" id="editBtn" th:if="${!needLogin}">编辑</span>
 	</header>
-	<main>
-		<div class="imfor">
+	<main th:if="${!needLogin}">
+		<div class="imfor" th:each="item:${cartList}">
+			<input type="hidden" th:value="${item.id}"/>
 			<div class="choice">
 				<input type="checkbox" class="current">
 				<div class="bg"></div>
 			</div>
 			<div class="pic">
-				<img src="/static/home/images/h2.jpg" alt="">
+				<img th:src="${shopInfo.get(item.id).shoppingImg}" alt="">
 			</div>
 			<div class="news">
-				<h3>纯真单品鲜花系列</h3>
-				<p class="con">已选 <span>纯真单品, 1个月(4束)</span></p>
-				<p class="price">¥ 99.00</p>
+				<h3 th:text="${shopInfo.get(item.id).shoppingName}"></h3>
+				<p class="con" th:text="${shopInfo.get(item.id).introduction}"></span></p>
+				<p class="price">¥ <span th:text="${shopInfo.get(item.id).asPrice}">99.00</span></p>
 			</div>
-			<!-- 数量 -->
+			数量
 
 	       	<div class="num">
 		       	<div>
 		       		<div class="left"><img src="/static/home/images/reduce.png" alt=""></div>
-		       		<div class="center"><input type="text" value="1"></div>
+		       		<div class="center"><input type="text" th:value="${item.count}"></div>
 		       		<div class="right"><img src="/static/home/images/plus.png" alt=""></div>
 		       	</div>
 	       	</div>
-	    </div>
-	    <div class="imfor">
-			<div class="choice">
-				<input type="checkbox" class="current">
-				<div class="bg"></div>
-			</div>
-			<div class="pic">
-				<img src="/static/home/images/h2.jpg" alt="">
-			</div>
-			<div class="news">
-				<h3>纯真单品鲜花系列</h3>
-				<p class="con">已选 <span>纯真单品, 1个月(4束)</span></p>
-				<p class="price">¥ 99.00</p>
-			</div>
-			<!-- 数量 -->
-	       	<div class="num">
-		       	<div>
-		       		<div class="left"><img src="/static/home/images/reduce.png" alt=""></div>
-		       		<div class="center"><input type="text" value="1"></div>
-		       		<div class="right"><img src="/static/home/images/plus.png" alt=""></div>
-		       	</div>
-	       	</div>
-	    </div>
-	       
+	    </div> 
 	</main>
 	<!-- 结算部分 -->
-	<div class="count">
+	<div class="count" th:if="${!needLogin}">
 		<div class="choice">
 			<input type="checkbox" ><span>全选</span>
 		    <div class="bg"></div>
@@ -70,7 +48,7 @@
 		<div class="total">
 			
 			<div class="sure"><a href="account.html">结算</a></div>
-			<div class="price">合计：<span>158.90</span></div>
+			<div class="price">合计：<span>0</span></div>
 		</div>
 	</div>
 	
@@ -107,5 +85,37 @@
 	</footer>
 	<script src='/static/home/js/jquery.min.js'></script>
 	<script src='/static/home/js/cart.js'></script>
+	<script>
+		$('#backHome').click(function(){
+			updateCart();
+			//location.href="/";
+		});	
+		function updateCart(){
+			var info = new Array();
+			$('.imfor').each(function(index,item){
+				var id = $(item).children('input:first').val();
+				var count = $(item).find(".num:first input:first").val();
+				var arri = [id,count];
+				info.push(arri);
+			});
+			if(info.length){
+				$.ajax({
+					url:'/home/updateCart',
+					type:'POST',
+					dataType:'json',
+					traditional:true,/*防止深度序列号 */
+					data:{content:info},
+					success:function(res){
+						console.log(res);
+					},
+					complete:function(xhr,tx){
+						location.href="/";
+					}
+				});
+			}else{
+				location.href="/";
+			}
+		};
+	</script>
     </body>
 </html>

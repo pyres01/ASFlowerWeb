@@ -17,7 +17,7 @@ import com.wd.ASFlowerWeb.mapper.NmShoppingMapper;
  *
  */
 @Service
-public class NmShoppingServer {
+public class NmShoppingService {
 	@Autowired
 	private NmShoppingMapper nmShoppingMapper;
 	
