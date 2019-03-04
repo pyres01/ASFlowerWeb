@@ -126,9 +126,7 @@ public class HomeOrderController {
 		if(beforeConfrimStatus){
 			
 		}else{//创建失败
-			mav = new ModelAndView(new MappingJackson2JsonView());
-			mav.addObject("code", 0);
-			mav.addObject("msg", "创建订单失败");
+			
 		}
 		return null;
 	}
