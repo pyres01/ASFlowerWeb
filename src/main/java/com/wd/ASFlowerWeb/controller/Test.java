@@ -80,4 +80,10 @@ public class Test {
 		Timestamp time= new Timestamp(System.currentTimeMillis());//获取系统当前时间 
 		return  time;
 	}
+	
+	@GetMapping("/test5")
+	public String test5(){
+		 
+		return  "/home/sureorder";
+	}
 }
