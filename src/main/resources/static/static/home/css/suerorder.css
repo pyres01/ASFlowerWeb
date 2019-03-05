@@ -16,6 +16,10 @@ body{
     margin: 0 auto;
     position: relative;
 }
+p{
+	font-size:14px;
+	line-height:24px;
+}
 header{
 	margin: 20px 0;
     overflow: hidden;
@@ -23,7 +27,7 @@ header{
 }
 
 header img{
-	width: 30px;
+	width: 20px;
 	padding: 10px;
 }
 header>div{
@@ -39,7 +43,7 @@ header .infor{
 header .num{
 	position: absolute;
 	right: 5px;
-	top: -5px;
+	top: -2px;
 }
 .way{
 	height: 40px;
@@ -61,12 +65,13 @@ main{
 	margin-top: 10px;
 }
 main .pic{
-	width: 120px;
+	width: 15%;
+	margin: 10px;
 	
 }
 main .pic>img{
-	width: 100px;
-	margin: 10px;
+	width: 100%;
+	
 }
 main li{
 	margin: 10px 0;
@@ -110,6 +115,7 @@ main li>div{
 
  	bottom: 0px;
  	border-top: 1px solid #ccc;
+ 	background:#fff;
 
  }
  
@@ -118,6 +124,9 @@ main li>div{
  	width: 70%;
  	text-align: right;
  	line-height: 40px;
+ }
+ .acount p{
+ line-height:40px;
  }
  .sure{
  	float: right;
