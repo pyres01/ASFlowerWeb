@@ -51,6 +51,12 @@ header .num{
 	position: relative;
 
 }
+.way>p{
+	padding-left:20px;
+}
+li>P{
+	padding-left:10px;
+}
 .byway{
 	position: absolute;
 	top: -5px;
