@@ -26,7 +26,7 @@
 			<div class="news">
 				<h3 th:text="${shopInfo.get(item.id).shoppingName}"></h3>
 				<p class="con" th:text="${shopInfo.get(item.id).introduction}"></span></p>
-				<p class="price">¥ <span th:text="${shopInfo.get(item.id).asPrice}">99.00</span></p>
+				<p class="price">¥ <span th:text="${shopInfo.get(item.id).asPrice}" class="priceNum">99.00</span></p>
 			</div>
 			数量
 
@@ -46,9 +46,8 @@
 		    <div class="bg"></div>
 		</div>
 		<div class="total">
-			
-			<div class="sure"><a href="account.html">结算</a></div>
-			<div class="price">合计：<span>0</span></div>
+			<div class="sure"><a href="javascript:;" id="ConfirmBtn">结算</a></div>
+			<div class="price">合计：<span id="totalMoney">0</span></div>
 		</div>
 	</div>
 	
@@ -57,7 +56,7 @@
     <footer>
 		  	<ul>
 		  		<li >
-		  		    <a href="/home/index">
+		  		    <a href="/">
 			  			<img src="/static/home/images/home.png" alt="">
 			  			<p>首页</p>
 		  			</a>
@@ -75,7 +74,7 @@
 		  			</a>
 		  		</li>
 		  		<li>
-		  		    <a href='/home/userinfo'>
+		  		    <a href='/home/user/userinfo'>
 			  			<img src="/static/home/images/user.png" alt="">
 			  			<p>我的</p>
 		  			</a>
@@ -86,9 +85,9 @@
 	<script src='/static/home/js/jquery.min.js'></script>
 	<script src='/static/home/js/cart.js'></script>
 	<script>
+	
 		$('#backHome').click(function(){
 			updateCart();
-			//location.href="/";
 		});	
 		function updateCart(){
 			var info = new Array();
@@ -116,6 +115,57 @@
 				location.href="/";
 			}
 		};
+		
+		var postStatus = false;
+		$('#ConfirmBtn').click(function(){
+			if(!postStatus){
+				var total = parseFloat($('#totalMoney').text());
+				if(total>0){
+					var shops = [];
+					$('.imfor').each(function(index,item){
+						if($(item).find("input[type=checkbox]:first").is(":checked")){
+							var id = $(item).children('input:first').val();
+							var count = $(item).find(".num:first input:first").val();
+							var arri = [id,count];
+							shops.push(arri);
+						}
+						
+					});
+					if(shops.length){
+						$.ajax({
+							url:'/home/orderConfirm',
+							type:'POST',
+							dataType:'html',
+							traditional:true,/*防止深度序列号 */
+							data:{shops:shops},
+							success:function(res){
+								$("body").html(res);
+								postStatus = true;
+								$('#ConfirmBtn').attr("disable",true);
+							}
+						});
+					}
+				}
+			}
+		});
+		
+		$('.imfor input[type=checkbox]').click(function(){
+			if($('.imfor input[type=checkbox]:checked').length){
+				$('.total .sure').css("background-color",'#fe5478');
+				$('.total .sure').prop("checked",false);
+			}else{
+				$('.total .sure').css("background-color",'#ccc');
+				$('.total .sure').prop("checked",false);
+			}
+			if($(this).is(":checked")){
+				var money = $(this).parent().parent().find('.priceNum:first').text();
+				$('#totalMoney').text(parseFloat($('#totalMoney').text())+parseFloat(money));
+			}else{
+				var money = $(this).parent().parent().find('.priceNum:first').text();
+				$('#totalMoney').text(parseFloat($('#totalMoney').text())-parseFloat(money));
+			}
+		});
+		
 	</script>
     </body>
 </html>

@@ -19,7 +19,7 @@ import com.wd.ASFlowerWeb.entity.NmOrder;
 public interface NmOrderMapper {
 
 	@Insert("INSERT INTO nmorder(uid,createTime,serialNo,total) VALUES(#{uid},#{createTime},#{serialNo},#{total})")
-	@SelectKey(before=false,keyProperty="id",resultType=Integer.class,statementType=StatementType.STATEMENT,statement="SELECT LAST_INSERT_ID() AS id")
+	@SelectKey(keyColumn="id",keyProperty="id",resultType=Integer.class,before=false,statement="select last_insert_id()")
 	Integer insert(NmOrder nmOrder);
 	
 	@Select("SELECT * FROM nmorder WHERE uid = ${uid}")

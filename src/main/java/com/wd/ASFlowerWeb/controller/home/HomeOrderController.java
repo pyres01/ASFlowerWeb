@@ -2,7 +2,7 @@ package com.wd.ASFlowerWeb.controller.home;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -26,7 +26,9 @@ import com.wd.ASFlowerWeb.entity.User;
 import com.wd.ASFlowerWeb.service.NmShoppingService;
 import com.wd.ASFlowerWeb.service.NmOrderItemService;
 import com.wd.ASFlowerWeb.service.NmOrderService;
+import com.wd.ASFlowerWeb.util.MyUtil;
 
+import lombok.extern.slf4j.Slf4j;
 /**
  * @author 若尘
  *
@@ -34,6 +36,7 @@ import com.wd.ASFlowerWeb.service.NmOrderService;
  *
  */
 @Controller
+@Slf4j
 public class HomeOrderController {
 
 	@Autowired
@@ -84,10 +87,15 @@ public class HomeOrderController {
 					}
 					//创建订单
 					NmOrder order = new NmOrder();
-					order.setCreateTime(new Timestamp(System.currentTimeMillis()));
+					order.setCreateTime(MyUtil.getCurrentTimestamp());
 					User member = (User) req.getSession().getAttribute("member");
 					order.setUid(member.getId());
-					order.setSeriaNo(System.currentTimeMillis() + String.valueOf( (Math.abs(new Random().nextLong()))));
+					SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmssSSS");
+					String serialNo_pre = sdf.format(MyUtil.getCurrentTimestamp());
+					String serialNo_ext = String.valueOf(Math.abs(new Random().nextLong()));
+					serialNo_ext = serialNo_ext.substring(0, 2);
+					String serialNo = serialNo_pre + serialNo_ext;
+					order.setSerialNo(serialNo);
 					order.setTotal(total);
 					int orderId = oService.save(order);
 					//保存订单项
@@ -119,13 +127,13 @@ public class HomeOrderController {
 		}else{
 			beforeConfrimStatus = false;
 		}
-		ModelAndView mav = null;
+		ModelAndView mav = new ModelAndView();
 		//创建成功
 		if(beforeConfrimStatus){
-			
+			mav.setViewName("/home/sureorder");
 		}else{//创建失败
-			
+			mav.setViewName("/home/order-fail");
 		}
-		return null;
+		return mav;
 	}
 }

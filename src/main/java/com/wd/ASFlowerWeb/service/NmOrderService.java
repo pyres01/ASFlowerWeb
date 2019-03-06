@@ -19,6 +19,7 @@ public class NmOrderService {
 	private NmOrderMapper nmOrderMapper;
 
 	public Integer save(NmOrder nmOrder){
-		return nmOrderMapper.insert(nmOrder);
+		nmOrderMapper.insert(nmOrder);
+		return nmOrder.getId();
 	}
 }

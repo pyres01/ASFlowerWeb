@@ -28,7 +28,7 @@ public class NmOrder {
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
 	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	private Timestamp createTime;
-	private String seriaNo;
+	private String serialNo;
 	private BigDecimal total;
 	private Integer receAddress_id;
 }
