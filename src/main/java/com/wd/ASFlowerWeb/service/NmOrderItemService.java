@@ -1,5 +1,7 @@
 package com.wd.ASFlowerWeb.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,5 +22,9 @@ public class NmOrderItemService {
 	
 	public Integer save(NmOrderItem item){
 		return mapper.insert(item);
+	}
+	
+	public List<NmOrderItem> getByOid(Integer oid){
+		return mapper.getByOid(oid);
 	}
 }

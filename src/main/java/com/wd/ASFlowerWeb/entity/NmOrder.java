@@ -30,5 +30,7 @@ public class NmOrder {
 	private Timestamp createTime;
 	private String serialNo;
 	private BigDecimal total;
-	private Integer receAddress_id;
+	private String receiver;
+	private String phone;
+	private String address;
 }

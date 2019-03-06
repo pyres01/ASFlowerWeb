@@ -96,6 +96,7 @@ public class HomeShoppingController {
 			}
 		}
 		if(sType==null || sid == null){
+			//抛出404
 			response.sendError(HttpServletResponse.SC_NOT_FOUND);
 		}
 		ModelAndView mav = null;

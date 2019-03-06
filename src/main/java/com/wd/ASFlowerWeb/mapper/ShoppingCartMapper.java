@@ -29,9 +29,13 @@ public interface ShoppingCartMapper {
 	@Update("UPDATE shoppingcart SET count=${count} where id = ${id}")
 	Integer update(@Param("id") Integer id,@Param("count")Integer count);
 	
-	//删除购物车项
+	//根据id删除购物车项
 	@Delete("DELETE FROM shoppingcart WHERE id = ${id}")
 	Integer delete(@Param("id")Integer id);
+	
+	//根据商品id删除购物车项
+	@Delete("DELETE FROM shoppingcart WHERE uid = ${uid} AND sid=${sid}")
+	Integer deleteBySid(@Param("uid")Integer uid,@Param("sid")Integer sid);
 	
 	//清空个人购物车
 	@Delete("DELETE FROM shoppingcart WHERE uid = ${uid}")

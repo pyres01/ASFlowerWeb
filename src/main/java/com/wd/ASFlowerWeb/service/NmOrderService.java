@@ -22,4 +22,8 @@ public class NmOrderService {
 		nmOrderMapper.insert(nmOrder);
 		return nmOrder.getId();
 	}
+	
+	public NmOrder getULastOrder(Integer uid){
+		return nmOrderMapper.getULastOrder(uid);
+	}
 }

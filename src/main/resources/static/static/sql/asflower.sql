@@ -55,9 +55,11 @@ CREATE TABLE `nmorder` (
   `createTime` timestamp NOT NULL,
   `serialNo` varchar(20) COLLATE utf8_bin NOT NULL,
   `total` decimal(8,2) NOT NULL,
-  `receaddress_id` int(11) DEFAULT NULL,
+  `receiver` varchar(10) COLLATE utf8_bin DEFAULT NULL,
+  `phone` varchar(11) COLLATE utf8_bin DEFAULT NULL,
+  `address` varchar(200) COLLATE utf8_bin DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 /*Data for the table `nmorder` */
 
@@ -69,6 +71,7 @@ CREATE TABLE `nmorderitem` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `oid` int(10) unsigned NOT NULL,
   `sid` int(10) unsigned NOT NULL,
+  `serialNo` varchar(20) COLLATE utf8_bin NOT NULL,
   `shoppingName` varchar(50) COLLATE utf8_bin NOT NULL,
   `introduction` varchar(200) COLLATE utf8_bin DEFAULT NULL,
   `shoppingImg` varchar(100) COLLATE utf8_bin NOT NULL,
@@ -83,7 +86,7 @@ CREATE TABLE `nmorderitem` (
   KEY `sid` (`sid`),
   CONSTRAINT `nmorderitem_ibfk_1` FOREIGN KEY (`oid`) REFERENCES `nmorder` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE,
   CONSTRAINT `nmorderitem_ibfk_2` FOREIGN KEY (`sid`) REFERENCES `nmshopping` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 /*Data for the table `nmorderitem` */
 
@@ -252,6 +255,30 @@ insert  into `user`(`id`,`nickName`,`memberName`,`password`,`sex`,`birthday`,`ph
 (5,NULL,'吴若尘测试号','111111',1,NULL,NULL,'2148125115@qq.com',NULL,NULL,NULL,0,1,0,'2019-02-24 16:45:31'),
 (6,NULL,'吴若尘测试号1','111111',1,NULL,NULL,'999@qq.com',NULL,NULL,NULL,0,1,0,'2019-02-24 16:49:17'),
 (7,NULL,'吴若尘测试号3','111111',1,NULL,NULL,'418790777@qq.com',NULL,NULL,NULL,0,1,0,'2019-02-24 19:20:08');
+
+/*!50106 set global event_scheduler = 1*/;
+
+/* Event structure for event `delete_user_unuseful_order_event` */
+
+/*!50106 DROP EVENT IF EXISTS `delete_user_unuseful_order_event`*/;
+
+DELIMITER $$
+
+/*!50106 CREATE DEFINER=`root`@`localhost` EVENT `delete_user_unuseful_order_event` ON SCHEDULE EVERY 1 SECOND STARTS '2019-03-06 20:27:26' ON COMPLETION PRESERVE ENABLE DO call delete_user_unuseful_order_proce() */$$
+DELIMITER ;
+
+/* Procedure structure for procedure `delete_user_unuseful_order_proce` */
+
+/*!50003 DROP PROCEDURE IF EXISTS  `delete_user_unuseful_order_proce` */;
+
+DELIMITER $$
+
+/*!50003 CREATE DEFINER=`root`@`localhost` PROCEDURE `delete_user_unuseful_order_proce`()
+begin
+delete from nmorderitem where oid in (SELECT id AS order_id FROM nmorder WHERE createTime < DATE_ADD(NOW(),INTERVAL - 30 MINUTE));
+delete from nmorder where  createTime < DATE_ADD(NOW(),INTERVAL - 30 MINUTE);
+end */$$
+DELIMITER ;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;

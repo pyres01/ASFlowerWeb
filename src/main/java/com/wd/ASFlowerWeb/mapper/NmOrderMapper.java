@@ -18,13 +18,13 @@ import com.wd.ASFlowerWeb.entity.NmOrder;
  */
 public interface NmOrderMapper {
 
-	@Insert("INSERT INTO nmorder(uid,createTime,serialNo,total) VALUES(#{uid},#{createTime},#{serialNo},#{total})")
+	@Insert("INSERT INTO nmorder(uid,createTime,serialNo,total,receiver,phone,address) VALUES(#{uid},#{createTime},#{serialNo},#{total},#{receiver},#{phone},#{address})")
 	@SelectKey(keyColumn="id",keyProperty="id",resultType=Integer.class,before=false,statement="select last_insert_id()")
 	Integer insert(NmOrder nmOrder);
 	
 	@Select("SELECT * FROM nmorder WHERE uid = ${uid}")
 	List<NmOrder> getByUid(@Param("uid")Integer uid);
 	
-	@Insert("UPDATE nmorder SET receaddress_id = ${receaddress_id}")
-	Integer setReceiver(@Param("receaddress_id")Integer receaddress_id);
+	@Select("SELECT * FROM nmorder WHRE uid = ${uid} AND status = 0 ORDER BY id LIMIT 1")
+	NmOrder getULastOrder(@Param("uid")Integer uid);
 }

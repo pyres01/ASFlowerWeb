@@ -21,7 +21,7 @@ public interface NmOrderItemMapper {
 	@Select("SELECT * FROM nmorderitem WHERE oid = ${oid}")
 	List<NmOrderItem> getByOid(@Param("oid")Integer oid);
 	
-	@Insert("INSERT INTO nmorderitem(oid,sid,shoppingName,introduction,shoppingImg,price,count,subTotal) VALUES(#{oid},#{sid},#{shoppingName},#{introduction},#{shoppingImg},#{price},#{count},#{subTotal})")
+	@Insert("INSERT INTO nmorderitem(oid,sid,serialNo,shoppingName,introduction,shoppingImg,price,count,subTotal) VALUES(#{oid},#{sid},#{serialNo},#{shoppingName},#{introduction},#{shoppingImg},#{price},#{count},#{subTotal})")
 	Integer insert(NmOrderItem nmOrderItem);
 	
 	@Update("UPDATE nmorderitem SET remark = #{remark}")

@@ -30,4 +30,5 @@ public class NmOrderItem {
 	private String ramark;
 	private Integer status = 0;
 	private Boolean isDelete = false;
+	private String serialNo;
 }

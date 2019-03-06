@@ -2,6 +2,7 @@ package com.wd.ASFlowerWeb.service;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -35,9 +36,14 @@ public class ShoppingCartService {
 		return mapper.update(id,count) == 1?true:false;
 	}
 	
-	//删除购物车项
+	//根据id删除购物车项
 	public boolean delete(Integer id){
 		return mapper.delete(id) == 1?true:false;
+	}
+	
+	
+	public boolean deleteBySid(Integer uid,Integer sid){
+		return mapper.deleteBySid(uid,sid) == 1?true:false;
 	}
 	
 	//清空个人购物车
