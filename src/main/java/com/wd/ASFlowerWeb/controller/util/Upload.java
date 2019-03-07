@@ -19,7 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * @author 若尘
+ * @author 韦丹
  *
  * 2019年2月15日
  *
@@ -53,6 +53,7 @@ public class Upload {
 
             // 文件上传后的路径
             String filePath = ClassUtils.getDefaultClassLoader().getResource("").getPath()+"static/static/images/upload/";
+            log.info(filePath);
             // 解决中文问题，liunx下中文路径，图片显示问题
             // fileName = UUID.randomUUID() + suffixName;
             fileName=  UUID.randomUUID().toString().replace("-", "")+".png";

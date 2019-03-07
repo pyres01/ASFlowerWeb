@@ -34,7 +34,7 @@ import com.wd.ASFlowerWeb.util.MyUtil;
 
 import lombok.extern.slf4j.Slf4j;
 /**
- * @author 若尘
+ * @author 韦丹
  *
  * 2019年1月10日
  *
@@ -54,7 +54,7 @@ public class HomeOrderController {
 	
 	@GetMapping("/home/order")
 	public String order(){
-		return "/home/order";
+		return "home/order";
 	}
 	
 	
@@ -171,7 +171,7 @@ public class HomeOrderController {
 	
 	@GetMapping("/home/orderConfirm")
 	public ModelAndView orderConfirm(HttpServletRequest req,HttpServletResponse response){
-		ModelAndView mav = new ModelAndView("/home/sureorder");
+		ModelAndView mav = new ModelAndView("home/sureorder");
 		User member = (User) req.getSession().getAttribute("member");
 		NmOrder order = oService.getULastOrder(member.getId());
 		if(order == null){
@@ -188,6 +188,6 @@ public class HomeOrderController {
 	
 	@GetMapping("/home/orderfail")
 	public String orderFail(HttpServletRequest req){
-		return "/home/order-fail";
+		return "home/order-fail";
 	}
 }

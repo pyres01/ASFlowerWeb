@@ -20,10 +20,11 @@ import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 
 import com.wd.ASFlowerWeb.entity.NmShopping;
 import com.wd.ASFlowerWeb.service.NmShoppingService;
+
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * @author 若尘
+ * @author 韦丹
  *
  * 2019年2月14日
  *
@@ -37,7 +38,7 @@ public class ShoppingController {
 	
 	@GetMapping("/admin/normalShopping")
 	public String normalShoppingIndex(){
-		return "/admin/normal-shopping";
+		return "admin/normal-shopping";
 	}
 	
 	@RequestMapping("/admin/normalShoppingEdit")
@@ -194,13 +195,13 @@ public class ShoppingController {
 				}
 			}else{
 				mav = new ModelAndView();
-				mav.setViewName("/admin/normal-shopping-edit");
+				mav.setViewName("admin/normal-shopping-edit");
 				mav.addObject("op", "add");
 				mav.addObject("sid", 0);
 			}
 		}else{
 			mav = new ModelAndView();
-			mav.setViewName("/admin/normal-shopping-edit");
+			mav.setViewName("admin/normal-shopping-edit");
 			if(sid != null){
 				mav.addObject("editNmShopping", nmShoppingServer.getById(sid));
 				mav.addObject("op", "update");
@@ -232,12 +233,12 @@ public class ShoppingController {
 	
 	@GetMapping("/admin/skShopping")
 	public String skShopping(){
-		return "/admin/sk-shopping";
+		return "admin/sk-shopping";
 	}
 	
 	@GetMapping("/admin/skShoppingEdit")
 	public String skShoppingEditIndex(){
-		return "/admin/sk-shopping-edit";
+		return "admin/sk-shopping-edit";
 	}
 	
 	

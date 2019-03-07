@@ -26,7 +26,7 @@ import com.wd.ASFlowerWeb.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * @author 若尘
+ * @author 韦丹
  *
  * 2019年1月10日
  *
@@ -43,13 +43,13 @@ public class HomeUserInfoController {
 	@GetMapping("/home/user/userinfo")
 	public ModelAndView userinfo(){
 		ModelAndView mav = new ModelAndView();
-		mav.setViewName("/home/userinfo");
+		mav.setViewName("home/userinfo");
 		return mav;
 	}
 	
 	@GetMapping("/home/user/useraccount")
 	public String useraccount(){
-		return "/home/useraccount";
+		return "home/useraccount";
 	}
 	
 	@RequestMapping("/home/user/userAddress")
@@ -118,14 +118,14 @@ public class HomeUserInfoController {
 			}
 			
 		}else{
-			mav = new ModelAndView("/home/address");
+			mav = new ModelAndView("home/address");
 		}
 		return mav;
 	}
 	
 	@GetMapping("/home/login")
 	public String login(){
-		return "/home/login";
+		return "home/login";
 	}
 	
 	@GetMapping("/home/user/logout")
@@ -139,7 +139,7 @@ public class HomeUserInfoController {
 	
 	@GetMapping("/home/register")
 	public String register(){
-		return "/home/register";
+		return "home/register";
 	}
 	
 	@RequestMapping("/home/user/repassword")
@@ -172,15 +172,15 @@ public class HomeUserInfoController {
 			}
 			
 		}else{
-			mav = new ModelAndView("/home/repassword");
+			mav = new ModelAndView("home/repassword");
 		}
 		return mav;
 	}
 	
 	@GetMapping("/home/findPass")
 	public String findPass(){
-		//return "/home/find-pass";
-		return "/home/find-pass";
+		//return "home/find-pass";
+		return "home/find-pass";
 	}
 	
 	@PostMapping("/home/validateLogin")

@@ -19,7 +19,7 @@ import com.wd.ASFlowerWeb.service.ManagerService;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * @author 若尘
+ * @author 韦丹
  *
  * 2019年1月7日
  *
@@ -82,8 +82,8 @@ public class LoginController {
 		HttpSession sessoin=request.getSession();
 		if(sessoin.getAttribute("manager") != null){
 			sessoin.removeAttribute("manager");
-			return "/admin/login";
+			return "admin/login";
 		}
-		return "/home/index";
+		return "home/index";
 	}
 }

@@ -1,9 +1,7 @@
 package com.wd.ASFlowerWeb.controller.util;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.regex.Matcher;
@@ -22,7 +20,7 @@ import com.wd.ASFlowerWeb.service.UserService;
 import com.wd.ASFlowerWeb.service.util.MailService;
 
 /**
- * @author 若尘
+ * @author 韦丹
  *
  * 2019年2月23日
  *

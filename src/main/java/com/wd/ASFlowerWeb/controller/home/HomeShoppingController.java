@@ -24,7 +24,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.wd.ASFlowerWeb.entity.NmShopping;;
 /**
- * @author 若尘
+ * @author 韦丹
  *
  * 2019年2月21日
  *
@@ -101,7 +101,7 @@ public class HomeShoppingController {
 		}
 		ModelAndView mav = null;
 		if(request.getMethod().equals("GET")){
-			mav = new ModelAndView("/home/detail");
+			mav = new ModelAndView("home/detail");
 			mav.addObject("t",sType);
 			mav.addObject("sid",sid);
 		}else{

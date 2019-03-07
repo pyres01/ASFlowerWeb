@@ -65,7 +65,7 @@ CREATE TABLE `nmorder` (
 /*Data for the table `nmorder` */
 
 insert  into `nmorder`(`id`,`uid`,`createTime`,`serialNo`,`total`,`receiver`,`phone`,`address`,`status`) values 
-(6,1,'2019-03-07 13:20:12','2019030713201210927',199.00,'吴若尘1','12345678901','广西贺州学院西校区南苑',0);
+(6,1,'2019-03-07 13:20:12','2019030713201210927',199.00,'吴韦丹1','12345678901','广西贺州学院西校区南苑',0);
 
 /*Table structure for table `nmorderitem` */
 
@@ -145,7 +145,7 @@ CREATE TABLE `receaddress` (
 insert  into `receaddress`(`id`,`uid`,`receiver`,`phone`,`address`,`def`) values 
 (1,3,'大猪包','18877493606','广西贺州学院西校区南苑',1),
 (2,3,'大猪包','18877493606','广西贺州学院西校区南苑',1),
-(3,1,'吴若尘1','12345678901','广西贺州学院西校区南苑',1);
+(3,1,'吴韦丹1','12345678901','广西贺州学院西校区南苑',1);
 
 /*Table structure for table `return` */
 
@@ -257,11 +257,11 @@ CREATE TABLE `user` (
 
 insert  into `user`(`id`,`nickName`,`memberName`,`password`,`sex`,`birthday`,`phone`,`email`,`qq`,`wechat`,`avatar`,`rankId`,`status`,`isDelete`,`joinTime`) values 
 (1,'小猪猪ww','小猪猪ww','123456',0,'2019-02-06','11111111111','111111@qq.com','111111','1111111',NULL,2,1,0,'2019-01-20 22:11:26'),
-(3,'吴若尘','若尘','12345678',1,'2019-01-22','17729780297','it.pyres@gmail.com','2148125115','it.pyres','qwrrwqr',0,1,0,'2019-01-22 21:18:55'),
+(3,'吴韦丹','韦丹','12345678',1,'2019-01-22','17729780297','it.pyres@gmail.com','2148125115','it.pyres','qwrrwqr',0,1,0,'2019-01-22 21:18:55'),
 (4,'测试用户1','测试用户1','12345678',1,'2019-02-03','12345678991','123456@qq.com','123456','123456',NULL,2,1,0,'2019-02-04 10:57:14'),
-(5,NULL,'吴若尘测试号','111111',1,NULL,NULL,'2148125115@qq.com',NULL,NULL,NULL,0,1,0,'2019-02-24 16:45:31'),
-(6,NULL,'吴若尘测试号1','111111',1,NULL,NULL,'999@qq.com',NULL,NULL,NULL,0,1,0,'2019-02-24 16:49:17'),
-(7,NULL,'吴若尘测试号3','111111',1,NULL,NULL,'418790777@qq.com',NULL,NULL,NULL,0,1,0,'2019-02-24 19:20:08');
+(5,NULL,'吴韦丹测试号','111111',1,NULL,NULL,'2148125115@qq.com',NULL,NULL,NULL,0,1,0,'2019-02-24 16:45:31'),
+(6,NULL,'吴韦丹测试号1','111111',1,NULL,NULL,'999@qq.com',NULL,NULL,NULL,0,1,0,'2019-02-24 16:49:17'),
+(7,NULL,'吴韦丹测试号3','111111',1,NULL,NULL,'418790777@qq.com',NULL,NULL,NULL,0,1,0,'2019-02-24 19:20:08');
 
 /*!50106 set global event_scheduler = 1*/;
 

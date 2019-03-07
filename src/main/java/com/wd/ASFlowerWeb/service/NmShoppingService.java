@@ -11,7 +11,7 @@ import com.wd.ASFlowerWeb.entity.NmShopping;
 import com.wd.ASFlowerWeb.mapper.NmShoppingMapper;
 
 /**
- * @author 若尘
+ * @author 韦丹
  *
  * 2019年2月20日
  *

@@ -10,7 +10,7 @@ import com.wd.ASFlowerWeb.entity.ShoppingCart;
 import com.wd.ASFlowerWeb.mapper.ShoppingCartMapper;
 
 /**
- * @author 若尘
+ * @author 韦丹
  *
  * 2019年3月2日
  *

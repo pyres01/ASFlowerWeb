@@ -28,7 +28,7 @@ import com.wd.ASFlowerWeb.service.ManagerService;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * @author 若尘
+ * @author 韦丹
  *
  * 2019年1月9日
  *
@@ -42,12 +42,12 @@ public class ManagerController {
 	
 	@GetMapping("/admin/managerNormalIndex")
 	public String normalIndex(){
-		return "/admin/manager-normal-list";
+		return "admin/manager-normal-list";
 	}
 	
 	@GetMapping("/admin/managerDelIndex")
 	public String delIndex(){
-		return "/admin/manager-del-list";
+		return "admin/manager-del-list";
 	}
 	
 	@RequestMapping("/admin/editManager")
@@ -62,7 +62,7 @@ public class ManagerController {
 		ModelAndView modelAndView = null;
 		if(request.getParameter("op")==null){
 			//加载新增管理员页面
-			modelAndView = new ModelAndView("/admin/manager-normal-edit");
+			modelAndView = new ModelAndView("admin/manager-normal-edit");
 			modelAndView.addObject("op",0);
 		}else{
 			
@@ -70,7 +70,7 @@ public class ManagerController {
 			
 			if(op == 1){
 				//加载修改管理员页面
-				modelAndView = new ModelAndView("/admin/manager-normal-edit");
+				modelAndView = new ModelAndView("admin/manager-normal-edit");
 				
 				Integer id = 0;
 				if(request.getParameter("id")!=null){
@@ -285,7 +285,7 @@ public class ManagerController {
 				return modelAndView;
 				
 			}else{
-				modelAndView = new ModelAndView("/admin/manager-normal-edit");
+				modelAndView = new ModelAndView("admin/manager-normal-edit");
 				modelAndView.addObject("op",0);
 			}
 			
@@ -399,7 +399,7 @@ public class ManagerController {
 	
 	@RequestMapping("/admin/repassword")
 	public ModelAndView repassword(HttpServletRequest request){
-		ModelAndView modelAndView = new ModelAndView("/admin/manager-repassword");
+		ModelAndView modelAndView = new ModelAndView("admin/manager-repassword");
 		
 		String op = "s";
 		if(request.getParameter("op")!=null){

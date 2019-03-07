@@ -10,7 +10,7 @@ import com.wd.ASFlowerWeb.interceptor.AdminLoginInterceptor;
 import com.wd.ASFlowerWeb.interceptor.HomeLoginInterceptor;
 
 /**
- * @author 风微轻
+ * @author 韦丹
  *
  * 2019年1月7日
  * 
@@ -35,7 +35,7 @@ public class WebConfig implements  WebMvcConfigurer {
 	
 
 	/**
-	 * @author 风微轻
+	 * @author 韦丹
 	 * @desc 添加拦截器和拦截规则
 	 */
 	@Override

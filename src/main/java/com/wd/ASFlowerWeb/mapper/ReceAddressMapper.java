@@ -11,7 +11,7 @@ import org.apache.ibatis.annotations.Update;
 import com.wd.ASFlowerWeb.entity.ReceAddress;
 
 /**
- * @author 若尘
+ * @author 韦丹
  *
  * 2019年2月25日
  *

@@ -25,7 +25,7 @@ import com.wd.ASFlowerWeb.service.ShoppingCartService;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * @author 若尘
+ * @author 韦丹
  *
  * 2019年1月10日
  *
@@ -41,9 +41,8 @@ public class HomeShoppingCartController {
 	private NmShoppingService nmsService;
 	
 	@GetMapping("/home/shoppingCart")
-	
 	public ModelAndView index(HttpServletRequest req){
-		ModelAndView mav = new ModelAndView("/home/cart");
+		ModelAndView mav = new ModelAndView("home/cart");
 		if(!checkLogin(req)){
 			mav.addObject("needLogin", true);
 		}else{

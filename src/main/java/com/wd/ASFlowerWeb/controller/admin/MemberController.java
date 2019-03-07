@@ -29,7 +29,7 @@ import com.wd.ASFlowerWeb.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * @author 若尘
+ * @author 韦丹
  *
  * 2019年1月22日
  *
@@ -43,7 +43,7 @@ public class MemberController {
 	
 	@GetMapping("/admin/member/list")
 	public String memberList(){
-		return "/admin/member-list";
+		return "admin/member-list";
 	}
 	
 	@RequestMapping("/admin/member/edit")
@@ -58,7 +58,7 @@ public class MemberController {
 		case ""://load add
 			modelAndView = new ModelAndView();
 			modelAndView.addObject("astatus", "t");
-			modelAndView.setViewName("/admin/member-edit");
+			modelAndView.setViewName("admin/member-edit");
 			break;
 		case "1"://load update
 			Integer id = request.getParameter("id")!=null?Integer.valueOf(request.getParameter("id")):null;
@@ -67,7 +67,7 @@ public class MemberController {
 			modelAndView = new ModelAndView();
 			modelAndView.addObject("astatus", "f");
 			modelAndView.addObject("id", id);
-			modelAndView.setViewName("/admin/member-edit");
+			modelAndView.setViewName("admin/member-edit");
 			break;
 		case "2"://add
 			modelAndView = this.memberAdd(request);
@@ -78,7 +78,7 @@ public class MemberController {
 		default:
 			modelAndView = new ModelAndView();
 			modelAndView.addObject("astatus", true);
-			modelAndView.setViewName("/admin/member-edit");
+			modelAndView.setViewName("admin/member-edit");
 			break;
 		}
 		log.info(modelAndView.toString());
@@ -308,7 +308,7 @@ public class MemberController {
 	@GetMapping("/admin/member/trashList")
 	public ModelAndView memberTrashList(){
 		ModelAndView modelAndView = new ModelAndView();
-		modelAndView.setViewName("/admin/member-del");
+		modelAndView.setViewName("admin/member-del");
 		return modelAndView;
 	}
 	

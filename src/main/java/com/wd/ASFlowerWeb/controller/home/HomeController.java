@@ -4,7 +4,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
 /**
- * @author 若尘
+ * @author 韦丹
  *
  * 2019年1月10日
  *
@@ -14,11 +14,11 @@ public class HomeController {
 
 	@GetMapping("/")
 	public String webRoot(){
-		return "/home/index";
+		return "home/index";
 	}
 	
 	@GetMapping("/home/index")
 	public String index(){
-		return "/home/index";
+		return "home/index";
 	}
 }
