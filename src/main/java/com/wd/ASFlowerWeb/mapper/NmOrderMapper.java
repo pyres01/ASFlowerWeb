@@ -25,6 +25,6 @@ public interface NmOrderMapper {
 	@Select("SELECT * FROM nmorder WHERE uid = ${uid}")
 	List<NmOrder> getByUid(@Param("uid")Integer uid);
 	
-	@Select("SELECT * FROM nmorder WHRE uid = ${uid} AND status = 0 ORDER BY id LIMIT 1")
+	@Select("SELECT * FROM nmorder WHERE uid = ${uid} AND status = 0 ORDER BY id LIMIT 1")
 	NmOrder getULastOrder(@Param("uid")Integer uid);
 }

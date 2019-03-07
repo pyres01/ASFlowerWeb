@@ -33,4 +33,5 @@ public class NmOrder {
 	private String receiver;
 	private String phone;
 	private String address;
+	private Integer status = 0;
 }

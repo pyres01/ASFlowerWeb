@@ -58,10 +58,14 @@ CREATE TABLE `nmorder` (
   `receiver` varchar(10) COLLATE utf8_bin DEFAULT NULL,
   `phone` varchar(11) COLLATE utf8_bin DEFAULT NULL,
   `address` varchar(200) COLLATE utf8_bin DEFAULT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 /*Data for the table `nmorder` */
+
+insert  into `nmorder`(`id`,`uid`,`createTime`,`serialNo`,`total`,`receiver`,`phone`,`address`,`status`) values 
+(6,1,'2019-03-07 13:20:12','2019030713201210927',199.00,'吴若尘1','12345678901','广西贺州学院西校区南苑',0);
 
 /*Table structure for table `nmorderitem` */
 
@@ -86,9 +90,12 @@ CREATE TABLE `nmorderitem` (
   KEY `sid` (`sid`),
   CONSTRAINT `nmorderitem_ibfk_1` FOREIGN KEY (`oid`) REFERENCES `nmorder` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE,
   CONSTRAINT `nmorderitem_ibfk_2` FOREIGN KEY (`sid`) REFERENCES `nmshopping` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 /*Data for the table `nmorderitem` */
+
+insert  into `nmorderitem`(`id`,`oid`,`sid`,`serialNo`,`shoppingName`,`introduction`,`shoppingImg`,`price`,`count`,`subTotal`,`remark`,`status`,`isDelete`) values 
+(6,6,2,'2019030713201211782','【送TA】33枝玫瑰系列',NULL,'/static/home/images/h6.jpg',199.00,2,398.00,NULL,0,0);
 
 /*Table structure for table `nmshopping` */
 
@@ -171,12 +178,12 @@ CREATE TABLE `shoppingcart` (
   KEY `sid` (`sid`),
   CONSTRAINT `shoppingcart_ibfk_1` FOREIGN KEY (`uid`) REFERENCES `user` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE,
   CONSTRAINT `shoppingcart_ibfk_2` FOREIGN KEY (`sid`) REFERENCES `nmshopping` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 /*Data for the table `shoppingcart` */
 
 insert  into `shoppingcart`(`id`,`uid`,`sid`,`count`) values 
-(1,1,1,3);
+(2,1,1,2);
 
 /*Table structure for table `siteinfo` */
 

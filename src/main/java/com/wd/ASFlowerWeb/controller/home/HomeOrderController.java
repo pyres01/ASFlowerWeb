@@ -160,16 +160,16 @@ public class HomeOrderController {
 		if(beforeConfrimStatus){
 			map.put("code", 200);
 			map.put("msg", "success");
-			map.put("href", "/home/sureorder");
+			map.put("href", "/home/orderConfirm");
 		}else{//创建失败
-			map.put("code", 200);
-			map.put("msg", "success");
-			map.put("href", "/home/order-fail");
+			map.put("code", 0);
+			map.put("msg", "fail");
+			map.put("href", "/home/orderfail");
 		}
 		return map;
 	}
 	
-	@PostMapping("/home/orderConfirm")
+	@GetMapping("/home/orderConfirm")
 	public ModelAndView orderConfirm(HttpServletRequest req,HttpServletResponse response){
 		ModelAndView mav = new ModelAndView("/home/sureorder");
 		User member = (User) req.getSession().getAttribute("member");
@@ -186,7 +186,7 @@ public class HomeOrderController {
 		return mav;
 	}
 	
-	@PostMapping("/home/orderfail")
+	@GetMapping("/home/orderfail")
 	public String orderFail(HttpServletRequest req){
 		return "/home/order-fail";
 	}

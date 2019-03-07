@@ -135,13 +135,12 @@
 						$.ajax({
 							url:'/home/orderCreate',
 							type:'POST',
-							dataType:'html',
+							dataType:'json',
 							traditional:true,/*防止深度序列号 */
 							data:{shops:shops},
 							success:function(res){
-								$("body").html(res);
-								postStatus = true;
 								$('#ConfirmBtn').attr("disable",true);
+								location.href=res.href;
 							}
 						});
 					}
