@@ -48,7 +48,8 @@
 						<p class="number">X<span th:text="${item.count}">2</span></p>
 					</div>
 				</div>
-				<p>买家留言:<input placeholder='选填：填写内容已和卖家协商确认'></p>
+				<input type="hidden" th:value="${item.id}">
+				<p>买家留言:<input type="text" class="s_remark" placeholder='选填：填写内容已和卖家协商确认'></p>
 			</li>
 			
 		</ul>
@@ -58,8 +59,35 @@
 		<div class="acount">
 			<p>合计：<span>￥<span th:text="${order!=null?order.total:0}"></span></span></p>
 		</div>
-		<div class="sure">确认订单</div>
+		<div class="sure" id="sureBtn">确认订单</div>
 	</footer>
 	
 </body>
+<script src='/static/home/js/jquery.min.js'></script>
+<script>
+$('#sureBtn').click(function(){
+
+	var url="/home/order/orderPay";
+	var form=$("<form></form>");  
+    //设置属性  
+    form.attr("action",url);  
+    form.attr("method","post");  
+    //创建input，即参数
+    $('main ul li').each(function(index,item){
+		var _id = $(this).find('s_remark').prev().val();
+		var _content = $(this).find('s_remark').val();
+		var rarr = _id+','+_content;
+		var inputType=$("<input type='text' name='remarks'/>");  
+	    inputType.attr("value",rarr);
+	    form.append(inputType);
+	});
+    
+    
+    form.appendTo("body");    
+    form.hide();  
+    //提交表单  
+    form.submit();
+});
+
+</script>
 </html>

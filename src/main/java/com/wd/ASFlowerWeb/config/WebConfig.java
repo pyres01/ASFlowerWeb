@@ -42,6 +42,7 @@ public class WebConfig implements  WebMvcConfigurer {
 	public void addInterceptors(InterceptorRegistry registry) {
 		// TODO Auto-generated method stub
 		registry.addInterceptor(new HomeLoginInterceptor()).addPathPatterns("/home/user/**").excludePathPatterns(Arrays.asList("/static/**","/templates/**","/home/login"));
+		registry.addInterceptor(new HomeLoginInterceptor()).addPathPatterns("/home/order/**").excludePathPatterns(Arrays.asList("/static/**","/templates/**","/home/login"));
 		registry.addInterceptor(new AdminLoginInterceptor()).addPathPatterns("/admin/**").excludePathPatterns(Arrays.asList("/static/**","/templates/**","/admin/login","/admin/toLogin"));
 		WebMvcConfigurer.super.addInterceptors(registry);
 	}

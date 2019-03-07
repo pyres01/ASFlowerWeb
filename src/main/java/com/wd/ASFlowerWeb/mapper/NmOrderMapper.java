@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.SelectKey;
+import org.apache.ibatis.annotations.Update;
 import org.apache.ibatis.mapping.StatementType;
 
 import com.wd.ASFlowerWeb.entity.NmOrder;
@@ -27,4 +28,7 @@ public interface NmOrderMapper {
 	
 	@Select("SELECT * FROM nmorder WHERE uid = ${uid} AND status = 0 ORDER BY id LIMIT 1")
 	NmOrder getULastOrder(@Param("uid")Integer uid);
+	
+	@Update("UPDATE nmorder SET status = ${status} WHERE id =${id}")
+	Integer updateStatus(@Param("id")Integer id,@Param("status")Integer status);
 }

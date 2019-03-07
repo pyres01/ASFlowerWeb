@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+import javax.management.RuntimeErrorException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -52,7 +53,7 @@ public class HomeOrderController {
 	@Autowired
 	private ShoppingCartService cartService;
 	
-	@GetMapping("/home/order")
+	@GetMapping("/home/order/index")
 	public String order(){
 		return "home/order";
 	}
@@ -68,7 +69,7 @@ public class HomeOrderController {
 	 * 
 	 */
 	
-	@PostMapping("/home/orderCreate")
+	@PostMapping("/home/order/orderCreate")
 	@ResponseBody
 	@Transactional(rollbackFor = Exception.class)
 	public Map<String,Object> orderCreate(HttpServletRequest req){
@@ -91,12 +92,15 @@ public class HomeOrderController {
 					BigDecimal total = new BigDecimal("0");
 					total.setScale(2, RoundingMode.DOWN);
 					for (String it : _shops) {
+						log.info("it:"+it);
 						sid = Integer.valueOf(it.split(",")[0]);
 						count = Integer.valueOf(it.split(",")[1]);
 						if(sid>0 && count>0){
+							log.info("sid:"+sid);
 							NmShopping iShop = nmsService.getById(sid);
 							if(iShop!=null && iShop.getStore()>0){
 								shops.add(iShop);
+								log.info("iShop:"+iShop.getId()+"");
 								buyCountMap.put(iShop.getId(), count);
 								total = total.add(iShop.getAsPrice());
 							}
@@ -140,13 +144,14 @@ public class HomeOrderController {
 							oiService.save(item);
 							//删除对应购物车
 							cartService.deleteBySid(member.getId(), nmShopping.getId());
+							log.info("uid:"+member.getId()+"|"+"sid:"+nmShopping.getId());
 						}
 					}else{
 						beforeConfrimStatus = false;
 					}
 				}catch(Exception e){
-					TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
 					beforeConfrimStatus = false;
+					throw new RuntimeException(e);
 				}
 			}else{
 				beforeConfrimStatus = false;
@@ -160,16 +165,16 @@ public class HomeOrderController {
 		if(beforeConfrimStatus){
 			map.put("code", 200);
 			map.put("msg", "success");
-			map.put("href", "/home/orderConfirm");
+			map.put("href", "/home/order/orderConfirm");
 		}else{//创建失败
 			map.put("code", 0);
 			map.put("msg", "fail");
-			map.put("href", "/home/orderfail");
+			map.put("href", "/home/order/orderfail");
 		}
 		return map;
 	}
 	
-	@GetMapping("/home/orderConfirm")
+	@GetMapping("/home/order/orderConfirm")
 	public ModelAndView orderConfirm(HttpServletRequest req,HttpServletResponse response){
 		ModelAndView mav = new ModelAndView("home/sureorder");
 		User member = (User) req.getSession().getAttribute("member");
@@ -186,8 +191,48 @@ public class HomeOrderController {
 		return mav;
 	}
 	
-	@GetMapping("/home/orderfail")
+	@GetMapping("/home/order/orderfail")
 	public String orderFail(HttpServletRequest req){
 		return "home/order-fail";
+	}
+	
+	@PostMapping("/home/order/orderPay")
+	public ModelAndView orderPay(HttpServletRequest req){
+		ModelAndView mav = new ModelAndView();
+		boolean payStatus = false;
+		
+		Map<Integer,String> remarkMap = new HashMap<>();
+		String[] remarkArr = req.getParameterValues("remarks");
+		for (String remark : remarkArr) {
+			try{
+				Integer iid = Integer.valueOf(remark.split(",")[0]);
+				String rem = remark.split(",")[1]!=null?remark.split(",")[1]:"";
+				remarkMap.put(iid, rem);
+			}catch(Exception e){}
+		}
+		
+		User member = (User) req.getSession().getAttribute("member");
+		NmOrder order = oService.getULastOrder(member.getId());
+		if(order.getStatus()==0){
+			List<NmOrderItem> oitems = oiService.getByOid(order.getId());
+			for (NmOrderItem nmOrderItem : oitems) {
+				oiService.setReamrk(nmOrderItem.getId(), remarkMap.get(nmOrderItem.getId()));
+			}
+			int random = (int)(Math.random()*10)+1;
+			log.info(random+"");
+			payStatus = random>=6?true:false;
+			if(payStatus){
+				oService.updateStatus(order.getId(), 1);
+			}
+		}else{
+			payStatus = false;
+		}
+		if(payStatus){
+			mav.addObject("result", "支付成功！");
+		}else{
+			mav.addObject("result", "支付失败！");
+		}
+		mav.setViewName("home/payresult");
+		return mav;
 	}
 }

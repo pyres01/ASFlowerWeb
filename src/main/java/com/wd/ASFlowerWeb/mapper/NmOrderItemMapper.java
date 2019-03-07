@@ -24,6 +24,6 @@ public interface NmOrderItemMapper {
 	@Insert("INSERT INTO nmorderitem(oid,sid,serialNo,shoppingName,introduction,shoppingImg,price,count,subTotal) VALUES(#{oid},#{sid},#{serialNo},#{shoppingName},#{introduction},#{shoppingImg},#{price},#{count},#{subTotal})")
 	Integer insert(NmOrderItem nmOrderItem);
 	
-	@Update("UPDATE nmorderitem SET remark = #{remark}")
-	Integer setReamrk(@Param("remark")String remark);
+	@Update("UPDATE nmorderitem SET remark = #{remark} WHERE id = ${id}")
+	Integer setReamrk(@Param("id")Integer id,@Param("remark")String remark);
 }

@@ -15,7 +15,7 @@
 	</header>
 	<main th:if="${!needLogin}">
 		<div class="imfor" th:each="item:${cartList}">
-			<input type="hidden" th:value="${item.id}"/>
+			<input type="hidden" th:value="${item.sid}"/>
 			<div class="choice">
 				<input type="checkbox" class="current">
 				<div class="bg"></div>
@@ -133,7 +133,7 @@
 					});
 					if(shops.length){
 						$.ajax({
-							url:'/home/orderCreate',
+							url:'/home/order/orderCreate',
 							type:'POST',
 							dataType:'json',
 							traditional:true,/*防止深度序列号 */
