@@ -96,6 +96,12 @@ main .pic>img{
 main li{
 	margin: 10px 0;
 }
+li input{
+	border:none;
+	width:80%;
+	height:30px;
+	outline:none;
+}
 main li>div>div{
 	float: left;
 }
