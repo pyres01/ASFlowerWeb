@@ -26,7 +26,7 @@ import lombok.extern.slf4j.Slf4j;
 
 
 /**
- * @author 风微轻
+ * @author 韦丹
  *
  * 2019年1月7日
  *
@@ -41,7 +41,7 @@ public class Test {
 	private ManagerMapper managerMapper;
 	@GetMapping("/home/test")
 	@ResponseBody
-	public void test(HttpServletRequest request) throws FileNotFoundException{
+	private void test(HttpServletRequest request) throws FileNotFoundException{
 		
 		//String path = ClassUtils.getDefaultClassLoader().getResource("").getPath()+"static/";
 		/*List<Integer> idList =  new ArrayList<Integer>();
@@ -54,7 +54,7 @@ public class Test {
 	
 	@GetMapping("/admin/test2")
 	@ResponseBody
-	public String test2(){
+	private String test2(){
 		String name = "pyres";
 		List<Manager> managerList = managerMapper.findDelManagerByName(name,0,1);
 		return managerList.toString();
@@ -62,7 +62,7 @@ public class Test {
 	
 	@GetMapping("/admin/test3")
 	@ResponseBody
-	public Integer test3(){
+	private Integer test3(){
 		Manager manager = new Manager();
 		manager.setName("test1");
 		manager.setPassword("123456");
@@ -81,9 +81,4 @@ public class Test {
 		return  time;
 	}
 	
-	@GetMapping("/test5")
-	public String test5(){
-		 
-		return  "/home/sureorder";
-	}
 }
