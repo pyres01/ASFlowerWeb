@@ -1,5 +1,7 @@
 package com.wd.ASFlowerWeb.service;
 
+import java.util.List;
+
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,4 +33,6 @@ public class NmOrderService {
 	public boolean updateStatus(Integer id,Integer status){
 		return nmOrderMapper.updateStatus(id, status) == 1?true:false;
 	}
+	
+	
 }

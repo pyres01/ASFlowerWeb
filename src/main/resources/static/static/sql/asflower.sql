@@ -60,12 +60,12 @@ CREATE TABLE `nmorder` (
   `address` varchar(200) COLLATE utf8_bin DEFAULT NULL,
   `status` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 /*Data for the table `nmorder` */
 
 insert  into `nmorder`(`id`,`uid`,`createTime`,`serialNo`,`total`,`receiver`,`phone`,`address`,`status`) values 
-(6,1,'2019-03-07 13:20:12','2019030713201210927',199.00,'吴韦丹1','12345678901','广西贺州学院西校区南苑',0);
+(10,1,'2019-03-07 20:21:24','2019030720212386546',199.00,'吴若尘1','12345678901','广西贺州学院西校区南苑',1);
 
 /*Table structure for table `nmorderitem` */
 
@@ -90,12 +90,12 @@ CREATE TABLE `nmorderitem` (
   KEY `sid` (`sid`),
   CONSTRAINT `nmorderitem_ibfk_1` FOREIGN KEY (`oid`) REFERENCES `nmorder` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE,
   CONSTRAINT `nmorderitem_ibfk_2` FOREIGN KEY (`sid`) REFERENCES `nmshopping` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 /*Data for the table `nmorderitem` */
 
 insert  into `nmorderitem`(`id`,`oid`,`sid`,`serialNo`,`shoppingName`,`introduction`,`shoppingImg`,`price`,`count`,`subTotal`,`remark`,`status`,`isDelete`) values 
-(6,6,2,'2019030713201211782','【送TA】33枝玫瑰系列',NULL,'/static/home/images/h6.jpg',199.00,2,398.00,NULL,0,0);
+(8,10,2,'2019030720212386720','【送TA】33枝玫瑰系列',NULL,'/static/home/images/h6.jpg',199.00,1,199.00,NULL,0,0);
 
 /*Table structure for table `nmshopping` */
 
@@ -145,7 +145,7 @@ CREATE TABLE `receaddress` (
 insert  into `receaddress`(`id`,`uid`,`receiver`,`phone`,`address`,`def`) values 
 (1,3,'大猪包','18877493606','广西贺州学院西校区南苑',1),
 (2,3,'大猪包','18877493606','广西贺州学院西校区南苑',1),
-(3,1,'吴韦丹1','12345678901','广西贺州学院西校区南苑',1);
+(3,1,'吴若尘1','12345678901','广西贺州学院西校区南苑',1);
 
 /*Table structure for table `return` */
 
@@ -178,12 +178,9 @@ CREATE TABLE `shoppingcart` (
   KEY `sid` (`sid`),
   CONSTRAINT `shoppingcart_ibfk_1` FOREIGN KEY (`uid`) REFERENCES `user` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE,
   CONSTRAINT `shoppingcart_ibfk_2` FOREIGN KEY (`sid`) REFERENCES `nmshopping` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 /*Data for the table `shoppingcart` */
-
-insert  into `shoppingcart`(`id`,`uid`,`sid`,`count`) values 
-(2,1,1,2);
 
 /*Table structure for table `siteinfo` */
 
@@ -257,11 +254,11 @@ CREATE TABLE `user` (
 
 insert  into `user`(`id`,`nickName`,`memberName`,`password`,`sex`,`birthday`,`phone`,`email`,`qq`,`wechat`,`avatar`,`rankId`,`status`,`isDelete`,`joinTime`) values 
 (1,'小猪猪ww','小猪猪ww','123456',0,'2019-02-06','11111111111','111111@qq.com','111111','1111111',NULL,2,1,0,'2019-01-20 22:11:26'),
-(3,'吴韦丹','韦丹','12345678',1,'2019-01-22','17729780297','it.pyres@gmail.com','2148125115','it.pyres','qwrrwqr',0,1,0,'2019-01-22 21:18:55'),
+(3,'吴若尘','若尘','12345678',1,'2019-01-22','17729780297','it.pyres@gmail.com','2148125115','it.pyres','qwrrwqr',0,1,0,'2019-01-22 21:18:55'),
 (4,'测试用户1','测试用户1','12345678',1,'2019-02-03','12345678991','123456@qq.com','123456','123456',NULL,2,1,0,'2019-02-04 10:57:14'),
-(5,NULL,'吴韦丹测试号','111111',1,NULL,NULL,'2148125115@qq.com',NULL,NULL,NULL,0,1,0,'2019-02-24 16:45:31'),
-(6,NULL,'吴韦丹测试号1','111111',1,NULL,NULL,'999@qq.com',NULL,NULL,NULL,0,1,0,'2019-02-24 16:49:17'),
-(7,NULL,'吴韦丹测试号3','111111',1,NULL,NULL,'418790777@qq.com',NULL,NULL,NULL,0,1,0,'2019-02-24 19:20:08');
+(5,NULL,'吴若尘测试号','111111',1,NULL,NULL,'2148125115@qq.com',NULL,NULL,NULL,0,1,0,'2019-02-24 16:45:31'),
+(6,NULL,'吴若尘测试号1','111111',1,NULL,NULL,'999@qq.com',NULL,NULL,NULL,0,1,0,'2019-02-24 16:49:17'),
+(7,NULL,'吴若尘测试号3','111111',1,NULL,NULL,'418790777@qq.com',NULL,NULL,NULL,0,1,0,'2019-02-24 19:20:08');
 
 /*!50106 set global event_scheduler = 1*/;
 
@@ -281,11 +278,50 @@ DELIMITER ;
 DELIMITER $$
 
 /*!50003 CREATE DEFINER=`root`@`localhost` PROCEDURE `delete_user_unuseful_order_proce`()
-begin
-delete from nmorderitem where oid in (SELECT id AS order_id FROM nmorder WHERE createTime < DATE_ADD(NOW(),INTERVAL - 30 MINUTE));
-delete from nmorder where  createTime < DATE_ADD(NOW(),INTERVAL - 30 MINUTE);
+begin
+delete from nmorderitem where oid in (SELECT id AS order_id FROM nmorder WHERE createTime < DATE_ADD(NOW(),INTERVAL - 30 MINUTE) aND `status`=0);
+delete from nmorder where  createTime < DATE_ADD(NOW(),INTERVAL - 30 MINUTE);
 end */$$
 DELIMITER ;
+
+/*Table structure for table `order_and_item` */
+
+DROP TABLE IF EXISTS `order_and_item`;
+
+/*!50001 DROP VIEW IF EXISTS `order_and_item` */;
+/*!50001 DROP TABLE IF EXISTS `order_and_item` */;
+
+/*!50001 CREATE TABLE  `order_and_item`(
+ `order_id` int(10) unsigned ,
+ `order_uid` mediumint(9) ,
+ `order_createTime` timestamp ,
+ `order_serialNo` varchar(20) ,
+ `order_total` decimal(8,2) ,
+ `order_receiver` varchar(10) ,
+ `order_phone` varchar(11) ,
+ `order_address` varchar(200) ,
+ `order_status` tinyint(1) ,
+ `item_id` int(10) unsigned ,
+ `item_oid` int(10) unsigned ,
+ `item_sid` int(10) unsigned ,
+ `item_serialNo` varchar(20) ,
+ `item_shoppingName` varchar(50) ,
+ `item_introduction` varchar(200) ,
+ `item_shoppingImg` varchar(100) ,
+ `item_price` decimal(8,2) ,
+ `item_count` tinyint(4) ,
+ `item_subTotal` decimal(8,2) ,
+ `item_remark` varchar(200) ,
+ `item_status` tinyint(1) ,
+ `item_isDelete` tinyint(1) 
+)*/;
+
+/*View structure for view order_and_item */
+
+/*!50001 DROP TABLE IF EXISTS `order_and_item` */;
+/*!50001 DROP VIEW IF EXISTS `order_and_item` */;
+
+/*!50001 CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `order_and_item` AS (select `nmorder`.`id` AS `order_id`,`nmorder`.`uid` AS `order_uid`,`nmorder`.`createTime` AS `order_createTime`,`nmorder`.`serialNo` AS `order_serialNo`,`nmorder`.`total` AS `order_total`,`nmorder`.`receiver` AS `order_receiver`,`nmorder`.`phone` AS `order_phone`,`nmorder`.`address` AS `order_address`,`nmorder`.`status` AS `order_status`,`nmorderitem`.`id` AS `item_id`,`nmorderitem`.`oid` AS `item_oid`,`nmorderitem`.`sid` AS `item_sid`,`nmorderitem`.`serialNo` AS `item_serialNo`,`nmorderitem`.`shoppingName` AS `item_shoppingName`,`nmorderitem`.`introduction` AS `item_introduction`,`nmorderitem`.`shoppingImg` AS `item_shoppingImg`,`nmorderitem`.`price` AS `item_price`,`nmorderitem`.`count` AS `item_count`,`nmorderitem`.`subTotal` AS `item_subTotal`,`nmorderitem`.`remark` AS `item_remark`,`nmorderitem`.`status` AS `item_status`,`nmorderitem`.`isDelete` AS `item_isDelete` from (`nmorder` join `nmorderitem`) where (`nmorderitem`.`oid` = `nmorder`.`id`) group by `nmorderitem`.`oid`) */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;

@@ -13,6 +13,7 @@ import java.util.Random;
 import javax.management.RuntimeErrorException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -25,8 +26,10 @@ import org.springframework.web.servlet.ModelAndView;
 import com.wd.ASFlowerWeb.entity.NmOrder;
 import com.wd.ASFlowerWeb.entity.NmOrderItem;
 import com.wd.ASFlowerWeb.entity.NmShopping;
+import com.wd.ASFlowerWeb.entity.OrderAndItemView;
 import com.wd.ASFlowerWeb.entity.ReceAddress;
 import com.wd.ASFlowerWeb.entity.User;
+import com.wd.ASFlowerWeb.mapper.OrderAndItemViewMapper;
 import com.wd.ASFlowerWeb.service.NmShoppingService;
 import com.wd.ASFlowerWeb.service.ShoppingCartService;
 import com.wd.ASFlowerWeb.service.NmOrderItemService;
@@ -52,10 +55,25 @@ public class HomeOrderController {
 	private NmOrderItemService oiService;
 	@Autowired
 	private ShoppingCartService cartService;
+	@Autowired
+	private OrderAndItemViewMapper oaivMapper;
 	
 	@GetMapping("/home/order/index")
-	public String order(){
-		return "home/order";
+	public ModelAndView order(HttpServletRequest req,Integer t){
+		ModelAndView  mav = new ModelAndView("home/order");
+		
+		HttpSession session = req.getSession();
+		User member = (User)session.getAttribute("member");
+		if(t==null){
+			List<OrderAndItemView> oais = oaivMapper.selectAllByUid(member.getId());
+			mav.addObject("oais", oais);
+		}else if(t==-1){//待付款
+			
+		}else if(t==-2){//已取消
+			
+		}else if(t==2){//待发货
+		}
+		return mav;
 	}
 	
 	
@@ -223,6 +241,8 @@ public class HomeOrderController {
 			payStatus = random>=6?true:false;
 			if(payStatus){
 				oService.updateStatus(order.getId(), 1);
+			}else{
+				oService.updateStatus(order.getId(), -1);
 			}
 		}else{
 			payStatus = false;

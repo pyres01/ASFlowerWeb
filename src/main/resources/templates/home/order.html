@@ -32,10 +32,10 @@
 			<div class="allorder current">
 			   <div>
 			   	<ul>
-			   		<li>
+			   		<li th:each="item:${oais}">
 			   			<div class="info">
 			   				<div>
-			   					<p>订单号：<span> #15913</span></p>
+			   					<p>订单号：<span th:text="${item.item_serialNo}"></span></p>
 			   					<p>日期：2018年10月15日</p>
 			   				</div>
 			   				<div>
@@ -45,37 +45,11 @@
 			   			<div class="goods">
 			   				<ul>
 			   					<li>
-			   						<img src="/static/home/images/h2.jpg" alt="">
-			   						<h3>植物花卉008</h3>	
+			   						<img th:src="${item.item_shoppingImg}" alt="">
+			   						<h3 th:text="${item.item_shoppingName}"></h3>	
 			   					</li>
-			   					<li><p>5900.00 × 2	</p></li>
-			   					<li><p>¥11800</p></li>
-			   				</ul>
-			   			</div>
-			   			<div class="handle">
-			   				<a href="#">付款</a>
-			   				<a href="#">取消</a>
-			   				<a href="#">查看</a>
-			   			</div>
-			   		</li>
-			   		<li>
-			   			<div class="info">
-			   				<div>
-			   					<p>订单号：<span> #15913</span></p>
-			   					<p>日期：2018年10月15日</p>
-			   				</div>
-			   				<div>
-			   					状态：<span>等待中</span>
-			   				</div>
-			   			</div>
-			   			<div class="goods">
-			   				<ul>
-			   					<li>
-			   						<img src="/static/home/images/h2.jpg" alt="">
-			   						<h3>植物花卉008</h3>
-			   					</li>
-			   					<li><p>5900.00 × 2	</p></li>
-			   					<li><p>¥11800</p></li>
+			   					<li><p><span th:text="${item.item_price}"></span> × <span  th:text="${item.item_count}"></span>	</p></li>
+			   					<li><p th:text="${item.item_subTotal}"></p></li>
 			   				</ul>
 			   			</div>
 			   			<div class="handle">
