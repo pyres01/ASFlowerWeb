@@ -7,4 +7,16 @@
 <body>
 <h2 th:text="${result}"></h2>
 </body>
+
+<script src='/static/home/js/jquery.min.js'></script>
+<script>
+$(function(){
+	var h2text = $('h2').text();
+	sleep(3000);
+	if(h2text == '支付成功！'){
+		window.location.href = '/home/user/userinfo';
+	}
+});
+
+</script>
 </html>

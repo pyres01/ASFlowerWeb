@@ -237,8 +237,8 @@ public class HomeOrderController {
 				oiService.setReamrk(nmOrderItem.getId(), remarkMap.get(nmOrderItem.getId()));
 			}
 			int random = (int)(Math.random()*10)+1;
-			log.info(random+"");
-			payStatus = random>=6?true:false;
+			//payStatus = random>=6?true:false;
+			payStatus  =true;
 			if(payStatus){
 				oService.updateStatus(order.getId(), 1);
 			}else{
