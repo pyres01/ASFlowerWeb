@@ -161,7 +161,7 @@
 						</div>
 					</div>
 					<div>
-						<button class="layui-btn" id="validateBtn">更新</button>
+						<button class="layui-btn" id="updateBtn">更新</button>
 					</div>
 				</div>
 		      </div>
@@ -196,8 +196,83 @@
 init();
 function init(){
 	//hidden属性 ie不支持，演示时如用到ie则js调用隐藏
-	//$('#updateContent').hide();
+	$('#updateContent').hide();
 	$('#resultContent').hide();
+	
+	layui.use('layer',function(){
+		layer = layui.layer;
+	});
+	$('#getCaptchaBtn').click(sendCode);
+	$('#validateBtn').click(validate);
+	$('#updateBtn').click(updatePass);
 }
+function sendCode(){
+	var email = $('#email').val()!=null?$('#email').val().trim():'';
+	if(email){
+		$.ajax({
+			url:'/sendCheckCode',
+			type:'POST',
+			dataType:'json',
+			data:{type:'findPass',email:email},
+			success:function(res){
+				if(res.code == 200){
+					layer.msg('发送成功！');
+				}else{
+					layer.msg('发送失败！');
+				}
+			}
+		})
+	}else{
+		layer.msg('请先输入邮箱！');
+	}
+}
+function validate(){
+	vS = false;
+	var email = $('#email').val()!=null?$('#email').val().trim():'';
+	var code = $('#emailInput').val()!=null?$('#emailInput').val().trim():'';
+	if(email && code){
+		$.ajax({
+			url:'/home/findPass',
+			type:'POST',
+			dataType:'json',
+			data:{op:'v',email:email,code:code},
+			success:function(res){
+				if(res.code == 200){
+					layer.msg('验证通过！');
+					$('#brBox').css('height','50px');
+					$('#updateContent').show();
+				}else{
+					layer.msg('验证失败！');
+				}
+			}
+		});
+	}else{
+		layer.msg('请输入邮箱和验证码！');
+	}
+	
+}
+function updatePass(){
+	var password = $('#password').val();
+	var repassword = $('#repassword').val();
+	if(password && repassword){
+		$.ajax({
+			url:'/home/findPass',
+			type:'POST',
+			dataType:'json',
+			data:{op:'u',password:password,repassword:repassword},
+			success:function(res){
+				if(res.code == 200){
+					$('#failTip').hide();
+				}else{
+					$('#successTip').hide();
+				}
+				$('#resultContent').show();
+			}
+		});
+	}else{
+		layer.msg('请输入密码和确认密码！');
+	}
+}
+
 </script>
 </html>

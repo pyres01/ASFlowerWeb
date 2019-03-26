@@ -18,10 +18,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 
+import com.mysql.cj.Session;
 import com.wd.ASFlowerWeb.entity.ReceAddress;
 import com.wd.ASFlowerWeb.entity.User;
 import com.wd.ASFlowerWeb.service.ReceAddressService;
 import com.wd.ASFlowerWeb.service.UserService;
+import com.wd.ASFlowerWeb.service.util.MailService;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -177,10 +179,61 @@ public class HomeUserInfoController {
 		return mav;
 	}
 	
-	@GetMapping("/home/findPass")
-	public String findPass(){
-		//return "home/find-pass";
-		return "home/find-pass";
+	@RequestMapping("/home/findPass")
+	public ModelAndView findPass(HttpServletRequest req){
+		ModelAndView mav = null;
+		if(req.getMethod().equals("POST")){
+			String op  = req.getParameter("op");
+			mav = new ModelAndView(new MappingJackson2JsonView());
+			if(op!=null&&op.trim().length()>0){
+				HttpSession sessoin=req.getSession();
+				if(op.equals("v")){
+					String fEmail = req.getParameter("email");
+					String vcode = req.getParameter("code");
+					if(this.validateFindPassCaptcha(req, fEmail, vcode)){
+						sessoin.setAttribute("fpassEmail",fEmail);
+						sessoin.setAttribute("fpassStatus", "ready");
+						mav.addObject("code", 200);
+						mav.addObject("msg", "验证成功");
+					}else{
+						mav.addObject("code", 0);
+						mav.addObject("msg", "验证失败");
+					}
+				}else if(op.equals("u")){
+					mav = new ModelAndView(new MappingJackson2JsonView());
+					String password = req.getParameter("password");
+					String repassword = req.getParameter("repassword");
+					if(this.validatePassword(password)&& this.validateRePassword(password, repassword)){
+						String fpassStatus =  (String) sessoin.getAttribute("fpassStatus");
+						if(fpassStatus.equals("ready")){
+							String email = (String) sessoin.getAttribute("fpassEmail");
+							User member = userService.getUserByEmail(email);
+							member.setPassword(password);
+							userService.updateUser(member);
+							mav.addObject("code", 200);
+							mav.addObject("msg", "找回成功");
+						}else{
+							mav.addObject("code", 0);
+							mav.addObject("msg", "您还没有通过验证");
+						}
+					}else{
+						mav.addObject("code", 0);
+						mav.addObject("msg", "密码不一致");
+					}
+					
+				}else{
+					mav.addObject("code", 0);
+					mav.addObject("msg", "参数错误");
+				}
+			}else{
+				mav.addObject("code", 0);
+				mav.addObject("msg", "参数错误");
+			}
+		}else{
+			mav = new ModelAndView();
+			mav.setViewName("home/find-pass");
+		}
+		return mav;
 	}
 	
 	@PostMapping("/home/validateLogin")
@@ -327,6 +380,10 @@ public class HomeUserInfoController {
 	private boolean validateRegCaptcha(HttpServletRequest request,String email,String captcha){
 		HttpSession session = request.getSession();
 		return (session.getAttribute("reg"+email)!=null && session.getAttribute("reg"+email).equals(captcha))?true:false;
+	}
+	private boolean validateFindPassCaptcha(HttpServletRequest request,String email,String captcha){
+		HttpSession session = request.getSession();
+		return (session.getAttribute("fpass"+email)!=null && session.getAttribute("fpass"+email).equals(captcha))?true:false;
 	}
 	
 	private boolean isExistUserByMName(String memberName){
