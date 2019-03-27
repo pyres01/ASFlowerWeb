@@ -1,8 +1,11 @@
 package com.wd.ASFlowerWeb.controller.home;
 
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TimeZone;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -348,6 +351,46 @@ public class HomeUserInfoController {
 		}
 		return map;
 	}
+	
+	
+	@PostMapping("/user/updateInfo")
+	@ResponseBody
+	public Map<String,Object> updateInfo(HttpServletRequest req){
+		Map<String,Object> map = new HashMap<>();
+		
+		HttpSession session = req.getSession();
+		User member = (User) session.getAttribute("member");
+		Integer uid = member.getId();
+		member = userService.getUserById(uid);
+		
+		String sex = req.getParameter("sex");
+		String birthday = req.getParameter("birthday");
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		sdf.setTimeZone(TimeZone.getTimeZone("Asia/Shanghai"));
+		if(sex.trim().length()==1){
+			Boolean _sex = Integer.valueOf(sex)==1?true:false;
+			member.setSex(_sex);
+		}
+		try {
+			Date _birthday = sdf.parse(birthday);
+			member.setBirthday(_birthday);
+		}catch(Exception e){}
+		log.info(member.toString());
+		if(userService.updateUser(member)){
+			session.setAttribute("member",member);
+			map.put("code", 200);
+			map.put("msg", "修改成功");
+		}else{
+			map.put("code", 0);
+			map.put("msg", "修改失败");
+		}
+		
+		return map;
+	}
+	
+	
+	
+	
 	
 	private boolean validateUsername(String username){
 		if(username!=null && username.trim().length()>=5 && username.trim().length()<=10){

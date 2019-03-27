@@ -6,6 +6,7 @@
 */
 
 $('.edit').click(function(event) {
-	$('.info input').removeAttr('readonly');
 	$('.title .save').show();
+	$('input[name=sex]').attr('disabled',false);
+	$('input[name=birthday]').attr('disabled',false);
 });

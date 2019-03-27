@@ -31,19 +31,19 @@
 				<div class="sex">
 					<div class="icon_sex"><label for="sex">性别：</label></div>
 					<div class="text_sex">
-					    <input type="radio" name="sex" value='male'  readonly th:checked="${session.member.sex==true}"/><label>男</label>
-			            <input name="sex" checked type="radio" value="female" readonly th:checked="${session.member.sex==false}"/><label>女</label>
+					    <input type="radio" name="sex"  value=1  disabled th:checked="${session.member.sex==true}"/><label>男</label>
+			            <input name="sex" checked type="radio" value=0 disabled th:checked="${session.member.sex==false}"/><label>女</label>
 					</div>
 				</div>
 				<!-- 生日 -->
 				<div>
 					<div>生日：</div>
-					<div><input type="text" value="" readonly th:value="${session.member.birthday!=null?#dates.format(session.member.birthday,'yyyy-MM-dd'):'暂未设置'}"></div>
+					<div><input type="text" name="birthday" disabled value=""  th:value="${session.member.birthday!=null?#dates.format(session.member.birthday,'yyyy-MM-dd'):'暂未设置'}"></div>
 				</div>
 				<!-- 生日 -->
 				<div>
 					<div>绑定邮箱：</div>
-					<div><div><input type="text" value="" readonly th:value="${session.member.email}"></div></div>
+					<div><div><input type="text" value="" disabled th:value="${session.member.email}"></div></div>
 				</div>
 			</div>
 		
@@ -56,7 +56,7 @@
 	         <div class="title">
 				<img src="/static/home/images/address.png" alt="">
 				<h2>礼物收货地址</h2>
-				<a href="address.html">编辑</a>
+				<a href="/home/user/userAddress">编辑</a>
 			</div>
 			<div class="info">
 				<div>
@@ -80,4 +80,30 @@
 	    <script src='/static/home/js/jquery.min.js'></script>
 	    <script src='/static/home/js/useraccount.js'></script>
     </body>
+    <script>
+    	$('.save').click(updateInfo);
+    	function updateInfo(){
+    		$('.title .save').hide();
+    		$('input[name=sex]').attr('disabled',true);
+    		$('input[name=birthday]').attr('disabled',true);
+    		
+    		var sex = $('input[name=sex]:checked').val();
+    		var birthday = $('input[name=birthday]').val();
+    		
+    		if(sex&&birthday){
+    			$.ajax({
+    				url:'/user/updateInfo',
+    				type:'POST',
+    				dataType:'json',
+    				data:{sex:sex,birthday:birthday},
+    				success:function(res){
+    					alert(res.msg);
+    				}
+    			
+    			});
+    		}else{
+    			alert('保存失败！')
+    		}
+    	}
+    </script>
 </html>
