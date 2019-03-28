@@ -341,6 +341,7 @@ public class HomeUserInfoController {
 			u.setPassword(password);
 			u.setEmail(email);
 			u.setJoinTime(new Timestamp(System.currentTimeMillis()));
+			u.setAvatar("/static/home/images/logo_new.png");
 			if(userService.addUser(u)){
 				map.put("code",200);
 				map.put("msg","register success");

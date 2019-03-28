@@ -18,6 +18,16 @@
       <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
       <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
+    <style>
+    	.user_logo img{
+    		width:64px;
+    		height:64px;
+    		border-radius:50%;
+    	}
+    	.user_logo_active{
+    		border:1px solid #0ff;
+    	}
+    </style>
   </head>
   
   <body>
@@ -94,7 +104,7 @@
               </div>
           </div>
           <div class="layui-form-item">
-              <label for="L_pass" class="layui-form-label">
+              <label for="L_pass" class="layui-form-label password-label">
                   <span class="x-red">*</span>登陆密码
               </label>
               <div class="layui-input-inline">
@@ -106,7 +116,7 @@
               </div>
           </div>
           <div class="layui-form-item">
-              <label for="L_repass" class="layui-form-label">
+              <label for="L_repass" class="layui-form-label repassword-label">
                   <span class="x-red">*</span>确认密码
               </label>
               <div class="layui-input-inline">
@@ -118,9 +128,13 @@
               <label for="L_avatar" class="layui-form-label">
                   <span class="x-red">*</span>头像
               </label>
-              <div class="layui-input-inline">
+              <!-- <div class="layui-input-inline">
                   <input type="text" id="L_avatar" name="avatar"  lay-verify="avatar"
                   autocomplete="off" class="layui-input">
+              </div> -->
+              <div class="layui-input-inline user_logo">
+                  <img class="user_logo_active" src="/static/common/images/man_logo.png"/ style="margin-left:10px;margin-right:20px;">
+                  <img src="/static/common/images/female_logo.png"/>
               </div>
           </div>
           <div class="layui-form-item">
@@ -149,7 +163,14 @@
     <script>
     
       var astatus = $('#astatus').text();
-      var op = astatus=="t"?2:3;
+     
+      if(astatus=='t'){
+    	  var op =2;
+      }else{
+    	  $('.password-label>span').hide();
+    	  $('.repassword-label>span').hide();
+    	  var op =3;
+      }
       var form=layer=laydate=null;
       layui.use(['form','layer','laydate'], function(){
           $ = layui.jquery;
@@ -159,23 +180,23 @@
       
         init(); 
         //自定义验证规则
-        form.verify({
-          nikename: function(value){
-            if(value.length < 5){
-              return '昵称至少得5个字符啊';
-            }
-          }
-          ,pass: [/(.+){6,12}$/, '密码必须6到12位']
-          ,repass: function(value){
-              if($('#L_pass').val()!=$('#L_repass').val()){
-                  return '两次密码不一致';
-              }
-          }
-        });
-
+        if(astatus=='t'){
+	        form.verify({
+	          nikename: function(value){
+	            if(value.length < 5){
+	              return '昵称至少得5个字符啊';
+	            }
+	          }
+	          ,pass: [/(.+){6,12}$/, '密码必须6到12位']
+	          ,repass: function(value){
+	              if($('#L_pass').val()!=$('#L_repass').val()){
+	                  return '两次密码不一致';
+	              }
+	          }
+	        });
+        }
         //监听提交
         form.on('submit(add)', function(data){
-          console.log(data);
           editMember(data.field);
           
         });
@@ -195,12 +216,15 @@
     				  $('#L_username').val(u.memberName);
         			  $('#L_nickname').val(u.nickName);
         			  if(u.sex){
-        				  console.log(1111);
         				  $('input[name=sex][value=1]').prop('checked', true);
         			  }
         			  $('#L_birthday').val(u.birthday!=null?u.birthday:"");
         			  $('#L_email').val(u.email);
         			  $('#L_phone').val(u.phone);
+        			  if($('.user_logo img').eq(1).attr('src')==u.avatar){
+        				  $('.user_logo img').eq(1).addClass('user_logo_active');
+        				  $('.user_logo img').eq(0).removeClass('user_logo_active');
+        			  }
         			  $('#L_qq').val(u.qq);
         			  $('#L_wechat').val(u.wechat);
         			  $('#L_rank option').each(function(){
@@ -224,14 +248,15 @@
       function editMember(data){
     	  data.op = op;
     	  data.id = $('#editId').text();
+    	  
+    	  data.avatar = $('.user_logo>img').eq(0).hasClass('user_logo_active')?1:0;
     	  $.ajax({
         	  url:'/admin/member/edit',
         	  type:'POST',
         	  dataType:'json',
         	  data:data,
         	  success:function(data){
-        		  console.log(data);
-        		  layer.alert("增加成功", {icon: 6},function () {
+        		  layer.alert("保存成功", {icon: 6},function () {
                       // 获得frame索引
                       var index = parent.layer.getFrameIndex(window.name);
                       //关闭当前frame
@@ -246,7 +271,11 @@
     	  }
     	  laydate.render({
     		  elem:'#L_birthday'
-    	  })
+    	  });
+    	  
+    	  $('.user_logo img').click(function(){
+    		 $(this).addClass('user_logo_active').siblings().removeClass('user_logo_active');
+    	  });
       }
   </script>
   </body>

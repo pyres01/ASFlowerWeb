@@ -5,7 +5,9 @@ import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 import javax.servlet.http.HttpServletRequest;
@@ -15,10 +17,13 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.wd.ASFlowerWeb.entity.Manager;
+import com.wd.ASFlowerWeb.entity.User;
 import com.wd.ASFlowerWeb.mapper.ManagerMapper;
+import com.wd.ASFlowerWeb.service.UserService;
 import com.wd.ASFlowerWeb.service.util.MailService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -38,10 +43,12 @@ public class Test {
 	@Autowired
     private MailService mailService;
 	@Autowired
+    private UserService userService;
+	@Autowired
 	private ManagerMapper managerMapper;
-	@GetMapping("/home/test")
+	@RequestMapping("/test")
 	@ResponseBody
-	private void test(HttpServletRequest request) throws FileNotFoundException{
+	private Map<String,Object> test(HttpServletRequest request,String email) throws FileNotFoundException{
 		
 		//String path = ClassUtils.getDefaultClassLoader().getResource("").getPath()+"static/";
 		/*List<Integer> idList =  new ArrayList<Integer>();
@@ -49,6 +56,15 @@ public class Test {
 		idList.add(2);
 		idList.add(3);
 		System.out.println(StringUtils.strip(idList.toString(),"[]"));*/
+		
+		Map<String,Object> map = new HashMap<>();
+		map.put("code", 200);
+		map.put("msg", "");
+		User user = userService.getUserByEmail(email);
+		map.put("data", user);
+		return map;
+		
+		
 		
 	}
 	

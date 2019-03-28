@@ -12,7 +12,7 @@
 <body>
 	<header>
 		<div class="mylogo">
-			<img src="/static/home/images/logo_new.png" alt="">
+			<img th:src="${session.member.avatar}" alt="">
 		</div>
 		<div class="mynews">
 			<h3 th:text="${session.member.memberName}"></h3>

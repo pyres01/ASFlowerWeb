@@ -81,7 +81,6 @@ public class MemberController {
 			modelAndView.setViewName("admin/member-edit");
 			break;
 		}
-		log.info(modelAndView.toString());
 		return modelAndView;
 	}
 	
@@ -105,7 +104,6 @@ public class MemberController {
 					user.setMemberName(username);
 				}else{
 					validateStatus = false;
-					log.info("username validate fail");
 				}
 				
 				String nickname = request.getParameter("nickname");
@@ -114,7 +112,6 @@ public class MemberController {
 					
 				}else{
 					validateStatus = false;
-					log.info("nickname validate fail");
 				}
 				
 				Boolean sex = request.getParameter("sex")!=null?Boolean.valueOf(request.getParameter("sex")):false;
@@ -137,7 +134,6 @@ public class MemberController {
 					user.setPhone(phone);
 				}else{
 					validateStatus = false;
-					log.info("phone validate fail");
 				}
 				
 				String email = request.getParameter("email");
@@ -152,7 +148,6 @@ public class MemberController {
 					}
 				}else{
 					validateStatus =false;
-					log.info("email validate fail");
 				}
 				
 				String qq = request.getParameter("qq");
@@ -171,11 +166,11 @@ public class MemberController {
 					user.setPassword(password);
 				}
 				
-				String avatar = request.getParameter("avatar");
-				if(avatar!=null){
-					
+				int avatar =request.getParameter("avatar")!=null?Integer.valueOf(request.getParameter("avatar")):0;
+				if(avatar==1){
+					user.setAvatar("/static/common/images/man_logo.png");
 				}else{
-					
+					user.setAvatar("/static/common/images/female_logo.png");
 				}
 				
 				Integer rank = request.getParameter("rank")!=null?Integer.valueOf(request.getParameter("rank")):1;

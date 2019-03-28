@@ -47,7 +47,7 @@
               </div>
           </div>
           <div class="layui-form-item">
-              <label for="L_pass" class="layui-form-label">
+              <label for="L_pass" class="layui-form-label password-label">
                   <span class="x-red">*</span>密码
               </label>
               <div class="layui-input-inline">
@@ -59,7 +59,7 @@
               </div>
           </div>
           <div class="layui-form-item">
-              <label for="L_repass" class="layui-form-label">
+              <label for="L_repass" class="layui-form-label repassword-label">
                   <span class="x-red">*</span>确认密码
               </label>
               <div class="layui-input-inline">
@@ -141,7 +141,11 @@
     </div>
     <script>
       var op = $('#initOp').text();
-      if(op==1){loadUpdateManager($('#updateId').text());}
+      if(op==1){
+    	  $('.password-label>span').hide();
+    	  $('.repassword-label>span').hide();
+    	  loadUpdateManager($('#updateId').text());
+      }
       
       var form = layer = laydate = null;
       layui.use(['form','layer','laydate'], function(){

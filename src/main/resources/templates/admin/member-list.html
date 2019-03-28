@@ -53,9 +53,6 @@
       <table class="layui-table" id="usersTable">
         <thead>
           <tr>
-            <th>
-              <div class="layui-unselect header layui-form-checkbox" lay-skin="primary"><i class="layui-icon">&#xe605;</i></div>
-            </th>
             <th>ID</th>
             <th>昵称</th>
             <th>会员名</th>
@@ -84,6 +81,7 @@
       	var jtStart;
       	var jtEnd;
       	var page = 1;
+      	var form;
     	init();
 
       /*用户-删除*/
@@ -109,9 +107,9 @@
       function init(){
     	  hideWhenNoUser();
     	  displayUsersCount(0);
-    	  layui.use('laydate', function(){
+    	  layui.use(['laydate','form'], function(){
    	        var laydate = layui.laydate;
-   	        
+   	        form = layui.form;
    	        //执行一个laydate实例
    	        laydate.render({
    	          elem: '#startDate' //指定元素
@@ -121,8 +119,10 @@
    	        laydate.render({
    	          elem: '#endDate' //指定元素
    	        });
+   	        
+   	     loadMember();
    	      });
-    	  loadMember();
+    	  
       }
       function loadMember(){
     	  var keyword = getSearchKeyword();
@@ -157,8 +157,7 @@
       }
       function renderTbody(users){
     	  $.each(users,function(index,item){
-    		  console.log(item);
-    		  $('#usersTbody').append('<tr><td><div class="layui-unselect layui-form-checkbox" lay-skin="primary" data-id="'+(item.id)+'"><i class="layui-icon">&#xe605;</i></div></td><td>'+(item.id)+'</td><td>'+(item.nickName!=null?item.nickName:"暂未设置")+'</td><td>'+(item.memberName)+'</td><td>'+(item.sex == 0?"女":"男")+'</td><td>'+(item.birthday!=null?item.birthday:"")+'</td><td>'+(item.phone!=null?item.phone:"")+'</td><td>'+(item.email!=null?item.email:"")+'</td><td>'+(item.qq!=null?item.qq:"")+'</td><td>'+(item.wechat!=null?item.wechat:"")+'</td><td>'+(item.avatar!=null?item.avatar:"")+'</td><td>'+(item.rankId)+'</td><td>'+(item.status ==1 ?"正常":"冻结")+'</td><td>'+(item.isDelete == 0?"否":"是")+'</td><td>'+(item.joinTime)+'</td><td class="td-manage"><a title="编辑"  onclick="x_admin_show(\'编辑\',\'/admin/member/edit?op=1&id='+(item.id)+'\',600,400)" href="javascript:;"><i class="layui-icon">&#xe642;</i></a><a onclick="x_admin_show(\'修改密码\',\'member-password.html\',600,400)" title="修改密码" href="javascript:;"><i class="layui-icon">&#xe631;</i></a><a title="删除" onclick="member_del(this,'+(item.id)+')" href="javascript:;"><i class="layui-icon">&#xe640;</i></a></td></tr>');
+    		  $('#usersTbody').append('<tr><td>'+(item.id)+'</td><td>'+(item.nickName!=null?item.nickName:"暂未设置")+'</td><td>'+(item.memberName)+'</td><td>'+(item.sex == 0?"女":"男")+'</td><td>'+(item.birthday!=null?item.birthday:"")+'</td><td>'+(item.phone!=null?item.phone:"")+'</td><td>'+(item.email!=null?item.email:"")+'</td><td>'+(item.qq!=null?item.qq:"")+'</td><td>'+(item.wechat!=null?item.wechat:"")+'</td><td>'+(item.avatar!=null?'<img src="'+(item.avatar)+'" style="width:64px;height:64px;margin:0 22%;"/>':"")+'</td><td>'+(item.rankId)+'</td><td>'+(item.status ==1 ?"正常":"冻结")+'</td><td>'+(item.isDelete == 0?"否":"是")+'</td><td>'+(item.joinTime)+'</td><td class="td-manage"><a title="编辑"  onclick="x_admin_show(\'编辑\',\'/admin/member/edit?op=1&id='+(item.id)+'\',600,400)" href="javascript:;"><i class="layui-icon">&#xe642;</i></a><a title="删除" onclick="member_del(this,'+(item.id)+')" href="javascript:;"><i class="layui-icon">&#xe640;</i></a></td></tr>');
     	  });
       }
       function hideWhenNoUser(){

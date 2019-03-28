@@ -55,19 +55,22 @@ $('#getCaptchaBtn').click(function(){
 	var email = $.trim($('input#email').val());
 	if(validateEmail(email)){
 		settime(that);
-		/*$.ajax({
+		$.ajax({
 			url:'/sendCheckCode'
 			,type:'POST'
 			,dataType:'json'
 			,data:{type:'register',email:email}
 			,success:function(res){
 				if(res.code == 20005){
-					layer.msg('邮箱已占用！',{icon:5});
+					layer.msg('邮箱已注册！',{icon:5});
+					countdown = 0;
 				}else if(res.code == 200){
 					sendCodeH++;
 				}
 			}
-		});*/
+		});
+	}else{
+		layer.msg('请输入合法邮箱！',{icon:5});
 	}
 	
 });

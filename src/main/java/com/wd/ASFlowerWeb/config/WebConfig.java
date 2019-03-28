@@ -22,17 +22,6 @@ import com.wd.ASFlowerWeb.interceptor.HomeLoginInterceptor;
 public class WebConfig implements  WebMvcConfigurer {
 
 	
-//	无需重载，重载后加载静态资源文件反而失效了
-//	@Override
-//	public void addResourceHandlers(ResourceHandlerRegistry registry) {
-//		// TODO Auto-generated method stub
-		//指定静态资源文件
-//		registry.addResourceHandler("/static/**").addResourceLocations("classpath:/static/**");
-		//指定模板文件
-//		registry.addResourceHandler("/templates/**").addResourceLocations("classpath:/templates/**");
-//		WebMvcConfigurer.super.addResourceHandlers(registry);
-//	}
-	
 
 	/**
 	 * @author 韦丹
@@ -40,9 +29,11 @@ public class WebConfig implements  WebMvcConfigurer {
 	 */
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
-		// TODO Auto-generated method stub
+		//用户拦截规则
 		registry.addInterceptor(new HomeLoginInterceptor()).addPathPatterns("/home/user/**").excludePathPatterns(Arrays.asList("/static/**","/templates/**","/home/login"));
+		//订单拦截规则
 		registry.addInterceptor(new HomeLoginInterceptor()).addPathPatterns("/home/order/**").excludePathPatterns(Arrays.asList("/static/**","/templates/**","/home/login"));
+		//后台拦截规则
 		registry.addInterceptor(new AdminLoginInterceptor()).addPathPatterns("/admin/**").excludePathPatterns(Arrays.asList("/static/**","/templates/**","/admin/login","/admin/toLogin"));
 		WebMvcConfigurer.super.addInterceptors(registry);
 	}

@@ -22,6 +22,8 @@ import lombok.extern.slf4j.Slf4j;
  * @author 韦丹
  *
  * 2019年1月7日
+ * 
+ * @desc 后台登录控制器
  *
  */
 @Controller
@@ -77,6 +79,11 @@ public class LoginController {
 		return map;
 	}
 	
+	/**
+	 * @desc 后台退出
+	 * @param request
+	 * @return 
+	 */
 	@GetMapping("/admin/logout")
 	public String logout(HttpServletRequest request){
 		HttpSession sessoin=request.getSession();

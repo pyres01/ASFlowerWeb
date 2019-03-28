@@ -7,6 +7,8 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @EnableTransactionManagement
 @SpringBootApplication
+
+//扫描mapper包
 @MapperScan({"com.wd.ASFlowerWeb.mapper"})
 public class AsFlowerWebApplication {
 

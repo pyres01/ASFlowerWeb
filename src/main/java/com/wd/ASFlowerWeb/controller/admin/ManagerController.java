@@ -30,7 +30,9 @@ import lombok.extern.slf4j.Slf4j;
 /**
  * @author 韦丹
  *
- * 2019年1月9日
+ * @date 2019年1月9日
+ * 
+ * @desc 管理员控制器
  *
  */
 @Controller
@@ -40,18 +42,31 @@ public class ManagerController {
 	@Autowired
 	private ManagerService managerService;
 	
+	/**
+	 * @desc 管理员列表页
+	 * @return
+	 */
 	@GetMapping("/admin/managerNormalIndex")
 	public String normalIndex(){
 		return "admin/manager-normal-list";
 	}
 	
+	/**
+	 * @desc 已删除的管理员列表页
+	 * @return
+	 */
 	@GetMapping("/admin/managerDelIndex")
 	public String delIndex(){
 		return "admin/manager-del-list";
 	}
 	
+	/**
+	 * @desc 编辑管理员
+	 * @param request
+	 * @return
+	 */
 	@RequestMapping("/admin/editManager")
-	public ModelAndView addManager(HttpServletRequest request){
+	public ModelAndView editManager(HttpServletRequest request){
 		
 		/**
 		 * op=null或者未设置，表示加载新增管理员页面，并置op为0，实现新增通知，ajax传入op为2实现新增
@@ -106,16 +121,14 @@ public class ManagerController {
 					manager.setName(name);
 				}else{
 		        	validateStatus = false;
-					log.info("validate name fail");
 		        }
-				//密码和确认密码
+				//校验密码和确认密码
 				if(pass!=null && repass!=null && pass.trim().length()>=6 && pass.trim().length()<=12 && pass.equals(repass)){
 					manager.setPassword(DigestUtils.md5DigestAsHex(repass.getBytes()));
 				}else{
 		        	validateStatus = false;
-					log.info("validate pass fail");
 		        }
-				//生日
+				//校验生日
 				if(birthday_str!=null && birthday_str.trim().length()==10){
 					SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 					sdf.setTimeZone(TimeZone.getTimeZone("Asia/Shanghai"));
@@ -127,7 +140,6 @@ public class ManagerController {
 					}
 				}else{
 		        	validateStatus = false;
-					log.info("validate birthday_str fail");
 		        }
 				//验证邮箱
 				String regEmail = "^([a-z0-9A-Z]+[-|\\.]?)+[a-z0-9A-Z]@([a-z0-9A-Z]+(-[a-z0-9A-Z]+)?\\.)+[a-zA-Z]{2,}$";
@@ -139,14 +151,12 @@ public class ManagerController {
 					manager.setEmail(email);
 				}else{
 		        	validateStatus = false;
-					log.info("validate email fail");
 		        }
-				//地址
+				//校验地址
 		        if(address!=null && address.trim().length()>=4){
 		        	manager.setAddress(address);
 		        }else{
 		        	validateStatus = false;
-					log.info("validate address fail");
 		        }
 		        
 		        //phone
@@ -154,7 +164,6 @@ public class ManagerController {
 		        	manager.setPhone(phone);
 		        }else{
 		        	validateStatus = false;
-					log.info("validate phone fail");
 		        }
 		        
 		        //qq
@@ -162,14 +171,12 @@ public class ManagerController {
 		        	manager.setQq(qq);
 		        }else{
 		        	validateStatus = false;
-					log.info("validate qq fail");
 		        }
 		        //微信
 		        if(wechat!= null && wechat.trim().length()>=6 && wechat.trim().length()<=20){
 		        	manager.setWechat(wechat);
 		        }else{
 		        	validateStatus = false;
-					log.info("validate wechat fail");
 		        }
 		        
 		        //sex
@@ -181,7 +188,6 @@ public class ManagerController {
 		        	manager.setRank(rank);
 		        }else{
 		        	validateStatus = false;
-					log.info("validate rank fail");
 		        }
 		        Boolean addStatus = false;
 		        if(validateStatus){
@@ -189,7 +195,7 @@ public class ManagerController {
 		        }
 		        if(!addStatus){
 		        	modelAndView.addObject("code",0);
-					modelAndView.addObject("msg", "add  failed");
+					modelAndView.addObject("msg", "添加失败");
 		        }
 		        return modelAndView;
 				
@@ -197,7 +203,7 @@ public class ManagerController {
 				//实现修改
 				modelAndView = new ModelAndView(new MappingJackson2JsonView());
 				modelAndView.addObject("code",200);
-				modelAndView.addObject("msg", "update success");
+				modelAndView.addObject("msg", "更新成功");
 				
 				//获取数据
 				
@@ -226,7 +232,7 @@ public class ManagerController {
 				if(pass!=null && repass!=null && pass.trim().length()>=6 && pass.trim().length()<=12 && pass.equals(repass)){
 					manager.setPassword(DigestUtils.md5DigestAsHex(repass.getBytes()));
 				}
-				//生日
+				//校验生日
 				if(birthday_str!=null && birthday_str.trim().length()==10){
 					SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 					sdf.setTimeZone(TimeZone.getTimeZone("Asia/Shanghai"));
@@ -246,26 +252,26 @@ public class ManagerController {
 		        if (m.matches()){
 					manager.setEmail(email);
 				}
-				//地址
+				//校验地址
 		        if(address!=null && address.trim().length()>=4){
 		        	manager.setAddress(address);
 		        }
 		        
-		        //phone
+		        //校验phone
 		        if(phone != null && phone.trim().length()==11){
 		        	manager.setPhone(phone);
 		        }
 		        
-		        //qq
+		        //校验qq
 		        if(qq!= null && qq.trim().length()>=5&&qq.trim().length()<=11){
 		        	manager.setQq(qq);
 		        }
-		        //微信
+		        //校验微信
 		        if(wechat!= null && wechat.trim().length()>=6 && wechat.trim().length()<=20){
 		        	manager.setWechat(wechat);
 		        }
 		        
-		        //sex
+		        //校验sex
 		        manager.setSex(sex);	
 		        
 		        HttpSession sessoin=request.getSession();
@@ -279,7 +285,7 @@ public class ManagerController {
 				
 				if(!addStatus){
 					modelAndView.addObject("code",0);
-					modelAndView.addObject("msg", "update failed");
+					modelAndView.addObject("msg", "更新失败");
 				}
 				//返回结果
 				return modelAndView;
@@ -293,6 +299,11 @@ public class ManagerController {
 		return modelAndView;
 	}
 	
+	/**
+	 * @desc 加载管理员列表（未删除的）
+	 * @param request
+	 * @return
+	 */
 	@RequestMapping("/admin/loadManagerList")
 	@ResponseBody
 	public Map<String,Object> loadManagerList(HttpServletRequest request){
@@ -300,7 +311,7 @@ public class ManagerController {
 		map.put("code", 200);
 		map.put("msg", "success");
 		if(request.getParameter("op") !=null && request.getParameter("op").equals("search")){
-			
+			//功能暂未开发
 		}else{
 			Integer managerCount = managerService.countNormalAll();
 			List<Manager> managerList = managerService.findNormalManagerAll();
@@ -310,6 +321,11 @@ public class ManagerController {
 		return map;
 	}
 	
+	/**
+	 * @desc 加载删除的管理员列表
+	 * @param request
+	 * @return
+	 */
 	@RequestMapping("/admin/loadDelManagerList")
 	@ResponseBody
 	public Map<String,Object> loadDelManagerList(HttpServletRequest request){
@@ -324,24 +340,29 @@ public class ManagerController {
 			map.put("managerList", managerList);
 		}else{
 			map.put("code", 0);
-			map.put("msg", "fail");
+			map.put("msg", "加载失败");
 		}
 		return map;
 	}
 	
+	/**
+	 * @desc 根据id获取管理员信息
+	 * @param request
+	 * @return
+	 */
 	@RequestMapping("/admin/loadManager")
 	@ResponseBody
 	public Map<String,Object> loadManager(HttpServletRequest request){
 		Map<String,Object> map = new HashMap<>();
 		map.put("code", 200);
-		map.put("msg", "load success");
+		map.put("msg", "获取成功");
 		Integer id = 0;
 		if(request.getParameter("id")!=null){
 			id = Integer.valueOf(request.getParameter("id"));
 		}
 		if(id<=0){
 			map.put("code", 0);
-			map.put("msg", "load filed");
+			map.put("msg", "获取失败");
 		}else{
 			Manager updateManager = managerService.getManagerById(id);
 			map.put("updateManager", updateManager);
@@ -349,57 +370,77 @@ public class ManagerController {
 		return map;
 	}
 	
+	/**
+	 * @desc 删除管理员
+	 * @param request
+	 * @return
+	 */
 	@PostMapping("/admin/delManager")
 	@ResponseBody
 	public Map<String,Object> delManager(HttpServletRequest request){
 		Integer id = Integer.valueOf(request.getParameter("id"));
 		Map<String,Object> map = new HashMap<>();
 		map.put("code", 200);
-		map.put("msg", "delete success");
+		map.put("msg", "删除成功");
 		log.info(id.toString());
 		if(id==null ||!managerService.delManager(id)){
 			map.put("code", 0);
-			map.put("msg", "delete failed");
+			map.put("msg", "删除失败");
 		}
 		return map;
 		
 	}
 	
+	/**
+	 * @desc 恢复删除的管理员
+	 * @param request
+	 * @return
+	 */
 	@PostMapping("/admin/recoverDelManager")
 	@ResponseBody
 	public Map<String,Object> recoverDelManager(HttpServletRequest request){
 		Integer id = Integer.valueOf(request.getParameter("id"));
 		Map<String,Object> map = new HashMap<>();
 		map.put("code", 200);
-		map.put("msg", "delete success");
+		map.put("msg", "恢复成功");
 		log.info(id.toString());
 		if(id==null ||!managerService.recoverDelManager(id)){
 			map.put("code", 0);
-			map.put("msg", "recover failed");
+			map.put("msg", "恢复失败");
 		}
 		return map;
 		
 	}
 	
+	/**
+	 * @desc 删除管理员
+	 * @param request
+	 * @return
+	 */
 	@PostMapping("/admin/relDelManager")
 	@ResponseBody
 	public Map<String,Object> relDelManager(HttpServletRequest request){
 		Integer id = Integer.valueOf(request.getParameter("id"));
 		Map<String,Object> map = new HashMap<>();
 		map.put("code", 200);
-		map.put("msg", "delete success");
+		map.put("msg", "删除成功");
 		log.info(id.toString());
 		if(id==null ||!managerService.relDelManager(id)){
 			map.put("code", 0);
-			map.put("msg", "really delete failed");
+			map.put("msg", "删除失败");
 		}
 		return map;
 		
 	}
 	
+	/**
+	 * @desc 管理员修改密码
+	 * @param request
+	 * @return
+	 */
 	@RequestMapping("/admin/repassword")
 	public ModelAndView repassword(HttpServletRequest request){
-		ModelAndView modelAndView = new ModelAndView("admin/manager-repassword");
+		ModelAndView modelAndView = new ModelAndView("admin/manager-password");
 		
 		String op = "s";
 		if(request.getParameter("op")!=null){
