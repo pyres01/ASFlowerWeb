@@ -21,6 +21,14 @@ public interface ShoppingCartMapper {
 	@Select("SELECT * FROM shoppingcart where uid = ${uid} ORDER BY id DESC")
 	List<ShoppingCart> getByUid(@Param("uid")Integer uid);
 	
+	//查询用户购物车
+	@Select("SELECT * FROM shoppingcart where uid = ${uid} AND id =${id}")
+	ShoppingCart getByid(@Param("uid")Integer uid,@Param("id")Integer id);
+		
+	//查询用户购物车id列表
+	@Select("SELECT id FROM shoppingcart where uid = ${uid} ORDER BY id DESC")
+	List<Integer> getIdsByUid(@Param("uid")Integer uid);
+		
 	//加入购物车
 	@Insert("INSERT INTO shoppingcart(uid,sid,count) values(#{uid},#{sid},#{count})")
 	Integer insert(ShoppingCart cart);

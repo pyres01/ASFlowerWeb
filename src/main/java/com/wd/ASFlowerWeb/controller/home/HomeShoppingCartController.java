@@ -104,6 +104,7 @@ public class HomeShoppingCartController {
 				for (String i : infos) {
 					id = Integer.valueOf(i.split(",")[0]);
 					count = Integer.valueOf(i.split(",")[1]);
+					log.info("id:"+id+",count:"+count);
 					scartService.update(id, count);
 				}
 			}

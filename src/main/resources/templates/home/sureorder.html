@@ -23,11 +23,11 @@
 		<div><img src="/static/home/images/address.png" alt=""></div>
 		<div class="userinfor">
 			<div class="infor">
-				<p>收货人：<span th:text="${order!=null?order.receiver:null}"></span></p>
-				<p class="num" th:text="${order!=null?order.phone:null}"></p>
+				<p>收货人：<span th:text="${session.defReceAddress.receiver}"></span></p>
+				<p class="num" th:text="${session.defReceAddress.phone}"></p>
 			</div>
 			
-			<p>收货地址：<span th:text="${order!=null?order.address:null}"></span></p>
+			<p>收货地址：<span th:text="${session.defReceAddress.address}"></span></p>
 		</div>
 	</header>
 	<div class="way">
@@ -38,17 +38,16 @@
 
 	<main>
 		<ul>
-			<li th:each="item:${orderitems}">
+			<li th:each="item:${result}">
 				<div>
-					<div class="pic"><img th:src="${item.shoppingImg}" alt=""></div>
+					<div class="pic"><img th:src="${item.shop.shoppingImg}" alt=""></div>
 					<div class="picinfor">
-						<p th:text="${item.shoppingName}"></p>
-						<p><span th:text="${item.introduction}"></span></p>
-						<p class="price">￥<span th:text="${item.price}"></span></p>
-						<p class="number">X<span th:text="${item.count}">2</span></p>
+						<p th:text="${item.shop.shoppingName}"></p>
+						<p><span th:text="${item.shop.introduction}"></span></p>
+						<p class="price">￥<span th:text="${item.shop.asPrice}"></span></p>
+						<p class="number">X<span th:text="${item.cart.count}"></span></p>
 					</div>
 				</div>
-				<input type="hidden" th:value="${item.id}">
 				<p>买家留言:<input type="text" class="s_remark" placeholder='选填：填写内容已和卖家协商确认'></p>
 			</li>
 			
@@ -57,7 +56,7 @@
 
 	<footer>
 		<div class="acount">
-			<p>合计：<span>￥<span th:text="${order!=null?order.total:0}"></span></span></p>
+			<p>合计：<span>￥<span th:text="${total}"></span></span></p>
 		</div>
 		<div class="sure" id="sureBtn">确认订单</div>
 	</footer>

@@ -15,7 +15,7 @@
 	</header>
 	<main th:if="${!needLogin}">
 		<div class="imfor" th:each="item:${cartList}">
-			<input type="hidden" th:value="${item.sid}"/>
+			<input type="hidden" th:value="${item.id}"/>
 			<div class="choice">
 				<input type="checkbox" class="current">
 				<div class="bg"></div>
@@ -88,6 +88,7 @@
 	
 		$('#backHome').click(function(){
 			updateCart();
+			location.href="/";
 		});	
 		function updateCart(){
 			var info = new Array();
@@ -106,17 +107,12 @@
 					data:{content:info},
 					success:function(res){
 						console.log(res);
-					},
-					complete:function(xhr,tx){
-						location.href="/";
 					}
 				});
-			}else{
-				location.href="/";
 			}
 		};
 		
-		var postStatus = false;
+		/* var postStatus = false;
 		$('#ConfirmBtn').click(function(){
 			if(!postStatus){
 				var total = parseFloat($('#totalMoney').text());
@@ -133,10 +129,10 @@
 					});
 					if(shops.length){
 						$.ajax({
-							url:'/home/order/orderCreate',
+							url:'/home/order/orderConfirm',
 							type:'POST',
 							dataType:'json',
-							traditional:true,/*防止深度序列号 */
+							traditional:true,//防止深度序列号 
 							data:{shops:shops},
 							success:function(res){
 								$('#ConfirmBtn').attr("disable",true);
@@ -146,6 +142,18 @@
 					}
 				}
 			}
+		}); */
+		$('#ConfirmBtn').click(function(){
+			var link='/home/order/orderConfirm?type=cart&items=';
+			$('.imfor').each(function(index,item){
+				if($(item).find("input[type=checkbox]:first").is(":checked")){
+					var id = $(item).children('input:first').val();
+					link += id+',';
+				}
+				
+			});
+			link = link.substr(0,link.length-1);
+			location.href=link;
 		});
 		
 		$('.imfor input[type=checkbox]').click(function(){

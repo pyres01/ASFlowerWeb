@@ -15,6 +15,7 @@ $('.num .left').click(function(event) {
 	}
   
     $(this).next().children().val(number);
+    updateCart();
 	
 });
 
@@ -22,6 +23,7 @@ $('.num .right').click(function(event) {
 	var number=$(this).prev().children().val();
 	number++;
 	$(this).prev().children().val(number);
+	updateCart();
 	
 });
 

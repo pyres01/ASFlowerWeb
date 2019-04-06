@@ -26,6 +26,14 @@ public class ShoppingCartService {
 		return mapper.getByUid(uid);
 	}
 	
+	public List<Integer> getIdsByUid(Integer uid){
+		return mapper.getIdsByUid(uid);
+	}
+	
+	public ShoppingCart getByid(Integer uid,Integer id){
+		return mapper.getByid(uid,id);
+	}
+	
 	//加入购物车
 	public boolean insert(ShoppingCart cart){
 		return mapper.insert(cart) == 1?true:false;
