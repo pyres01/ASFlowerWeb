@@ -1,6 +1,8 @@
 package com.wd.ASFlowerWeb.controller;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -31,6 +33,8 @@ import com.wd.ASFlowerWeb.service.util.MailService;
 import lombok.extern.slf4j.Slf4j;
 
 import com.alipay.api.*;
+import com.alipay.api.domain.AlipayTradeWapPayModel;
+import com.alipay.api.request.AlipayTradeWapPayRequest;
 
 /**
  * @author 韦丹
@@ -98,16 +102,16 @@ public class Test {
 	}
 	
 	@GetMapping("/alipay/test")
-	public void alipaytest(HttpServletRequest request,HttpServletResponse response){
+	public void alipaytest(HttpServletRequest request,HttpServletResponse response) throws IOException{
 		// 商户订单号，商户网站订单系统中唯一订单号，必填
-	    String out_trade_no = new String(request.getParameter("WIDout_trade_no").getBytes("ISO-8859-1"),"UTF-8");
+	    String out_trade_no = "2019040703080501";
 		// 订单名称，必填
-	    String subject = new String(request.getParameter("WIDsubject").getBytes("ISO-8859-1"),"UTF-8");
+	    String subject = "订单名称";
 		System.out.println(subject);
 	    // 付款金额，必填
-	    String total_amount=new String(request.getParameter("WIDtotal_amount").getBytes("ISO-8859-1"),"UTF-8");
+	    float total_amount=99.00f;
 	    // 商品描述，可空
-	    String body = new String(request.getParameter("WIDbody").getBytes("ISO-8859-1"),"UTF-8");
+	    String body = "商品描述";
 	    // 超时时间 可空
 	   String timeout_express="2m";
 	    // 销售产品码 必填
@@ -122,7 +126,7 @@ public class Test {
 	    AlipayTradeWapPayModel model=new AlipayTradeWapPayModel();
 	    model.setOutTradeNo(out_trade_no);
 	    model.setSubject(subject);
-	    model.setTotalAmount(total_amount);
+	    model.setTotalAmount(total_amount+"");
 	    model.setBody(body);
 	    model.setTimeoutExpress(timeout_express);
 	    model.setProductCode(product_code);
