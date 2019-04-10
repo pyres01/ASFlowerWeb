@@ -15,7 +15,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 
 import com.wd.ASFlowerWeb.entity.NmOrder;
 import com.wd.ASFlowerWeb.entity.NmOrderItem;
@@ -68,7 +70,6 @@ public class HomeNmOrderController {
 		if(req.getParameter("type")!=null){
 			type = req.getParameter("type");
 			if(type.equals("cart")){//从购物车过来的
-				log.info(req.getParameter("items"));
 				String[] cartIds = req.getParameter("items").split(",");
 				Integer[] ids = new Integer[cartIds.length];
 				int i=0;
@@ -86,17 +87,14 @@ public class HomeNmOrderController {
 						ShoppingCart cart = cartService.getByid(uid, id);
 						NmShopping shop = nmsService.getById(cart.getSid());
 						shop.setShoppingImg(shop.getShoppingImg().split("\\|")[0]);
-						item.put("cart", cart);
+						item.put("buynum", cart.getCount());
 						item.put("shop", shop);
 						carts.add(item);
 						total = total.add(shop.getAsPrice().multiply(new BigDecimal(cart.getCount())));
 					}
 				}
 				if(carts!=null){
-					log.info(carts.toString());
 					mav.addObject("result", carts);
-					mav.addObject("code", 200);
-					mav.addObject("msg", "");
 					mav.addObject("total", total);
 				}else{
 					try {
@@ -105,6 +103,42 @@ public class HomeNmOrderController {
 				}
 				
 			}else if(type.equals("buy")){//直接购买的
+				if(!checkLogin(req)){
+					try {
+						response.sendRedirect("/home/login");
+					} catch (IOException e) {
+						
+					}
+				}else{
+					try{
+						Integer sid = Integer.valueOf(req.getParameter("sid"));
+						Integer num = Integer.valueOf(req.getParameter("n"));
+						if(sid>0 && num>0){
+							NmShopping shop = nmsService.getById(sid);
+							shop.setShoppingImg(shop.getShoppingImg().split("\\|")[0]);
+							
+							if(shop.getStore()<num){
+								mav = new ModelAndView("home/order-confirm-fail");
+								mav.addObject("error", "库存不足");
+								return mav;
+							}
+							List<Object> all = new ArrayList<>();
+							Map<String,Object> item = new HashMap<>();
+							item.put("shop", shop);
+							item.put("buynum", num);
+							all.add(item);
+							mav.addObject("result", all);
+							mav.addObject("total", shop.getAsPrice().multiply(new BigDecimal(num.toString())));
+						}
+					}catch(Exception e){
+						try {
+							response.sendError(response.SC_NOT_ACCEPTABLE);
+						} catch (Exception e1) {
+							
+						}
+					}
+					
+				}
 				
 			}
 		}else{
@@ -115,9 +149,16 @@ public class HomeNmOrderController {
 		return mav;
 	}
 	
-	@PostMapping("/home/order/orderCreate")
-	public ModelAndView orderCrete(HttpServletRequest req,HttpServletResponse response){
-		ModelAndView mav = new ModelAndView("home/sureorder");
+	@PostMapping("/home/order/create")
+	private ModelAndView orderCrete(HttpServletRequest req,HttpServletResponse response){
+		
+		ModelAndView mav = new ModelAndView();
 		return mav;
+	}
+	
+	private boolean checkLogin(HttpServletRequest req){
+		HttpSession session = req.getSession();
+		User member = (User) session.getAttribute("member");
+		return member == null?false:true;
 	}
 }

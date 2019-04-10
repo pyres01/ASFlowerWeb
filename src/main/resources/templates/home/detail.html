@@ -196,7 +196,7 @@
 		  		    <a href="#">加入购物车</a>
 		  		</li>
 		  		<li class="buy" id="MenuBuyBtn">
-		  		    <a href="#">立即购买</a>
+		  		    <a href="javascript:;">立即购买</a>
 		  		</li>
 		  		
 		  	</ul>
@@ -227,7 +227,11 @@
 		  
 		  getContent();
 		  $('#MenuJoinBtn').click(addCart);
-		  
+		  $('#MenuBuyBtn').click(function(){
+			  var sid = $('#sid').text();
+			  var count = $('#_count').val();
+			  location.href = '/home/order/orderConfirm?type=buy&sid='+sid+'&n='+count;
+		  });
 		});
 		
 	}
@@ -280,7 +284,8 @@
 				layer.msg(res.msg);
 			}
 		});
-	}	
+	}
+	
 	</script>
 </body>
 </html>

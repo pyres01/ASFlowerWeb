@@ -433,4 +433,6 @@ public class HomeUserInfoController {
 	private boolean isExistUserByMName(String memberName){
 		return userService.getUserByMName(memberName)!=null?true:false;
 	}
+	
+	
 }
