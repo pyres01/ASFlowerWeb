@@ -37,8 +37,12 @@
 	<div class="bg"></div>
 
 	<main>
-		<ul>
-			<li th:each="item:${result}">
+	<form action="/home/order/orderPay" method="POST">
+		<input type="hidden" name="order_count" th:value="${#lists.size(result)}"/>
+		<ul id="order_cul">
+			<li th:each="item,iterStat:${result}">
+				<input type="hidden"  th:value="${item.cid}" th:name="'i_cid'+${iterStat.index+1}" />
+				<input type="hidden" th:value="${item.shop.id}" th:name="'i_id'+${iterStat.index+1}" />
 				<div>
 					<div class="pic"><img th:src="${item.shop.shoppingImg}" alt=""></div>
 					<div class="picinfor">
@@ -46,12 +50,14 @@
 						<p><span th:text="${item.shop.introduction}"></span></p>
 						<p class="price">￥<span th:text="${item.shop.asPrice}"></span></p>
 						<p class="number">X<span th:text="${item.buynum}"></span></p>
+						<input type="hidden" th:name="'i_num'+${iterStat.index+1}" th:value="${item.buynum}"/>
 					</div>
 				</div>
-				<p>买家留言:<input type="text" class="s_remark" placeholder='选填：填写内容已和卖家协商确认'></p>
+				<p>买家留言:<input type="text" class="i_remark" placeholder='选填：填写内容已和卖家协商确认'></p>
 			</li>
 			
 		</ul>
+		</form>
 	</main>
 
 	<footer>
@@ -64,28 +70,13 @@
 </body>
 <script src='/static/home/js/jquery.min.js'></script>
 <script>
-$('#sureBtn').click(function(){
 
-	var url="/home/order/orderPay";
-	var form=$("<form></form>");  
-    //设置属性  
-    form.attr("action",url);  
-    form.attr("method","post");  
-    //创建input，即参数
-    $('main ul li').each(function(index,item){
-		var _id = $(this).find('s_remark').prev().val();
-		var _content = $(this).find('s_remark').val();
-		var rarr = _id+','+_content;
-		var inputType=$("<input type='text' name='remarks'/>");  
-	    inputType.attr("value",rarr);
-	    form.append(inputType);
-	});
-    
-    
-    form.appendTo("body");    
-    form.hide();  
-    //提交表单  
-    form.submit();
+$('#sureBtn').click(function(){
+	$('form').submit();
+});
+
+$('#sureBtn').click(function(){
+	$('document.form').submit();
 });
 
 </script>

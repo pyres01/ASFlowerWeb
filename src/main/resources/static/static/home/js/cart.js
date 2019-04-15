@@ -16,6 +16,12 @@ $('.num .left').click(function(event) {
   
     $(this).next().children().val(number);
     updateCart();
+    var topP = $(this).parent().parent().parent();
+    if($(topP).find('input[type=checkbox]').is(':checked')){
+    	
+    	var money = $(topP).find('.priceNum:first').text();
+		$('#totalMoney').text(parseFloat($('#totalMoney').text())-parseFloat(money));
+    }
 	
 });
 
@@ -24,6 +30,12 @@ $('.num .right').click(function(event) {
 	number++;
 	$(this).prev().children().val(number);
 	updateCart();
+	var topP = $(this).parent().parent().parent();
+	if($(topP).find('input[type=checkbox]').is(':checked')){
+		var money = $(topP).find('.priceNum:first').text();
+		$('#totalMoney').text(parseFloat($('#totalMoney').text())+parseFloat(money));
+	}
+	
 	
 });
 
@@ -45,14 +57,14 @@ $('.imfor .choice .bg').on('click', function(event) {
 });
 
 /*全选*/
-$('.count .choice input').on('click', function(event) {
+/*$('.count .choice input').on('click', function(event) {
 	if($(this).is(':checked')){
 		$(this).next().text('取消全选');
 		$(this).next().next().show();
 		$('.imfor .choice input').attr('checked', true);
 		$('.imfor .choice .bg').show();
 	}
-});
+});*/
 
 $('.count .choice .bg').on('click', function(event) {
 	if($(this).prev().prev().is(':checked')){

@@ -33,7 +33,7 @@
 	       	<div class="num">
 		       	<div>
 		       		<div class="left"><img src="/static/home/images/reduce.png" alt=""></div>
-		       		<div class="center"><input type="text" th:value="${item.count}"></div>
+		       		<div class="center"><input type="text" th:value="${item.count}" class="cnum"/></div>
 		       		<div class="right"><img src="/static/home/images/plus.png" alt=""></div>
 		       	</div>
 	       	</div>
@@ -165,10 +165,10 @@
 				$('.total .sure').prop("checked",false);
 			}
 			if($(this).is(":checked")){
-				var money = $(this).parent().parent().find('.priceNum:first').text();
+				var money = $(this).parent().parent().find('.priceNum:first').text()*$(this).parent().parent().find('.cnum').val();
 				$('#totalMoney').text(parseFloat($('#totalMoney').text())+parseFloat(money));
 			}else{
-				var money = $(this).parent().parent().find('.priceNum:first').text();
+				var money = $(this).parent().parent().find('.priceNum:first').text()*$(this).parent().parent().find('.cnum').val();
 				$('#totalMoney').text(parseFloat($('#totalMoney').text())-parseFloat(money));
 			}
 		});
