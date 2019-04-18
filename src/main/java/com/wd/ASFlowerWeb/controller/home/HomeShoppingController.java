@@ -24,6 +24,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.wd.ASFlowerWeb.entity.NmShopping;;
 /**
+ * 前台商品控制器
  * @author 韦丹
  *
  * 2019年2月21日
@@ -34,7 +35,7 @@ import com.wd.ASFlowerWeb.entity.NmShopping;;
 public class HomeShoppingController {
 	
 	@Autowired
-	private NmShoppingService nmShoppingServer;
+	private NmShoppingService nmShoppingServer; //商品service
 	
 	@GetMapping("/home/getShoppings")
 	@ResponseBody
@@ -43,16 +44,19 @@ public class HomeShoppingController {
 		
 		Integer typeId = null;
 		Map<Integer,Integer> typePageSizeMap = new HashMap<>();
+		
+		//设置首页对应主题（商品分类）下的商品展示数量
 		typePageSizeMap.put(1, 4);//订阅惊喜
 		typePageSizeMap.put(2, 6);//极速送花
 		typePageSizeMap.put(3, 6);//永生花礼
 		typePageSizeMap.put(4, 4);//花边小物
 		
+		//根据主题（商品分类）来加载对于商品
 		if(request.getParameter("tid")!=null && request.getParameter("tid").trim().length()==1){
 			typeId = Integer.valueOf(request.getParameter("tid").trim());
 			if(typePageSizeMap.get(typeId)==null){
 				map.put("code", 500);
-				map.put("msg", "param error");
+				map.put("msg", "参数有误");
 			}else{
 				int infoCount = nmShoppingServer.countForSearchByType(typeId);
 				if(infoCount>0){
@@ -60,11 +64,11 @@ public class HomeShoppingController {
 					List<NmShopping> shoppings = nmShoppingServer.searchByType(typeId, 0, typePageSizeMap.get(typeId));
 					
 					map.put("code", 200);
-					map.put("msg", "success");
+					map.put("msg", "获取成功");
 					map.put("shoppings", shoppings);
 				}else{
 					map.put("code", 204);
-					map.put("msg", "null");
+					map.put("msg", "获取失败");
 				}
 			}
 		}
@@ -72,6 +76,7 @@ public class HomeShoppingController {
 		return map;
 	}
 	
+	//获取商品详情
 	@RequestMapping("/home/shoppingDetail")
 	@ResponseBody
 	public ModelAndView shoppingDetail(HttpServletRequest request,HttpServletResponse response) throws IOException{
@@ -83,7 +88,6 @@ public class HomeShoppingController {
 				sType =  Integer.valueOf(request.getParameter("topic").trim());
 			} catch (NumberFormatException e) {
 				sType = null;
-				log.info("sType null");
 			}
 		}
 		if(request.getParameter("id")!=null && request.getParameter("id").trim().length()>0){
@@ -92,7 +96,6 @@ public class HomeShoppingController {
 			} catch (NumberFormatException e) {
 				// TODO Auto-generated catch block
 				sid = null;
-				log.info("sid null");
 			}
 		}
 		if(sType==null || sid == null){
@@ -109,10 +112,10 @@ public class HomeShoppingController {
 			NmShopping m_Shopping = nmShoppingServer.getByTypeAndId(sType, sid);
 			if(m_Shopping == null){
 				mav.addObject("code",204);
-				mav.addObject("msg","get fail");
+				mav.addObject("msg","获取失败");
 			}else{
 				mav.addObject("code",200);
-				mav.addObject("msg","get success");
+				mav.addObject("msg","获取成功");
 				mav.addObject("shopping", m_Shopping);
 			}
 			
@@ -120,6 +123,7 @@ public class HomeShoppingController {
 		return mav;
 	}
 	
+	//首页点击主题跳到不同视图
 	@GetMapping("/home/nmtype")
 	@ResponseBody
 	public ModelAndView nmTypeList(int type,Integer page){
@@ -142,6 +146,7 @@ public class HomeShoppingController {
 		return mav;
 	}
 	
+	//不同分类下的分页数据获取，由于页面图片为改为DOM,接口空余
 	@PostMapping("/home/getNmBytype")
 	@ResponseBody
 	public Map<String,Object> getNmByType(HttpServletRequest req){
@@ -171,15 +176,15 @@ public class HomeShoppingController {
 				page = Math.min(Math.max(1, page), pageCount);
 				List<NmShopping> shoppings = nmShoppingServer.searchByType(type, (page-1)*pageSize, pageSize);
 				map.put("code", 200);
-				map.put("msg", "get success");
+				map.put("msg", "获取成功");
 				map.put("shoppings", shoppings);
 			}else{
 				map.put("code", 0);
-				map.put("msg", "null");
+				map.put("msg", "无数据");
 			}
 		}else{
 			map.put("code", 0);
-			map.put("msg", "param error");
+			map.put("msg", "获取失败");
 		}
 		
 		return map;

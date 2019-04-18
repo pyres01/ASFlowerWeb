@@ -43,7 +43,7 @@ import com.wd.ASFlowerWeb.util.MyUtil;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * 
+ * 前台订单控制器
  * @author 韦丹
  * 
  * @desc 前台订单
@@ -55,15 +55,15 @@ import lombok.extern.slf4j.Slf4j;
 public class HomeNmOrderController {
 
 	@Autowired
-	private NmShoppingService nmsService;
+	private NmShoppingService nmsService;	//商品service
 	@Autowired
-	private NmOrderService oService;
+	private NmOrderService oService;	//订单service
 	@Autowired
-	private NmOrderItemService oiService;
+	private NmOrderItemService oiService;	//订单项service
 	@Autowired
-	private ShoppingCartService cartService;
+	private ShoppingCartService cartService;	//购物车service
 	@Autowired
-	private OrderAndItemViewMapper oaivMapper;
+	private OrderAndItemViewMapper oaivMapper;	//订单和订单项mapper
 	
 	/**
 	 * 
@@ -168,16 +168,16 @@ public class HomeNmOrderController {
 		return map;
 	}
 	
-	
+	//确认订单跳转到这里，订单支付，默认是支付成功
 	@PostMapping("/home/order/orderPay")
 	@Transactional
 	public ModelAndView orderPay(HttpServletRequest req,HttpServletResponse resp){
 		ModelAndView mav = new ModelAndView("home/payresult");
-		boolean can_pay = true;
+		boolean can_pay = true;	//表示是否能支付，如库存够不够，如有一件商品库存不够，整个订单不能支付
 		User buyer = (User) req.getSession().getAttribute("member");
 		
 		String errMsg = "";
-		boolean payResult = true;
+		boolean payResult = true; //默认支付成功
 		try{
 			Integer order_count = Integer.valueOf(req.getParameter("order_count"));
 			if(order_count>0){
@@ -198,8 +198,11 @@ public class HomeNmOrderController {
 					}
 					total = total.add(nmshop.getAsPrice().multiply(new BigDecimal(buy_num)));
 				}
+				
+				//如果可以支付
 				if(can_pay){
 					
+					//创建订单
 					NmOrder order = new NmOrder();
 					order.setUid(buyer.getId());
 					order.setCreateTime(MyUtil.getCurrentTimestamp());
@@ -216,6 +219,7 @@ public class HomeNmOrderController {
 					order.setAddress(receAddr.getAddress());
 					order.setStatus(1);
 					int orderId = oService.save(order);
+					//订单创建成功，然后创建订单项
 					if(orderId>0){
 						for(int i=1;i<=order_count;i++){
 							NmOrderItem item = new NmOrderItem();
@@ -238,7 +242,7 @@ public class HomeNmOrderController {
 							oiService.save(item);
 							nmshop.setStore(nmshop.getStore()-Integer.valueOf(req.getParameter("i_num"+i)));
 							nmsService.update(nmshop);
-							//删除对应购物车
+							//如果从购物车过来的，删除对应购物车
 							cartService.delete(Integer.valueOf(req.getParameter("i_cid"+i)));
 							
 						}
@@ -262,10 +266,11 @@ public class HomeNmOrderController {
 			payResult = false;
 		}
 		
+		//如果支付成功
 		if(payResult){
 			mav.addObject("code", 200);
 			mav.addObject("msg", "支付成功！");
-		}else{
+		}else{//支付失败或者不可支付，提示错误信息
 			mav.addObject("code", 0);
 			mav.addObject("msg", errMsg);
 		}
@@ -273,7 +278,7 @@ public class HomeNmOrderController {
 		return mav;
 	}
 	
-	
+	//用户我的订单
 	@GetMapping("/home/order/ulist")
 	public ModelAndView ulist(HttpServletRequest req,HttpServletResponse resp) throws IOException{
 		ModelAndView mav = new ModelAndView("home/order");
@@ -285,6 +290,7 @@ public class HomeNmOrderController {
 		}catch(Exception e){
 			s = null;
 		}
+		//加载全部订单
 		if(s==null){
 			List<OrderAndItemView> oais = oaivMapper.selectAllByUid(member.getId());
 			mav.addObject("allOlsts", oais);

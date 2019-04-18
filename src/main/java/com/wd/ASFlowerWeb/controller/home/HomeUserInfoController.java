@@ -31,6 +31,7 @@ import com.wd.ASFlowerWeb.service.util.MailService;
 import lombok.extern.slf4j.Slf4j;
 
 /**
+ * 前台会员控制器
  * @author 韦丹
  *
  * 2019年1月10日
@@ -41,10 +42,11 @@ import lombok.extern.slf4j.Slf4j;
 public class HomeUserInfoController {
 	
 	@Autowired
-	private UserService userService;
+	private UserService userService;	//会员service
 	@Autowired
-	private ReceAddressService receAddressService;
+	private ReceAddressService receAddressService;	//收货地址service
 	
+	//"我的" 页面
 	@GetMapping("/home/user/userinfo")
 	public ModelAndView userinfo(){
 		ModelAndView mav = new ModelAndView();
@@ -52,11 +54,13 @@ public class HomeUserInfoController {
 		return mav;
 	}
 	
+	//个人资料页面
 	@GetMapping("/home/user/useraccount")
 	public String useraccount(){
 		return "home/useraccount";
 	}
 	
+	//会员收货地址，计划是可以保存多个收货地址供选择，其中一个默认收货地址，此处，将默认收货地址设置为仅有的唯一一个收货地址
 	@RequestMapping("/home/user/userAddress")
 	public ModelAndView address(HttpServletRequest req){
 		ModelAndView mav = null;
@@ -65,26 +69,33 @@ public class HomeUserInfoController {
 			String receiver = "";
 			String phone = "";
 			String address="";
-			boolean validate = true;
+			boolean validate = true;//数据验证标识
+			
+			//收货人
 			if(req.getParameter("receiver")!=null && req.getParameter("receiver").trim().length()>=2){
 				receiver = req.getParameter("receiver").trim();
 			}else{
 				validate = false;
 			}
+			//联系号码
 			if(req.getParameter("phone")!=null && req.getParameter("phone").trim().length()==11){
 				phone = req.getParameter("phone").trim();
 			}else{
 				validate = false;
 			}
+			//收货地址
 			if(req.getParameter("address")!=null && req.getParameter("address").trim().length()>=10){
 				address = req.getParameter("address").trim();
 			}else{
 				validate = false;
 			}
+			//验证通过
 			if(validate){
 				boolean saveStatus = true;
 				ReceAddress addr = null;
 				HttpSession session = req.getSession();
+				
+				//如果session中已保存有默认地址且不为空就是修改收货地址，且要更新session中的收货地址
 				if(session.getAttribute("defReceAddress") != null){
 					addr = (ReceAddress) session.getAttribute("defReceAddress");
 					addr.setAddress(address);
@@ -95,7 +106,7 @@ public class HomeUserInfoController {
 					}else{
 						saveStatus = false;
 					}
-				}else{
+				}else{//否则即使添加收货地址，并保存到session中去
 					addr = new ReceAddress();
 					Integer uid = Integer.valueOf(((User)session.getAttribute("member")).getId());
 					addr.setUid(uid);
@@ -112,14 +123,14 @@ public class HomeUserInfoController {
 				}
 				if(saveStatus){
 					mav.addObject("code", 200);
-					mav.addObject("msg", "save success");
+					mav.addObject("msg", "保存成功");
 				}else{
 					mav.addObject("code", 0);
-					mav.addObject("msg", "save fail");
+					mav.addObject("msg", "保存失败");
 				}
 			}else{
 				mav.addObject("code", 0);
-				mav.addObject("msg", "validate fail");
+				mav.addObject("msg", "数据不合法");
 			}
 			
 		}else{
@@ -127,12 +138,13 @@ public class HomeUserInfoController {
 		}
 		return mav;
 	}
-	
+	//显示登录页面
 	@GetMapping("/home/login")
 	public String login(){
 		return "home/login";
 	}
 	
+	//会员退出
 	@GetMapping("/home/user/logout")
 	@ResponseBody
 	public void logout(HttpServletRequest request){
@@ -142,11 +154,13 @@ public class HomeUserInfoController {
 		}
 	}
 	
+	//显示注册页面
 	@GetMapping("/home/register")
 	public String register(){
 		return "home/register";
 	}
 	
+	//修改密码
 	@RequestMapping("/home/user/repassword")
 	public ModelAndView rePassWord(HttpServletRequest request){
 		ModelAndView mav = null;
@@ -162,18 +176,18 @@ public class HomeUserInfoController {
 					if(userService.updateUser(u)){
 						request.getSession().setAttribute("member",u);
 						mav.addObject("code", 200);
-						mav.addObject("msg", "change success");
+						mav.addObject("msg", "修改成功");
 					}else{
 						mav.addObject("code", 0);
-						mav.addObject("msg", "change fail");
+						mav.addObject("msg", "修改失败");
 					}
 				}else{
 					mav.addObject("code", 0);
-					mav.addObject("msg", "password error");
+					mav.addObject("msg", "密码错误");
 				}
 			}else{
 				mav.addObject("code", 0);
-				mav.addObject("msg", "param error");
+				mav.addObject("msg", "数据有误");
 			}
 			
 		}else{
@@ -182,6 +196,7 @@ public class HomeUserInfoController {
 		return mav;
 	}
 	
+	//找回密码
 	@RequestMapping("/home/findPass")
 	public ModelAndView findPass(HttpServletRequest req){
 		ModelAndView mav = null;
@@ -190,7 +205,7 @@ public class HomeUserInfoController {
 			mav = new ModelAndView(new MappingJackson2JsonView());
 			if(op!=null&&op.trim().length()>0){
 				HttpSession sessoin=req.getSession();
-				if(op.equals("v")){
+				if(op.equals("v")){//验证邮箱部分
 					String fEmail = req.getParameter("email");
 					String vcode = req.getParameter("code");
 					if(this.validateFindPassCaptcha(req, fEmail, vcode)){
@@ -202,7 +217,7 @@ public class HomeUserInfoController {
 						mav.addObject("code", 0);
 						mav.addObject("msg", "验证失败");
 					}
-				}else if(op.equals("u")){
+				}else if(op.equals("u")){//更新密码部分
 					mav = new ModelAndView(new MappingJackson2JsonView());
 					String password = req.getParameter("password");
 					String repassword = req.getParameter("repassword");
@@ -239,6 +254,7 @@ public class HomeUserInfoController {
 		return mav;
 	}
 	
+	//验证登录，如果登录成功，同时保存收货地址到session
 	@PostMapping("/home/validateLogin")
 	@ResponseBody
 	public Map<String,Object> validateLogin(HttpServletRequest req){
@@ -265,7 +281,7 @@ public class HomeUserInfoController {
 		}
 		if(!checkStatus){
 			map.put("code", 0);
-			map.put("msg", "validate fail");
+			map.put("msg", "验证失败");
 		}else{
 			ReceAddress DefReceAddress = receAddressService.getDefReceAddress(1);
 			HttpSession sessoin=req.getSession();
@@ -276,7 +292,7 @@ public class HomeUserInfoController {
 		return map;
 	}
 	
-	
+	//验证注册
 	@PostMapping("/home/validateRegister")
 	@ResponseBody
 	public Map<String,Object> validateRegister(HttpServletRequest req){
@@ -334,7 +350,7 @@ public class HomeUserInfoController {
 		
 		if(!checkStatus){
 			map.put("code",0);
-			map.put("msg","register fail");
+			map.put("msg","注册失败");
 		}else{
 			User u = new User();
 			u.setMemberName(username);
@@ -344,16 +360,16 @@ public class HomeUserInfoController {
 			u.setAvatar("/static/home/images/logo_new.png");
 			if(userService.addUser(u)){
 				map.put("code",200);
-				map.put("msg","register success");
+				map.put("msg","注册成功");
 			}else{
 				map.put("code",0);
-				map.put("msg","register fail");
+				map.put("msg","注册失败");
 			}
 		}
 		return map;
 	}
 	
-	
+	//更新会员资料
 	@PostMapping("/user/updateInfo")
 	@ResponseBody
 	public Map<String,Object> updateInfo(HttpServletRequest req){
@@ -392,25 +408,25 @@ public class HomeUserInfoController {
 	
 	
 	
-	
+	//验证会员名
 	private boolean validateUsername(String username){
 		if(username!=null && username.trim().length()>=5 && username.trim().length()<=10){
 			return true;
 		}
 		return false;
 	}
-	
+	//验证密码
 	private boolean validatePassword(String password){
 		if(password == null || password.trim().length()<6 || password.trim().length()>12){
 			return false;
 		}
 		return true;
 	}
-
+	//验证确认密码
 	private boolean validateRePassword(String password,String repassword){
 		return password.equals(repassword);
 	}
-	
+	//验证邮箱格式
 	private boolean validateEmail(String email){
 		String REGEX="^\\w+((-\\w+)|(\\.\\w+))*@\\w+(\\.\\w{2,3}){1,3}$";
 		Pattern p = Pattern.compile(REGEX);    
@@ -420,16 +436,18 @@ public class HomeUserInfoController {
 		}
 		return false;
 	}
-	
+	//判断注册验证码是否正确
 	private boolean validateRegCaptcha(HttpServletRequest request,String email,String captcha){
 		HttpSession session = request.getSession();
 		return (session.getAttribute("reg"+email)!=null && session.getAttribute("reg"+email).equals(captcha))?true:false;
 	}
+	//判断找回密码验证码是否正确
 	private boolean validateFindPassCaptcha(HttpServletRequest request,String email,String captcha){
 		HttpSession session = request.getSession();
 		return (session.getAttribute("fpass"+email)!=null && session.getAttribute("fpass"+email).equals(captcha))?true:false;
 	}
 	
+	//根据会员名判断会员是否存在
 	private boolean isExistUserByMName(String memberName){
 		return userService.getUserByMName(memberName)!=null?true:false;
 	}

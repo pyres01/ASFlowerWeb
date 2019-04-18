@@ -32,35 +32,49 @@ import lombok.extern.slf4j.Slf4j;
  * @author 韦丹
  *
  * 2019年1月22日
+ * 
+ * 会员/用户控制器
  *
  */
 @Controller
 @Slf4j
+
+
 public class MemberController {
 	
 	@Autowired
 	UserService userService;
 	
+	/**
+	 * 会员列表
+	 * @return
+	 */
 	@GetMapping("/admin/member/list")
 	public String memberList(){
 		return "admin/member-list";
 	}
 	
+	/**
+	 * 编辑会员信息
+	 * @param request
+	 * @return
+	 * @throws Exception
+	 */
 	@RequestMapping("/admin/member/edit")
 	public ModelAndView memberEdit(HttpServletRequest request) throws Exception{
 		
-		String op = "";
+		String op = "";	//根据op判断操作
 		if(request.getParameter("op")!=null && !request.getParameter("op").equals("")){
 			op = request.getParameter("op");
 		}
 		ModelAndView modelAndView = null;
 		switch (op) {
-		case ""://load add
+		case ""://加载添加窗口
 			modelAndView = new ModelAndView();
 			modelAndView.addObject("astatus", "t");
 			modelAndView.setViewName("admin/member-edit");
 			break;
-		case "1"://load update
+		case "1"://加载修改窗口
 			Integer id = request.getParameter("id")!=null?Integer.valueOf(request.getParameter("id")):null;
 			//如果id为空直接抛出异常
 			if(id==null) throw new Exception();
@@ -69,13 +83,13 @@ public class MemberController {
 			modelAndView.addObject("id", id);
 			modelAndView.setViewName("admin/member-edit");
 			break;
-		case "2"://add
+		case "2"://实现会员添加
 			modelAndView = this.memberAdd(request);
 			break;
-		case "3"://update
+		case "3"://会员更新
 			modelAndView = this.memberUpdate(request);
 			break;
-		default:
+		default://默认加载添加窗口
 			modelAndView = new ModelAndView();
 			modelAndView.addObject("astatus", true);
 			modelAndView.setViewName("admin/member-edit");
@@ -86,6 +100,7 @@ public class MemberController {
 	
 	
 	/**
+	 * 更新会员信息
 	 * @param request
 	 * @return ModelAndView
 	 */
@@ -94,11 +109,14 @@ public class MemberController {
 		ModelAndView modelAndView = new ModelAndView(new MappingJackson2JsonView());
 		
 		Integer id = request.getParameter("id")!=null?Integer.valueOf(request.getParameter("id")):null;
-		if(id!=null){
+		if(id!=null){//会员id不能为空
+			//先根据id获取会员信息，如果有修改再改变信息数据，否则保留原有
 			User user = userService.getUserById(id);
-			if(user!=null){
-				//update user info by id
-				Boolean validateStatus = true;
+			if(user!=null){//会员存在
+				
+				Boolean validateStatus = true;	//标识验证要更新的数据是否合法
+				
+				//会员名
 				String username = request.getParameter("username");
 				if(username!=null && !username.trim().equals("")&&username.length()>=5){
 					user.setMemberName(username);
@@ -106,6 +124,7 @@ public class MemberController {
 					validateStatus = false;
 				}
 				
+				//昵称
 				String nickname = request.getParameter("nickname");
 				if(nickname!=null && !nickname.trim().equals("") && nickname.length()>=5){
 					user.setNickName(nickname);
@@ -114,9 +133,11 @@ public class MemberController {
 					validateStatus = false;
 				}
 				
+				//性别
 				Boolean sex = request.getParameter("sex")!=null?Boolean.valueOf(request.getParameter("sex")):false;
 				user.setSex(sex);
 				
+				//生日
 				if(request.getParameter("birthday")!=null && !request.getParameter("birthday").trim().equals("")){
 					SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 					sdf.setTimeZone(TimeZone.getTimeZone("Asia/Shanghai"));
@@ -129,6 +150,7 @@ public class MemberController {
 					}
 				}
 				
+				//号码
 				String phone = request.getParameter("phone");
 				if(phone!=null && !phone.trim().equals("") && phone.length()==11){
 					user.setPhone(phone);
@@ -136,6 +158,7 @@ public class MemberController {
 					validateStatus = false;
 				}
 				
+				//邮箱
 				String email = request.getParameter("email");
 				if(email!=null){
 					String regEmail = "^([a-z0-9A-Z]+[-|\\.]?)+[a-z0-9A-Z]@([a-z0-9A-Z]+(-[a-z0-9A-Z]+)?\\.)+[a-zA-Z]{2,}$";
@@ -150,63 +173,71 @@ public class MemberController {
 					validateStatus =false;
 				}
 				
+				//QQ
 				String qq = request.getParameter("qq");
 				if(qq!=null && !qq.trim().equals("") && qq.length()>=5){
 					user.setQq(qq);
 				}
 				
+				//微信
 				String wechat = request.getParameter("wechat");
 				if(wechat!=null && !wechat.trim().equals("") && wechat.length()>=6 && wechat.length()<=20){
 					user.setWechat(wechat);
 				}
 				
+				//密码和确认密码
 				String password = request.getParameter("pass");
 				String repass = request.getParameter("repass");
 				if(password!=null && !password.trim().equals("") && password.length()>=6 && password.length()<=12 && password.equals(repass)){
 					user.setPassword(password);
 				}
 				
+				//头像
 				int avatar =request.getParameter("avatar")!=null?Integer.valueOf(request.getParameter("avatar")):0;
-				if(avatar==1){
+				if(avatar==1){//男
 					user.setAvatar("/static/common/images/man_logo.png");
-				}else{
+				}else{//女
 					user.setAvatar("/static/common/images/female_logo.png");
 				}
 				
+				//等级
 				Integer rank = request.getParameter("rank")!=null?Integer.valueOf(request.getParameter("rank")):1;
 				user.setRankId(rank);
-				if(validateStatus){
+				
+				
+				if(validateStatus){//验证通过
 					Boolean updateStatus = userService.updateUser(user);
 					if(updateStatus){
 						modelAndView.addObject("code",200);
-						modelAndView.addObject("msg","update success");
+						modelAndView.addObject("msg","更新成功！");
 					}else{
 						modelAndView.addObject("code",0);
-						modelAndView.addObject("msg","update fail");
+						modelAndView.addObject("msg","更新失败！");
 					}
 				}else{
 					modelAndView.addObject("code",0);
-					modelAndView.addObject("msg","param fail");
+					modelAndView.addObject("msg","数据不合法");
 				}
 			}else{
 				modelAndView.addObject("code",0);
-				modelAndView.addObject("msg","param error");
+				modelAndView.addObject("msg","非法请求");
 			}
 		}else{
 			modelAndView.addObject("code",0);
-			modelAndView.addObject("msg","param error");
+			modelAndView.addObject("msg","非法请求");
 		}
 		return modelAndView;
 	}
 
+	//实现会员添加
 	private ModelAndView  memberAdd(HttpServletRequest request){
 		
 		User user = new User();
-		Boolean validateStatus = true;
+		Boolean validateStatus = true;//表示验证数据是否合法
 		
 		ModelAndView modelAndView = new ModelAndView(new MappingJackson2JsonView());
 		
-		
+		//会员名
 		String username = request.getParameter("username");
 		if(username!=null && !username.trim().equals("")&&username.length()>=5){
 			user.setMemberName(username);
@@ -214,14 +245,17 @@ public class MemberController {
 			validateStatus = false;
 		}
 		
+		//昵称（非必填）
 		String nickname = request.getParameter("nickname");
 		if(nickname!=null && !nickname.trim().equals("") && nickname.length()>=5){
 			user.setNickName(nickname);
 		}
 		
+		//性别
 		Boolean sex = request.getParameter("sex")!=null?Boolean.valueOf(request.getParameter("sex")):false;
 		user.setSex(sex);
 		
+		//生日
 		if(request.getParameter("birthday")!=null && !request.getParameter("birthday").trim().equals("")){
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 			sdf.setTimeZone(TimeZone.getTimeZone("Asia/Shanghai"));
@@ -234,6 +268,7 @@ public class MemberController {
 			}
 		}
 		
+		//号码
 		String phone = request.getParameter("phone");
 		if(phone!=null && !phone.trim().equals("") && phone.length()==11){
 			user.setPhone(phone);
@@ -241,6 +276,7 @@ public class MemberController {
 			validateStatus = false;
 		}
 		
+		//邮箱
 		String email = request.getParameter("email");
 		if(email!=null){
 			String regEmail = "^([a-z0-9A-Z]+[-|\\.]?)+[a-z0-9A-Z]@([a-z0-9A-Z]+(-[a-z0-9A-Z]+)?\\.)+[a-zA-Z]{2,}$";
@@ -255,16 +291,18 @@ public class MemberController {
 			validateStatus =false;
 		}
 		
+		//QQ
 		String qq = request.getParameter("qq");
 		if(qq!=null && !qq.trim().equals("") && qq.length()>=5){
 			user.setQq(qq);
 		}
-		
+		//微信
 		String wechat = request.getParameter("wechat");
 		if(wechat!=null && !wechat.trim().equals("") && wechat.length()>=6 && wechat.length()<=20){
 			user.setWechat(wechat);
 		}
 		
+		//密码和确认密码
 		String password = request.getParameter("pass");
 		String repass = request.getParameter("repass");
 		if(password!=null && !password.trim().equals("") && password.length()>=6 && password.length()<=12 && password.equals(repass)){
@@ -273,43 +311,43 @@ public class MemberController {
 			validateStatus = false;
 		}
 		
-		String avatar = request.getParameter("avatar");
-		if(avatar!=null){
-			
-		}else{
-			
+		//头像
+		int avatar =request.getParameter("avatar")!=null?Integer.valueOf(request.getParameter("avatar")):0;
+		if(avatar==1){//男
+			user.setAvatar("/static/common/images/man_logo.png");
+		}else{//女
+			user.setAvatar("/static/common/images/female_logo.png");
 		}
 		
+		//等级
 		Integer rank = request.getParameter("rank")!=null?Integer.valueOf(request.getParameter("rank")):1;
 		user.setRankId(rank);
 		
+		//设置加入时间
 		user.setJoinTime(new Timestamp(System.currentTimeMillis()));
+		//验证通过
 		if(validateStatus){
 			Boolean addStatus = userService.addUser(user);
 			if(addStatus){
 				modelAndView.addObject("code",200);
-				modelAndView.addObject("msg","add success");
+				modelAndView.addObject("msg","添加成功");
 			}else{
 				modelAndView.addObject("code",0);
-				modelAndView.addObject("msg","add fail");
+				modelAndView.addObject("msg","添加失败");
 			}
 		}else{
 			modelAndView.addObject("code",0);
-			modelAndView.addObject("msg","param fail");
+			modelAndView.addObject("msg","数据不合法");
 		}
 		return modelAndView;
 	}
 	
-	@GetMapping("/admin/member/trashList")
-	public ModelAndView memberTrashList(){
-		ModelAndView modelAndView = new ModelAndView();
-		modelAndView.setViewName("admin/member-del");
-		return modelAndView;
-	}
-	
+	//查询会员
 	@PostMapping("/admin/member/searchListPage")
 	@ResponseBody
 	public Map<String,Object> searchListPage(HttpServletRequest request){
+		
+		//分页数
 		int pageSize = 15;
 		
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -357,6 +395,7 @@ public class MemberController {
 		return map;
 	}
 	
+	//会员删除
 	@GetMapping("/admin/member/del")
 	@ResponseBody
 	public Map<String,Object> delMember(@RequestParam("id") Integer id){
@@ -365,21 +404,21 @@ public class MemberController {
 		if(id!=null && id>0){
 			if(userService.setDelete(id)){
 				map.put("code", 200);
-				map.put("msg", "delete success");
+				map.put("msg", "删除成功");
 			}else{
 				map.put("code", 0);
-				map.put("msg", "delete fail");
+				map.put("msg", "删除失败");
 			}
 			
 		}else{
 			map.put("code", 0);
-			map.put("msg", "param error");
+			map.put("msg", "非法操作");
 			
 		}
 		return map;
 	}
 	
-	
+	//根据id获取会员信息
 	@PostMapping("/admin/member/getMember")
 	@ResponseBody
 	public Map<String,Object> getMemberById(@RequestParam("id") Integer id){
@@ -388,15 +427,15 @@ public class MemberController {
 			User user = userService.getUserById(id);
 			if(user!=null){
 				map.put("code", 200);
-				map.put("msg", "get success");
+				map.put("msg", "获取成功");
 				map.put("member", user);
 			}else{
 				map.put("code", 0);
-				map.put("msg", "get fail");
+				map.put("msg", "获取失败");
 			}
 		}else{
 			map.put("code", 0);
-			map.put("msg", "param error");
+			map.put("msg", "参数有误");
 		}
 		
 		return map;

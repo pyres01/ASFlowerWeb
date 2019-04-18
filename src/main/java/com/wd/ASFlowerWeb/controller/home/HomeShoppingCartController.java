@@ -25,6 +25,7 @@ import com.wd.ASFlowerWeb.service.ShoppingCartService;
 import lombok.extern.slf4j.Slf4j;
 
 /**
+ * 购物车控制器
  * @author 韦丹
  *
  * 2019年1月10日
@@ -36,22 +37,26 @@ public class HomeShoppingCartController {
 	
 	
 	@Autowired
-	private ShoppingCartService scartService;
+	private ShoppingCartService scartService;	//购物车service
 	@Autowired
-	private NmShoppingService nmsService;
+	private NmShoppingService nmsService;		//商品service
 	
+	//购物车页面
 	@GetMapping("/home/shoppingCart")
 	public ModelAndView index(HttpServletRequest req){
 		ModelAndView mav = new ModelAndView("home/cart");
+		//如果还没登录
 		if(!checkLogin(req)){
-			mav.addObject("needLogin", true);
+			mav.addObject("needLogin", true);//告诉页面用户需要登录
 		}else{
 			mav.addObject("needLogin", false);
 			User member = (User) req.getSession().getAttribute("member");
+			//根据登录会员的id获取购物车内容
 			List<ShoppingCart> cartList = scartService.getByUid(member.getId());
 			Map<Integer,Object> shopInfo = new HashMap<>();
 			for (ShoppingCart shoppingCart : cartList) {
 				NmShopping S = nmsService.getById(shoppingCart.getSid());
+				//商品图片仅取第一张，将多张图片src拼接成的字符串拆分切割
 				S.setShoppingImg(S.getShoppingImg().split("\\|")[0]);
 				shopInfo.put(shoppingCart.getId(), S);
 			}
@@ -61,6 +66,7 @@ public class HomeShoppingCartController {
 		return mav;
 	}
 	
+	//加入购物车
 	@PostMapping("/home/addCart")
 	@ResponseBody
 	public Map<String,Object> addCart(HttpServletRequest req,Integer sid,Integer count){
@@ -93,6 +99,7 @@ public class HomeShoppingCartController {
 		return map;
 	}
 	
+	//更新购物车，如点击了数量加减按钮
 	@PostMapping("/home/updateCart")
 	@ResponseBody
 	public Map<String,Object> updateCart(HttpServletRequest request){
@@ -112,6 +119,7 @@ public class HomeShoppingCartController {
 		return null;
 	}
 	
+	//删除购物车商品
 	@RequestMapping("/home/delCarti")
 	@ResponseBody
 	public Map<String,Object> delCarti(HttpServletRequest req,Integer id){
@@ -119,7 +127,7 @@ public class HomeShoppingCartController {
 			Map<String,Object> map = new HashMap<>();
 			if(id == null || id<0){
 				map.put("code",0);
-				map.put("msg", "param error");
+				map.put("msg", "参数有误");
 				
 			}else{
 				if(scartService.delete(id)){
@@ -135,6 +143,7 @@ public class HomeShoppingCartController {
 		return null;
 	}
 	
+	//清空购物车
 	@RequestMapping("/home/delCart")
 	@ResponseBody
 	public Map<String,Object> delCart(HttpServletRequest req){
@@ -153,6 +162,7 @@ public class HomeShoppingCartController {
 		return null;
 	}
 	
+	//判断会员是否登录
 	private boolean checkLogin(HttpServletRequest req){
 		HttpSession session = req.getSession();
 		User member = (User) session.getAttribute("member");

@@ -18,24 +18,28 @@ import com.wd.ASFlowerWeb.service.NmOrderService;
 
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * 后台订单控制器
+ * @author 韦丹
+ *
+ */
+
 @Controller
 @Slf4j
 public class OrderController {
 	
 	@Autowired 
-	private NmOrderService nmOrderService;
+	private NmOrderService nmOrderService;	//订单service
 	
 	@Autowired 
-	private NmOrderItemService nmOrderItemService;
+	private NmOrderItemService nmOrderItemService; //订单项service
 	
 	@Autowired
-	private OrderAndItemViewMapper oaivMapper;
+	private OrderAndItemViewMapper oaivMapper;	//订单-订单项视图
 	
-	@Autowired
-	private NmOrderItemService noiServer;
 	
 	/**
-	 * 后台订单列表
+	 * 待发货
 	 * @param req
 	 * @return
 	 */
@@ -48,6 +52,7 @@ public class OrderController {
 		return mav;
 	}
 	
+	//获取已发货，只写了接口，暂无用到
 	@PostMapping("/admin/order/Post")
 	public ModelAndView post(HttpServletRequest req){
 		ModelAndView mav = new ModelAndView(new MappingJackson2JsonView());
@@ -56,7 +61,7 @@ public class OrderController {
 		boolean update = true;
 		try{
 			order_item_id = Integer.valueOf(req.getParameter("oid"));
-			if(!noiServer.updateStatus(order_item_id, 2)){
+			if(!nmOrderItemService.updateStatus(order_item_id, 2)){
 				update = false;
 			}
 		}catch(Exception e){
