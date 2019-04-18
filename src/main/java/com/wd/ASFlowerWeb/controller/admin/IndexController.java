@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
  *
  * 2019年1月9日
  * 
- * @desc 后台Index控制器
+ * @desc 后台Index（首页）控制器
  *
  */
 @Controller
@@ -27,7 +27,7 @@ public class IndexController {
 		return "admin/welcome";
 	}
 	
-	//
+	//菜单处图标字体
 	@GetMapping("/admin/unicode")
 	public String unicode(){
 		return "admin/unicode";

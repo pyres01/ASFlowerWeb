@@ -35,4 +35,8 @@ public class NmOrderItemService {
 		return mapper.setReamrk(id, remark) == 1?true:false;
 	}
 	
+	public boolean updateStatus(Integer id,Integer status){
+		return mapper.updateStatus(id, status) == 1?true:false;
+	}
+	
 }

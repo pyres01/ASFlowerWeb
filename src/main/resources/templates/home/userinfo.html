@@ -27,7 +27,7 @@
 	
 	<div class="bg1"></div>
 	<div class="order">
-		<div class="myorder">
+		<div class="myorder" onclick="toOrderList();">
 			<img src="/static/home/images/allOrder.png" alt="">
 			<h2>我的订单</h2>
 		</div>
@@ -35,19 +35,19 @@
 		<div>
 			<ul>
 				<li>
-					<a href="/home/order/index">
+					<a href="/home/order/ulist">
 						<img src="/static/home/images/inService.png" alt="">
 						<p>服务中<span>(0)</span></p>
 					</a>
 				</li>
 				<li>
-					<a href="/home/order/index?t=-1">
+					<a href="/home/order/ulist">
 						<img src="/static/home/images/waitForPay.png" alt="">
 						<p>待付款<span>(0)</span></p>
 					</a>
 				</li>
 				<li>
-					<a href="#">
+					<a href="/home/order/ulist">
 						<img src="/static/home/images/remove.png" alt="">
 						<p>已取消<span>(0)</span></p>
 					</a>
@@ -150,5 +150,10 @@
 <script src='/static/home/js/jquery.min.js'></script>
 <script type="text/javascript" src="/static/home/js/layui/layui.js" charset="utf-8"></script>
 <script src='/static/home/js/userinfo.js'></script>
+<script>
+function toOrderList(){
+	location.href="/home/order/ulist";
+}
+</script>
 </body>
 </html>

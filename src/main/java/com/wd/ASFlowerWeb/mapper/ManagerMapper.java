@@ -12,7 +12,7 @@ import org.apache.ibatis.annotations.Update;
 import com.wd.ASFlowerWeb.entity.Manager;
 
 /**
- * @author 风微轻
+ * @author 韦丹
  *
  * 2019年1月6日
  *

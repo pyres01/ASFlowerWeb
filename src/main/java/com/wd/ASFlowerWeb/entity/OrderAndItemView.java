@@ -3,11 +3,13 @@ package com.wd.ASFlowerWeb.entity;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * @author 若尘
+ * @author 韦丹
  *
  * 2019年3月9日
  *
@@ -15,9 +17,10 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class OrderAndItemView {
-
+	private String buyer;
 	private Integer order_id;
 	private Integer order_uid;
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm",timezone="GMT+8")
 	private Timestamp order_createTime;
 	private String order_serialNo;
 	private BigDecimal order_total;

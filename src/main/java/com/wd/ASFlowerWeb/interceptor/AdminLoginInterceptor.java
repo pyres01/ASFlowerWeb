@@ -8,7 +8,7 @@ import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
 /**
- * @author 风微轻
+ * @author 韦丹
  *
  * 2019年1月7日
  * @desc 登陆拦截器

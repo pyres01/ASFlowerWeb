@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 import com.wd.ASFlowerWeb.mapper.SiteinfoMapper;
 
 /**
- * @author 风微轻
+ * @author 韦丹
  *
  * 2019年1月6日
  *

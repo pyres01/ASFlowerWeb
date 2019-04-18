@@ -5,18 +5,22 @@
 <title>支付结果</title>
 </head>
 <body>
-<h2 th:text="${result}"></h2>
+<strong>code:</strong><span th:text="${code}" id="pays"></span><br>
+<strong>msg:</strong><span th:text="${msg}"></span><br>
 </body>
 
 <script src='/static/home/js/jquery.min.js'></script>
 <script>
-$(function(){
-	var h2text = $('h2').text();
-	sleep(3000);
-	if(h2text == '支付成功！'){
-		window.location.href = '/home/user/userinfo';
-	}
-});
+var paySuc = document.getElementById('pays').text();
+if(paySuc==200){
+	var i=5;
+	var timer = setInterval(function(){
+	    i--;
+	    if(i ==1){
+	        window.location.href="/home/order/ulist";
+	    }
+	},1000);
+}
 
 </script>
 </html>

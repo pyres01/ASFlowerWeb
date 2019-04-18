@@ -53,7 +53,7 @@
 						<input type="hidden" th:name="'i_num'+${iterStat.index+1}" th:value="${item.buynum}"/>
 					</div>
 				</div>
-				<p>买家留言:<input type="text" class="i_remark" placeholder='选填：填写内容已和卖家协商确认'></p>
+				<p>买家留言:<input type="text" th:name="i_remark+${iterStat.index+1}" placeholder='选填：填写内容已和卖家协商确认'></p>
 			</li>
 			
 		</ul>

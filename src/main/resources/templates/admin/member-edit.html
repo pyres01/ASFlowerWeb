@@ -102,6 +102,9 @@
                   <input type="text" id="L_wechat" name="wechat"  lay-verify="wechat"
                   autocomplete="off" class="layui-input">
               </div>
+              <div class="layui-form-mid layui-word-aux">
+                  6到20个字符
+              </div>
           </div>
           <div class="layui-form-item">
               <label for="L_pass" class="layui-form-label password-label">
@@ -152,9 +155,7 @@
           <div class="layui-form-item">
               <label for="L_repass" class="layui-form-label">
               </label>
-              <button  class="layui-btn" lay-filter="add" lay-submit="">
-                  增加
-              </button>
+              <button  class="layui-btn" lay-filter="add" lay-submit="">保存 </button>
           </div>
       </form>
     </div>
@@ -169,6 +170,8 @@
       }else{
     	  $('.password-label>span').hide();
     	  $('.repassword-label>span').hide();
+    	  $('.password-label').next().find('input').removeAttr('required');
+    	  $('.repassword-label').next().find('input').removeAttr('required');
     	  var op =3;
       }
       var form=layer=laydate=null;
@@ -198,7 +201,7 @@
         //监听提交
         form.on('submit(add)', function(data){
           editMember(data.field);
-          
+          return false;
         });
         
         
@@ -256,14 +259,10 @@
         	  dataType:'json',
         	  data:data,
         	  success:function(data){
-        		  layer.alert("保存成功", {icon: 6},function () {
-                      // 获得frame索引
-                      var index = parent.layer.getFrameIndex(window.name);
-                      //关闭当前frame
-                      parent.layer.close(index);
-                  });
+        		  layer.alert("保存成功", {icon: 6});
+        		  parent.window.reload();
         	  }
-          })
+          });
       }
       function init(){
     	  if(astatus=="f"){

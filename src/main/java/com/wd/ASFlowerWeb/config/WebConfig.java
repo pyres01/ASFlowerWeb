@@ -14,7 +14,7 @@ import com.wd.ASFlowerWeb.interceptor.HomeLoginInterceptor;
  *
  * 2019年1月7日
  * 
- * @desc 网站配置文件，使用拦截器用到
+ * @desc 项目自定义配置文件，使用拦截器用到
  * 
  * @remark springboot 1.5 靠重写WebMvcConfigurerAdapter， 2.0后靠实现WebMvcConfigurer接口
  */
@@ -29,11 +29,11 @@ public class WebConfig implements  WebMvcConfigurer {
 	 */
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
-		//用户拦截规则
+		//用户拦截规则 --前台用户信息相关，未登录拦截
 		registry.addInterceptor(new HomeLoginInterceptor()).addPathPatterns("/home/user/**").excludePathPatterns(Arrays.asList("/static/**","/templates/**","/home/login"));
-		//订单拦截规则
+		//订单拦截规则 --前台用户订单相关，未登录拦截
 		registry.addInterceptor(new HomeLoginInterceptor()).addPathPatterns("/home/order/**").excludePathPatterns(Arrays.asList("/static/**","/templates/**","/home/login"));
-		//后台拦截规则
+		//后台拦截规则 --后台，除登录外，用户未登录拦截
 		registry.addInterceptor(new AdminLoginInterceptor()).addPathPatterns("/admin/**").excludePathPatterns(Arrays.asList("/static/**","/templates/**","/admin/login","/admin/toLogin"));
 		WebMvcConfigurer.super.addInterceptors(registry);
 	}

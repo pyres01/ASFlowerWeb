@@ -144,6 +144,8 @@
       if(op==1){
     	  $('.password-label>span').hide();
     	  $('.repassword-label>span').hide();
+    	  $('.password-label').next().find('input').removeAttr('required');
+    	  $('.repassword-label').next().find('input').removeAttr('required');
     	  loadUpdateManager($('#updateId').text());
       }
       
@@ -158,20 +160,31 @@
         laydate.render({
         	elem:'#L_birthday'
         });
-        //自定义验证规则
-        form.verify({
-          nikename: function(value){
-            if(value.length < 5){
-              return '昵称至少得5个字符啊';
-            }
-          }
-          ,pass: [/(.+){6,12}$/, '密码必须6到12位']
-          ,repass: function(value){
-              if($('#L_pass').val()!=$('#L_repass').val()){
-                  return '两次密码不一致';
+        if(op==1){
+        	form.verify({
+                nikename: function(value){
+                  if(value.length < 5){
+                    return '昵称至少得5个字符啊';
+                  }
+                }
+        	});
+        }else{
+        	//自定义验证规则
+            form.verify({
+              nikename: function(value){
+                if(value.length < 5){
+                  return '昵称至少得5个字符啊';
+                }
               }
-          }
-        });
+              ,pass: [/(.+){6,12}$/, '密码必须6到12位']
+              ,repass: function(value){
+                  if($('#L_pass').val()!=$('#L_repass').val()){
+                      return '两次密码不一致';
+                  }
+              }
+            });
+        }
+        
 
         //监听提交
         form.on('submit(add)', function(data){
@@ -191,6 +204,7 @@
         	  		break;
         	  }
           }
+          return false;
         });
         
         
@@ -240,7 +254,7 @@
     			 
     		  });
     	  }else{
-    		  //id有误
+    		  alert('操作有误！'); //id有误
     	  }
       }
       function addManager(formData){

@@ -29,6 +29,7 @@ import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 import com.wd.ASFlowerWeb.entity.NmOrder;
 import com.wd.ASFlowerWeb.entity.NmOrderItem;
 import com.wd.ASFlowerWeb.entity.NmShopping;
+import com.wd.ASFlowerWeb.entity.OrderAndItemView;
 import com.wd.ASFlowerWeb.entity.ReceAddress;
 import com.wd.ASFlowerWeb.entity.ShoppingCart;
 import com.wd.ASFlowerWeb.entity.User;
@@ -174,13 +175,16 @@ public class HomeNmOrderController {
 		ModelAndView mav = new ModelAndView("home/payresult");
 		boolean can_pay = true;
 		User buyer = (User) req.getSession().getAttribute("member");
+		
+		String errMsg = "";
+		boolean payResult = true;
 		try{
 			Integer order_count = Integer.valueOf(req.getParameter("order_count"));
 			if(order_count>0){
 				BigDecimal total = new BigDecimal("0");
 				for(int i=1;i<=order_count;i++){
 					NmShopping nmshop = nmsService.getById(Integer.valueOf(req.getParameter("i_id"+i)));
-					if(nmshop.getStore()<Integer.valueOf(req.getParameter("i_id"+i))){
+					if(nmshop.getStore()<Integer.valueOf(req.getParameter("i_num"+i))){
 						can_pay = false;
 						break;
 					}
@@ -210,6 +214,7 @@ public class HomeNmOrderController {
 					order.setReceiver(receAddr.getReceiver());
 					order.setPhone(receAddr.getPhone());
 					order.setAddress(receAddr.getAddress());
+					order.setStatus(1);
 					int orderId = oService.save(order);
 					if(orderId>0){
 						for(int i=1;i<=order_count;i++){
@@ -222,7 +227,8 @@ public class HomeNmOrderController {
 							item.setPrice(nmshop.getAsPrice());
 							item.setCount(Integer.valueOf(req.getParameter("i_num"+i)));
 							item.setSubTotal(item.getPrice().multiply(new BigDecimal(String.valueOf(item.getCount()))));
-							item.setStatus(0);
+							item.setStatus(1);
+							item.setRamark(req.getParameter("i_remark"+i));
 							item.setOid(orderId);
 							serialNo_pre = sdf.format(MyUtil.getCurrentTimestamp());
 							serialNo_ext = String.valueOf(Math.abs(new Random().nextLong()));
@@ -236,20 +242,90 @@ public class HomeNmOrderController {
 							cartService.delete(Integer.valueOf(req.getParameter("i_cid"+i)));
 							
 						}
+					}else{
+						payResult = false;
+						errMsg = "创建订单失败！";
 					}
+				}else{
+					payResult = false;
+					errMsg = "部分商品库存不足，创建订单失败！";
 				}
 				
+			}else{
+				payResult = false;
+				errMsg = "非法操作！";
 			}
 			
 		}catch (Exception e) {
 			e.printStackTrace();
 			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+			payResult = false;
 		}
 		
-		
+		if(payResult){
+			mav.addObject("code", 200);
+			mav.addObject("msg", "支付成功！");
+		}else{
+			mav.addObject("code", 0);
+			mav.addObject("msg", errMsg);
+		}
 		
 		return mav;
 	}
+	
+	
+	@GetMapping("/home/order/ulist")
+	public ModelAndView ulist(HttpServletRequest req,HttpServletResponse resp) throws IOException{
+		ModelAndView mav = new ModelAndView("home/order");
+		HttpSession session = req.getSession();
+		User member = (User)session.getAttribute("member");
+		Integer s = null;
+		try{
+			s = Integer.valueOf(req.getParameter("s"));
+		}catch(Exception e){
+			s = null;
+		}
+		if(s==null){
+			List<OrderAndItemView> oais = oaivMapper.selectAllByUid(member.getId());
+			mav.addObject("allOlsts", oais);
+		}else 
+		/*else if(s==-1){//已取消
+			
+		}else if(s==0){//待付款
+			
+		}else if(s==1){//已付款、待发货
+			mav = new ModelAndView(new MappingJackson2JsonView());
+			List<OrderAndItemView> oais = oaivMapper.selectAllByUidAndStatus(member.getId(), 1);
+			mav.addObject("data", oais);
+			mav.addObject("code", 200);
+			mav.addObject("msg", "");
+		}else if(s==2){//待收货
+			
+		}else if(s==3){//已收货、待评价
+			
+		}else if(s==4){//已评价、待售后
+			
+		}*/
+		
+		if(s==-1 || s==0 || s==1 || s==2 || s==3 || s==4){
+			mav = new ModelAndView(new MappingJackson2JsonView());
+			List<OrderAndItemView> oais = oaivMapper.selectAllByUidAndStatus(member.getId(), s);
+			mav.addObject("data", oais);
+			mav.addObject("code", 200);
+			mav.addObject("msg", "");
+		}
+		return mav;
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	private boolean checkLogin(HttpServletRequest req){
 		HttpSession session = req.getSession();

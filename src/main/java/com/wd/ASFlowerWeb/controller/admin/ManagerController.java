@@ -40,10 +40,10 @@ import lombok.extern.slf4j.Slf4j;
 public class ManagerController {
 	
 	@Autowired
-	private ManagerService managerService;
+	private ManagerService managerService;	//管理员service
 	
 	/**
-	 * @desc 管理员列表页
+	 * @desc 管理员列表页|正常使用的
 	 * @return
 	 */
 	@GetMapping("/admin/managerNormalIndex")
@@ -69,8 +69,8 @@ public class ManagerController {
 	public ModelAndView editManager(HttpServletRequest request){
 		
 		/**
-		 * op=null或者未设置，表示加载新增管理员页面，并置op为0，实现新增通知，ajax传入op为2实现新增
-		 * op=1表示加载修改管理员页面，并置op为1，通知前端获取需修改管理员数据，实现修改通知，ajax中传入op为3实现修改
+		 * op=null或者未设置，表示加载新增管理员页面，并（置op为0）在页面中设置参数，页面判断参数值是新增操作，ajax传入op为2实现新增
+		 * op=1表示加载修改管理员页面，并（置op为1）在页面中设置参数，页面判断参数值是修改操作，然后获取需修改管理员数据，ajax中传入op为3实现修改
 		 * op=2  实现新增
 		 * op=3实现修改
 		 */
@@ -89,8 +89,10 @@ public class ManagerController {
 				
 				Integer id = 0;
 				if(request.getParameter("id")!=null){
+					//获取要修改的管理员id，且id应大于0
 					id = Math.max(id,Integer.valueOf(request.getParameter("id")));
 				}
+				//保存到页面
 				modelAndView.addObject("op",1);
 				modelAndView.addObject("id",id);
 			}else if(op==2){
@@ -114,7 +116,7 @@ public class ManagerController {
 				
 				Boolean validateStatus = true;
 				Manager manager = new Manager();
-				//简单处理数据，完善项目可添加xss过滤以及白名单过滤和去空格
+				//简单处理数据
 				
 				//名称
 				if(name!=null && name.trim().length()>5){
@@ -280,9 +282,10 @@ public class ManagerController {
 		        	manager.setRank(rank);
 		        }
 		        		        
-		        
+		        //更新管理员信息
 				Boolean addStatus =  managerService.updateManagerById(manager);
 				
+				//如果更新失败，前台提示更新失败
 				if(!addStatus){
 					modelAndView.addObject("code",0);
 					modelAndView.addObject("msg", "更新失败");
@@ -291,6 +294,7 @@ public class ManagerController {
 				return modelAndView;
 				
 			}else{
+				//默认是显示添加管理员页面
 				modelAndView = new ModelAndView("admin/manager-normal-edit");
 				modelAndView.addObject("op",0);
 			}
@@ -300,7 +304,7 @@ public class ManagerController {
 	}
 	
 	/**
-	 * @desc 加载管理员列表（未删除的）
+	 * @desc 加载管理员列表（管理员信息）（未删除的）
 	 * @param request
 	 * @return
 	 */
@@ -322,7 +326,7 @@ public class ManagerController {
 	}
 	
 	/**
-	 * @desc 加载删除的管理员列表
+	 * @desc 加载删除的管理员列表（管理员信息）
 	 * @param request
 	 * @return
 	 */
@@ -360,6 +364,7 @@ public class ManagerController {
 		if(request.getParameter("id")!=null){
 			id = Integer.valueOf(request.getParameter("id"));
 		}
+		//id<=0返回获取失败，否则去获取
 		if(id<=0){
 			map.put("code", 0);
 			map.put("msg", "获取失败");
@@ -382,7 +387,8 @@ public class ManagerController {
 		Map<String,Object> map = new HashMap<>();
 		map.put("code", 200);
 		map.put("msg", "删除成功");
-		log.info(id.toString());
+		
+		//如果id为空或者删除失败
 		if(id==null ||!managerService.delManager(id)){
 			map.put("code", 0);
 			map.put("msg", "删除失败");
@@ -434,7 +440,7 @@ public class ManagerController {
 	}
 	
 	/**
-	 * @desc 管理员修改密码
+	 * @desc 管理员列表的操作的修改密码   //不实现
 	 * @param request
 	 * @return
 	 */
