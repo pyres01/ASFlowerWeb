@@ -171,6 +171,36 @@
 			}
 		});
 		
+		$('#delBtn').click(function(){
+			var l = $('main').find('input[type=checkbox]:checked').length;
+			if(!l){
+				alert('请至少勾选一个商品');
+			}
+			var arr = [];
+			$.each($('main').find('input[type=checkbox]:checked'),function(i,v){
+				arr.push($(v).parent().prev().val());
+			});
+			$.ajax({
+				url:'/home/delCarti',
+				type:'POST',
+				dataType:'json',
+				data:{ks:arr},
+				traditional:true,
+				success:function(res){
+					if(res.code==200){
+						alert('删除成功！');
+						$('main').find('input[type=checkbox]:checked').parent().parent().remove();
+						$('#totalMoney').text(0);
+					}else{
+						alert('删除失败');
+					}
+					
+				},
+				error:function(handle){
+					alert('删除失败');
+				}
+			})
+		});
 	</script>
     </body>
 </html>

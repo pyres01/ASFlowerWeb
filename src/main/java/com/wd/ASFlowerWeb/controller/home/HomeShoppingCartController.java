@@ -78,18 +78,30 @@ public class HomeShoppingCartController {
 		}else{
 			if(sid>0 && count>0){
 				User member = (User) req.getSession().getAttribute("member");
-				ShoppingCart cart = new ShoppingCart();
-				cart.setUid(member.getId());
-				cart.setSid(sid);
-				cart.setCount(count);
-				if(scartService.insert(cart)){
+				ShoppingCart tmplCart = scartService.getByUidASid(member.getId(),sid);
+				
+				boolean addStatus = false;
+				if(tmplCart!=null){
+					if(scartService.update(tmplCart.getId(), tmplCart.getCount()+count)){
+						addStatus = true;
+					}
+				}else{
+					ShoppingCart cart = new ShoppingCart();
+					cart.setUid(member.getId());
+					cart.setSid(sid);
+					cart.setCount(count);
+					if(scartService.insert(cart)){
+						addStatus = true;
+					}
+				}
+				
+				if(addStatus){
 					map.put("code", 200);
 					map.put("msg", "亲，在购物车等您哦^_^");
 				}else{
 					map.put("code", 0);
 					map.put("msg", "添加失败了=_=!");
 				}
-				log.info(cart.toString());
 			}else{
 				map.put("code", 0);
 				map.put("msg", "添加失败了=_=!");
@@ -122,21 +134,32 @@ public class HomeShoppingCartController {
 	//删除购物车商品
 	@RequestMapping("/home/delCarti")
 	@ResponseBody
-	public Map<String,Object> delCarti(HttpServletRequest req,Integer id){
+	public Map<String,Object> delCarti(HttpServletRequest req){
 		if(this.checkLogin(req)){
 			Map<String,Object> map = new HashMap<>();
-			if(id == null || id<0){
+			
+			String[] idsStrArr = req.getParameterValues("ks");
+			if(idsStrArr==null || idsStrArr.length==0){
 				map.put("code",0);
 				map.put("msg", "参数有误");
-				
 			}else{
-				if(scartService.delete(id)){
-					map.put("code",200);
-					map.put("msg", "删除成功");
-				}else{
-					map.put("code",0);
-					map.put("msg", "删除失败");
+				
+				for (String item : idsStrArr) {
+					try{
+						if(scartService.delete(Integer.valueOf(item))){
+							continue;
+						}else{
+							map.put("code",0);
+							map.put("msg", "部分删除失败，请联系管理员");
+						}
+					}catch(Exception e){
+						map.put("code",0);
+						map.put("msg", "检测到非法参数");
+					}
+					
 				}
+				map.put("code",200);
+				map.put("msg", "删除成功");
 			}
 			return map;
 		}

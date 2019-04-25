@@ -24,6 +24,10 @@ public interface ShoppingCartMapper {
 	//查询用户购物车
 	@Select("SELECT * FROM shoppingcart where uid = ${uid} AND id =${id}")
 	ShoppingCart getByid(@Param("uid")Integer uid,@Param("id")Integer id);
+	
+	//查询用户某商品的购物车
+	@Select("SELECT * FROM shoppingcart where uid = ${uid} AND sid =${sid} limit 1")
+	ShoppingCart getByUidASid(@Param("uid")Integer uid,@Param("sid")Integer sid);
 		
 	//查询用户购物车id列表
 	@Select("SELECT id FROM shoppingcart where uid = ${uid} ORDER BY id DESC")

@@ -26,8 +26,13 @@ public class ShoppingCartService {
 		return mapper.getByUid(uid);
 	}
 	
+	//根据用户Id查询购物车
 	public List<Integer> getIdsByUid(Integer uid){
 		return mapper.getIdsByUid(uid);
+	}
+	//查询某用户商品已存在购物车
+	public ShoppingCart getByUidASid(Integer uid,Integer sid){
+		return mapper.getByUidASid(uid, sid);
 	}
 	
 	public ShoppingCart getByid(Integer uid,Integer id){
