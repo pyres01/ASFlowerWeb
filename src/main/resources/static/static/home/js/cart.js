@@ -75,3 +75,8 @@ $('.count .choice .bg').on('click', function(event) {
 		$('.imfor .choice .bg').hide();
 	}
 });
+
+//编辑
+$('#editBtn').on('click', function(event) {
+	$('#delBtn').show();
+});

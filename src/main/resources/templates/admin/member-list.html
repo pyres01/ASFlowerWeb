@@ -88,8 +88,21 @@
       function member_del(obj,id){
           layer.confirm('确认要删除吗？',function(index){
               //发异步删除数据
-              $(obj).parents("tr").remove();
-              layer.msg('已删除!',{icon:1,time:1000});
+              $.ajax({
+            	  url:'/admin/member/del',
+            	  type:'POST',
+            	  dataType:'json',
+            	  data:{id:id},
+            	  success:function(res){
+            		  $(obj).parents("tr").remove();
+                      layer.msg('已删除!',{icon:1,time:1000});
+                      $('#userNum').text($('#userNum').text()-1);
+            	  },
+            	  error:function(xhr){
+            		  layer.msg('删除失败!',{icon:2,time:1000});
+            	  }
+              });
+              
           });
       }
 

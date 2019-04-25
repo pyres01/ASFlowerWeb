@@ -73,6 +73,7 @@ public class Mail {
     				map.put("msg", "member exist");
     			}
     		}else{
+    			//找回密码
     			User user = userService.getUserByEmail(email);
     			if(user!= null){
     				String checkCode = String.valueOf(new Random().nextInt(899999) + 100000);

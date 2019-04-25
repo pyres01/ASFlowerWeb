@@ -156,7 +156,7 @@
 			  </div>
 			  <label class="layui-form-label">上架时间：</label>
 			  <div class="layui-input-inline">
-			  	<input type="text" name="saleTime" required lay-verify="required"  autocomplete="off" class="layui-input layui-input-inline" id="saleTime" th:attr="value=${editNmShopping!=null?#dates.format(editNmShopping.onShelveTime,'yyyy-MM-dd HH:mm:ss'):''}">
+			  	<input type="text" name="saleTime" required   autocomplete="off" class="layui-input" id="onSaleTime" th:attr="value=${editNmShopping!=null?#dates.format(editNmShopping.onShelveTime,'yyyy-MM-dd HH:mm:ss'):''}">
 			  </div>
 			</div>
 			<div class="layui-form-item">
@@ -371,9 +371,11 @@ layui.use(['upload','layedit','laydate'], function(){
   
   
   laydate.render({
-	  elem:'#saleTime',
+	  elem:'#onSaleTime',
 	  type:'datetime',
+	  trigger:'click'
   });
+  
   layedit.set({
 	  uploadImage: {
 	    url: '/admin/imgUpLoad' //接口url
@@ -461,7 +463,7 @@ layui.use(['upload','layedit','laydate'], function(){
   $('#saveShoppingBtn').on('click',function(){
 	  var op = $('input[name=op]').val();
 	  var sid = $('input[name=sid]').val();
-	  var type = $('input[name=type]').val();
+	  var type = $('input[name=type]:checked').val();
 	  var title = $('input[name=title]').val();
 	  var introduction = $('input[name=introduction]').val();
 	  var asPrice = $('input[name=asPrice]').val();

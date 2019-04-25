@@ -38,6 +38,10 @@ public class UserService {
 		return userMapper.setDelete(id) == 1?true:false;
 	}
 	
+	public boolean delete(Integer id){
+		return userMapper.delete(id) == 1?true:false;
+	}
+	
 	public boolean addUser(User user){
 		return userMapper.insert(user)==1?true:false;
 	}

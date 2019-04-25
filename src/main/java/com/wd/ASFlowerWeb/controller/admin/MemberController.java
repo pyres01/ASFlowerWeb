@@ -396,13 +396,13 @@ public class MemberController {
 	}
 	
 	//会员删除
-	@GetMapping("/admin/member/del")
+	@PostMapping("/admin/member/del")
 	@ResponseBody
 	public Map<String,Object> delMember(@RequestParam("id") Integer id){
 		Map<String,Object> map = new HashMap<>();
 		
 		if(id!=null && id>0){
-			if(userService.setDelete(id)){
+			if(userService.delete(id)){
 				map.put("code", 200);
 				map.put("msg", "删除成功");
 			}else{

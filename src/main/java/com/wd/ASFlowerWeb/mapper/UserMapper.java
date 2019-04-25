@@ -41,7 +41,7 @@ public interface UserMapper {
 	Integer update(User user);
 	
 	@Delete("DELETE FROM user where id = ${id}")
-	Integer delete();
+	Integer delete(@Param("id")Integer id);
 	
 	@Select("SELECT COUNT(*) FROM user")
 	Integer count();

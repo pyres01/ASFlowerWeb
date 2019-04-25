@@ -11,7 +11,7 @@ import org.springframework.web.servlet.ModelAndView;
  * @author 韦丹
  *
  * 2019年1月7日
- * @desc 登陆拦截器
+ * @desc 定义前台登陆拦截器
  *
  */
 public class HomeLoginInterceptor implements HandlerInterceptor{
