@@ -239,8 +239,16 @@ public class MemberController {
 		
 		//会员名
 		String username = request.getParameter("username");
+		boolean isExist = false;
 		if(username!=null && !username.trim().equals("")&&username.length()>=5){
-			user.setMemberName(username);
+			User tmplUser = userService.getUserByMName(username);
+			if(tmplUser!=null){
+				validateStatus = false;
+				isExist = true;
+			}else{
+				user.setMemberName(username);
+			}
+			
 		}else{
 			validateStatus = false;
 		}
@@ -339,6 +347,11 @@ public class MemberController {
 			modelAndView.addObject("code",0);
 			modelAndView.addObject("msg","数据不合法");
 		}
+		if(isExist){
+			modelAndView.addObject("code",0);
+			modelAndView.addObject("msg","用户已存在");
+		}
+		
 		return modelAndView;
 	}
 	

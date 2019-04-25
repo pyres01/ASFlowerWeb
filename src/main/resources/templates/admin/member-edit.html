@@ -42,7 +42,7 @@
                   autocomplete="off" class="layui-input">
               </div>
               <div class="layui-form-mid layui-word-aux">
-                  <span class="x-red">*</span>将会成为登入名
+                  <span class="x-red">*</span>将会成为登入名（唯一）
               </div>
           </div>
           <div class="layui-form-item">
@@ -76,6 +76,9 @@
                   <input type="text" id="L_phone" name="phone" required="" lay-verify="phone"
                   autocomplete="off" class="layui-input">
               </div>
+              <div class="layui-form-mid layui-word-aux">
+                  11位长度
+              </div>
           </div>
           <div class="layui-form-item">
               <label for="L_email" class="layui-form-label">
@@ -92,6 +95,9 @@
               <div class="layui-input-inline">
                   <input type="text" id="L_qq" name="qq"  lay-verify="qq"
                   autocomplete="off" class="layui-input">
+              </div>
+              <div class="layui-form-mid layui-word-aux">
+                  5到12个数字
               </div>
           </div>
           <div class="layui-form-item">
@@ -258,9 +264,14 @@
         	  type:'POST',
         	  dataType:'json',
         	  data:data,
-        	  success:function(data){
-        		  layer.alert("保存成功", {icon: 6});
-        		  parent.window.reload();
+        	  success:function(res){
+        		  if(res.code ==200){
+        			  layer.alert("保存成功", {icon: 6});
+            		  parent.window.reload();
+        		  }else{
+        			  layer.msg(res.msg);
+        		  }
+        		  
         	  }
           });
       }
