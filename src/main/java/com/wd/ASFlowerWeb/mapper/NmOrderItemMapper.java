@@ -28,5 +28,8 @@ public interface NmOrderItemMapper {
 	Integer setReamrk(@Param("id")Integer id,@Param("remark")String remark);
 	
 	@Update("UPDATE nmorderitem SET status = ${status} WHERE id = ${id}")
-	Integer updateStatus(Integer id, Integer status);
+	Integer updateStatus(@Param("id")Integer id, @Param("status")Integer status);
+	
+	@Select("SELECT * FROM nmorderitem WHERE id = ${id} limit 1")
+	NmOrderItem getByid(@Param("id")Integer id);
 }

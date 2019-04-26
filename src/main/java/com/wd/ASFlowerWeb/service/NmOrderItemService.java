@@ -30,6 +30,9 @@ public class NmOrderItemService {
 	public List<NmOrderItem> getByOid(Integer oid){
 		return mapper.getByOid(oid);
 	}
+	public NmOrderItem getByid(Integer id){
+		return mapper.getByid(id);
+	}
 	
 	public boolean setReamrk(Integer id,String remark){
 		return mapper.setReamrk(id, remark) == 1?true:false;

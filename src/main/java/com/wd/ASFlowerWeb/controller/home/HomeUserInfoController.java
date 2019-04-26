@@ -276,7 +276,7 @@ public class HomeUserInfoController {
 			}
 		}
 		User member = userService.getUserByMName(username);
-		if(member==null || !member.getPassword().equals(password)){
+		if(member.getStatus()==0 || member==null || !member.getPassword().equals(password)){
 			checkStatus = false;
 		}
 		if(!checkStatus){

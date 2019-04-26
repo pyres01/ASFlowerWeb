@@ -2,6 +2,7 @@ package com.wd.ASFlowerWeb.service;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -60,5 +61,13 @@ public class UserService {
 	
 	public User getUserByEmail(String email){
 		return userMapper.getUserByEmail(email);
+	}
+	
+	public boolean stopUser(Integer id){
+		return userMapper.stopUser(id)==1?true:false;
+	}
+
+	public boolean useUser(Integer id) {
+		return userMapper.useUser(id)==1?true:false;
 	}
 }

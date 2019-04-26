@@ -122,6 +122,7 @@ public class MemberController {
 					user.setMemberName(username);
 				}else{
 					validateStatus = false;
+					log.info("会员名不合法");
 				}
 				
 				//昵称
@@ -131,10 +132,14 @@ public class MemberController {
 					
 				}else{
 					validateStatus = false;
+					log.info("昵称不合法");
 				}
 				
 				//性别
-				Boolean sex = request.getParameter("sex")!=null?Boolean.valueOf(request.getParameter("sex")):false;
+				Boolean sex = false;
+				if(request.getParameter("sex")!=null && request.getParameter("sex").equals("1")){
+					sex = true;
+				}
 				user.setSex(sex);
 				
 				//生日
@@ -156,6 +161,7 @@ public class MemberController {
 					user.setPhone(phone);
 				}else{
 					validateStatus = false;
+					log.info("号码不合法");
 				}
 				
 				//邮箱
@@ -171,6 +177,7 @@ public class MemberController {
 					}
 				}else{
 					validateStatus =false;
+					log.info("邮箱不合法");
 				}
 				
 				//QQ
@@ -193,15 +200,19 @@ public class MemberController {
 				}
 				
 				//头像
-				int avatar =request.getParameter("avatar")!=null?Integer.valueOf(request.getParameter("avatar")):0;
+				int avatar =request.getParameter("avatar")!=null&&request.getParameter("avatar").trim().length()==1?Integer.valueOf(request.getParameter("avatar")):0;
 				if(avatar==1){//男
 					user.setAvatar("/static/common/images/man_logo.png");
 				}else{//女
 					user.setAvatar("/static/common/images/female_logo.png");
 				}
 				
+				
+				Integer rank = 2;
 				//等级
-				Integer rank = request.getParameter("rank")!=null?Integer.valueOf(request.getParameter("rank")):1;
+				if(request.getParameter("rank")!=null&&request.getParameter("rank").trim().length()==1){
+					rank = Integer.valueOf(request.getParameter("rank"));
+				}
 				user.setRankId(rank);
 				
 				
@@ -413,14 +424,63 @@ public class MemberController {
 	@ResponseBody
 	public Map<String,Object> delMember(@RequestParam("id") Integer id){
 		Map<String,Object> map = new HashMap<>();
-		
-		if(id!=null && id>0){
+		map.put("code", 0);
+		//暂不提供删除，使用停用功能
+		map.put("msg", "非法操作");
+		return map;
+		/*if(id!=null && id>0){
 			if(userService.delete(id)){
 				map.put("code", 200);
 				map.put("msg", "删除成功");
 			}else{
 				map.put("code", 0);
 				map.put("msg", "删除失败");
+			}
+			
+		}else{
+			map.put("code", 0);
+			map.put("msg", "非法操作");
+			
+		}
+		return map;*/
+	}
+	
+	//会员停用
+	@PostMapping("/admin/member/stop")
+	@ResponseBody
+	public Map<String,Object> stopMember(@RequestParam("id") Integer id){
+		Map<String,Object> map = new HashMap<>();
+		
+		if(id!=null && id>0){
+			if(userService.stopUser(id)){
+				map.put("code", 200);
+				map.put("msg", "停用成功");
+			}else{
+				map.put("code", 0);
+				map.put("msg", "停用失败");
+			}
+			
+		}else{
+			map.put("code", 0);
+			map.put("msg", "非法操作");
+			
+		}
+		return map;
+	}
+	
+	//会员启用
+	@PostMapping("/admin/member/use")
+	@ResponseBody
+	public Map<String,Object> use(@RequestParam("id") Integer id){
+		Map<String,Object> map = new HashMap<>();
+		
+		if(id!=null && id>0){
+			if(userService.useUser(id)){
+				map.put("code", 200);
+				map.put("msg", "启用成功");
+			}else{
+				map.put("code", 0);
+				map.put("msg", "启用失败");
 			}
 			
 		}else{

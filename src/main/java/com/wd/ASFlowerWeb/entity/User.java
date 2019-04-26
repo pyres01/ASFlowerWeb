@@ -39,7 +39,7 @@ public class User {
 	private String qq;
 	private String wechat;
 	private String avatar;
-	private Integer rankId = 0;
+	private Integer rankId = 2;
 	private Integer status=1;
 	private Boolean isDelete=false;
 }

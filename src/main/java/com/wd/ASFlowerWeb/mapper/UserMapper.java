@@ -55,4 +55,10 @@ public interface UserMapper {
 	
 	@Update("UPDATE user SET isDelete = 1 where id = ${id}")
 	Integer setDelete(@Param("id") Integer id);
+	
+	@Update("UPDATE user SET status = 0 where id = ${id}")
+	Integer stopUser(@Param("id") Integer id);
+	
+	@Update("UPDATE user SET status = 1 where id = ${id}")
+	Integer useUser(@Param("id") Integer id);
 }

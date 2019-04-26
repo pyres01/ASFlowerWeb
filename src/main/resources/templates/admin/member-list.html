@@ -22,6 +22,14 @@
     		width:180%;
     		overflow-x:scroll;
     	}
+    	.stopUserIcon,.editUserIcon{
+    		font-size:19px;
+    	}
+    	.useUserIcon{
+    		font-size:16px !important;
+    		position: relative;
+    		top: -2px;
+    	}
     </style>
   </head>
   
@@ -46,7 +54,6 @@
         </form>
       </div>
       <xblock>
-        <button class="layui-btn layui-btn-danger" onclick="delAll()" id="delManyBtn"><i class="layui-icon"></i>批量删除</button>
         <button class="layui-btn" onclick="x_admin_show('添加用户','/admin/member/edit',600,400)"><i class="layui-icon"></i>添加</button>
         <span class="x-right" style="line-height:40px">共有数据：<span id="userNum">0</span> 条</span>
       </xblock>
@@ -84,37 +91,56 @@
       	var form;
     	init();
 
-      /*用户-删除*/
-      function member_del(obj,id){
-          layer.confirm('确认要删除吗？',function(index){
+      /*用户-停用*/
+      function member_stop(obj,id){
+    	  var s = $(obj).parent().parent().find('.useStatus').text();
+    	  if(s !=='正常'){
+    		  alert('无需重复停用');
+    		  return false;
+    	  }
+          layer.confirm('确认要停用吗？',function(index){
               //发异步删除数据
               $.ajax({
-            	  url:'/admin/member/del',
+            	  url:'/admin/member/stop',
             	  type:'POST',
             	  dataType:'json',
             	  data:{id:id},
             	  success:function(res){
-            		  $(obj).parents("tr").remove();
-                      layer.msg('已删除!',{icon:1,time:1000});
-                      $('#userNum').text($('#userNum').text()-1);
+            		  //$(obj).parents("tr").remove();
+                      layer.msg('已停用!',{icon:1,time:1000});
+                      //$('#userNum').text($('#userNum').text()-1);
+                      $(obj).parent().parent().find('.useStatus').text('冻结');
             	  },
             	  error:function(xhr){
-            		  layer.msg('删除失败!',{icon:2,time:1000});
+            		  layer.msg('停用失败!',{icon:2,time:1000});
             	  }
               });
               
           });
       }
-
-      function delAll (argument) {
-
-        var data = tableCheck.getData();
-  
-        layer.confirm('确认要删除吗？'+data,function(index){
-            //捉到所有被选中的，发异步进行删除
-            layer.msg('删除成功', {icon: 1});
-            $(".layui-form-checked").not('.header').parents('tr').remove();
-        });
+      
+      /*用户-启用*/
+      function member_use(obj,id){
+    	  var s = $(obj).parent().parent().find('.useStatus').text();
+    	  console.log(s);
+    	  if(s ==='正常'){
+    		  alert('无需重复启用');
+    		  return false;
+    	  }
+          
+           $.ajax({
+         	  url:'/admin/member/use',
+         	  type:'POST',
+         	  dataType:'json',
+         	  data:{id:id},
+         	  success:function(res){
+                   layer.msg('已启用!',{icon:1,time:1000});
+                   $(obj).parent().parent().find('.useStatus').text('正常');
+         	  },
+         	  error:function(xhr){
+         		  layer.msg('启用失败!',{icon:2,time:1000});
+         	  }
+           });
       }
       
       function init(){
@@ -170,7 +196,7 @@
       }
       function renderTbody(users){
     	  $.each(users,function(index,item){
-    		  $('#usersTbody').append('<tr><td>'+(item.id)+'</td><td>'+(item.nickName!=null?item.nickName:"暂未设置")+'</td><td>'+(item.memberName)+'</td><td>'+(item.sex == 0?"女":"男")+'</td><td>'+(item.birthday!=null?item.birthday:"")+'</td><td>'+(item.phone!=null?item.phone:"")+'</td><td>'+(item.email!=null?item.email:"")+'</td><td>'+(item.qq!=null?item.qq:"")+'</td><td>'+(item.wechat!=null?item.wechat:"")+'</td><td>'+(item.avatar!=null?'<img src="'+(item.avatar)+'" style="width:64px;height:64px;margin:0 22%;"/>':"")+'</td><td>'+(item.rankId==2?'普通会员':'普通会员')+'</td><td>'+(item.status ==1 ?"正常":"冻结")+'</td><td>'+(item.isDelete == 0?"否":"是")+'</td><td>'+(item.joinTime)+'</td><td class="td-manage"><a title="编辑"  onclick="x_admin_show(\'编辑\',\'/admin/member/edit?op=1&id='+(item.id)+'\',600,400)" href="javascript:;"><i class="layui-icon">&#xe642;</i></a><a title="删除" onclick="member_del(this,'+(item.id)+')" href="javascript:;"><i class="layui-icon">&#xe640;</i></a></td></tr>');
+    		  $('#usersTbody').append('<tr><td>'+(item.id)+'</td><td>'+(item.nickName!=null?item.nickName:"暂未设置")+'</td><td>'+(item.memberName)+'</td><td>'+(item.sex == 0?"女":"男")+'</td><td>'+(item.birthday!=null?item.birthday:"")+'</td><td>'+(item.phone!=null?item.phone:"")+'</td><td>'+(item.email!=null?item.email:"")+'</td><td>'+(item.qq!=null?item.qq:"")+'</td><td>'+(item.wechat!=null?item.wechat:"")+'</td><td>'+(item.avatar!=null?'<img src="'+(item.avatar)+'" style="width:64px;height:64px;margin:0 22%;"/>':"")+'</td><td>'+(item.rankId==2?'普通会员':'普通会员')+'</td><td class="useStatus">'+(item.status ==1 ?"正常":"冻结")+'</td><td>'+(item.isDelete == 0?"否":"是")+'</td><td>'+(item.joinTime)+'</td><td class="td-manage"><a title="编辑"  onclick="x_admin_show(\'编辑\',\'/admin/member/edit?op=1&id='+(item.id)+'\',600,400)" href="javascript:;"><i class="layui-icon editUserIcon">&#xe642;</i></a> <a title="停用" onclick="member_stop(this,'+(item.id)+')" href="javascript:;"><i class="layui-icon stopUserIcon">&#xe601;</i></a> <a title="启用" onclick="member_use(this,'+(item.id)+')" href="javascript:;"><i class="layui-icon useUserIcon">&#xe62f;</i></a></td></tr>');
     	  });
       }
       function hideWhenNoUser(){

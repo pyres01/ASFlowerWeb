@@ -77,7 +77,7 @@
         		<td th:text="${item.order_receiver}"></td>
         		<td th:text="${item.order_address}"></td>
         		<td th:text="${item.order_phone}"></td>
-        		<td><button>确认发货</button></td>
+        		<td><button onclick="post(this);">确认发货</button></td>
         	</tr>
         </tbody>
       </table>
@@ -87,4 +87,29 @@
     </div>
     
   </body>
+  <script src="/static/admin/js/jquery.min.js"></script>
+  <script>
+  	function post(obj){
+  		var id = $(obj).parent().parent().children('td:nth-of-type(2)').text();
+  		if(id>0){
+  			$.ajax({
+  				url:'/admin/order/toPost',
+  				type:'POST',
+  				dataType:'json',
+  				data:{id:id},
+  				success:function(res){
+  					if(res.code==200){
+  						alert('发货成功');
+  						$(obj).parent().parent().remove();
+  					}else{
+  						alert('发货失败，请联系管理员');
+  					}
+  				},
+  				error:function(xhr){
+  					alert('error,请联系管理员');
+  				}
+  			});
+  		}
+  	}
+  </script>
 </html>

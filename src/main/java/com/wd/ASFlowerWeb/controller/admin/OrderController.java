@@ -1,6 +1,8 @@
 package com.wd.ASFlowerWeb.controller.admin;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -8,9 +10,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 
+import com.wd.ASFlowerWeb.entity.NmOrderItem;
 import com.wd.ASFlowerWeb.entity.OrderAndItemView;
 import com.wd.ASFlowerWeb.mapper.OrderAndItemViewMapper;
 import com.wd.ASFlowerWeb.service.NmOrderItemService;
@@ -75,6 +79,35 @@ public class OrderController {
 		}
 		
 		return mav;
+	}
+	
+	//后台发货
+	@PostMapping("/admin/order/toPost")
+	@ResponseBody
+	public Map<String,Object> toPost(HttpServletRequest req){
+		Map<String,Object> map = new HashMap<String, Object>();
+		
+		try{
+			Integer id = Integer.valueOf(req.getParameter("id"));
+			if(id>0){
+				NmOrderItem item = nmOrderItemService.getByid(id);
+				if(item.getStatus()==1){
+					nmOrderItemService.updateStatus(item.getId(), 2);
+					map.put("code", 200);
+					map.put("msg", "发货成功");
+				}
+				
+			}else{
+				map.put("code", 0);
+				map.put("msg", "参数异常");
+			}
+		}catch(Exception e){
+			map.put("code", 0);
+			map.put("msg", "发货失败");
+			log.info(e.getMessage());
+		}
+		
+		return map;
 	}
 
 }
