@@ -126,12 +126,12 @@ public class MemberController {
 				}
 				
 				//昵称
-				String nickname = request.getParameter("nickname");
+				/*String nickname = request.getParameter("nickname");
 				if(nickname!=null && !nickname.trim().equals("") && nickname.length()>=5){
 					user.setNickName(nickname);
 					
-				}
-				
+				}*/
+				user.setNickName(request.getParameter("nickname"));
 				//性别
 				Boolean sex = false;
 				if(request.getParameter("sex")!=null && request.getParameter("sex").equals("1")){
@@ -179,16 +179,16 @@ public class MemberController {
 				
 				//QQ
 				String qq = request.getParameter("qq");
-				if(qq!=null && !qq.trim().equals("") && qq.length()>=5){
+				/*if(qq!=null && !qq.trim().equals("") && qq.length()>=5){
 					user.setQq(qq);
-				}
-				
+				}*/
+				user.setQq(qq);
 				//微信
 				String wechat = request.getParameter("wechat");
-				if(wechat!=null && !wechat.trim().equals("") && wechat.length()>=6 && wechat.length()<=20){
+				/*if(wechat!=null && !wechat.trim().equals("") && wechat.length()>=6 && wechat.length()<=20){
 					user.setWechat(wechat);
-				}
-				
+				}*/
+				user.setWechat(wechat);
 				//密码和确认密码
 				String password = request.getParameter("pass");
 				String repass = request.getParameter("repass");
