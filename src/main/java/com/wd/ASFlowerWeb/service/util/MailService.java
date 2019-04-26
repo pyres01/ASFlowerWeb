@@ -23,6 +23,7 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Service
 @Slf4j
+//服务层
 public class MailService {
 	
 	@Value("${spring.mail.username}")
@@ -30,7 +31,7 @@ public class MailService {
     @Autowired
     private JavaMailSender mailSender;
  
- 
+// 邮箱发送服务
     public void sendSimpleMail(String to,String title,String content){
         SimpleMailMessage message = new SimpleMailMessage();
         message.setFrom(from);
@@ -40,7 +41,8 @@ public class MailService {
         mailSender.send(message);
         log.info("邮件发送成功");
     }
- 
+    
+// 暂时用不到 带附件的发送
     public void sendAttachmentsMail(String to, String title, String cotent, List<File> fileList){
         MimeMessage message = mailSender.createMimeMessage();
         try {
