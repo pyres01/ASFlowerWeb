@@ -119,7 +119,13 @@ public class MemberController {
 				//会员名
 				String username = request.getParameter("username");
 				if(username!=null && !username.trim().equals("")&&username.length()>=5){
-					user.setMemberName(username);
+					if(userService.getUserByMName(username)==null){
+						user.setMemberName(username);
+					}else{
+						validateStatus = false;
+						log.info("会员名不能重复");
+					}
+					
 				}else{
 					validateStatus = false;
 					log.info("会员名不合法");
