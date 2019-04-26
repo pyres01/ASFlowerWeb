@@ -130,9 +130,6 @@ public class MemberController {
 				if(nickname!=null && !nickname.trim().equals("") && nickname.length()>=5){
 					user.setNickName(nickname);
 					
-				}else{
-					validateStatus = false;
-					log.info("昵称不合法");
 				}
 				
 				//性别
