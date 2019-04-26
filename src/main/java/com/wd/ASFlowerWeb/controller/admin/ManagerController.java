@@ -226,9 +226,10 @@ public class ManagerController {
 				Manager manager = managerService.getManagerById(id);
 				//简单处理数据，完善项目可添加xss过滤以及白名单过滤和去空格
 				
-				//名称
-				if(name!=null && name.trim().length()>5){
+				//用户名
+				if(name!=null && name.trim().length()>=5 && name.trim().length()<=10){
 					manager.setName(name);
+					log.info(name);
 				}
 				//密码和确认密码
 				if(pass!=null && repass!=null && pass.trim().length()>=6 && pass.trim().length()<=12 && pass.equals(repass)){
@@ -283,6 +284,7 @@ public class ManagerController {
 		        }
 		        		        
 		        //更新管理员信息
+		        log.info(manager.toString());
 				Boolean addStatus =  managerService.updateManagerById(manager);
 				
 				//如果更新失败，前台提示更新失败
